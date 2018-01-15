@@ -32,23 +32,29 @@ class TextData():
         return newlist
 
     def return_seq(self):
-        pre_ptichId = -1
-        pre_seqno = -1
 
+        count = 0
         for i in self.relayTexts:
-            if(i["pitchId"] != '-1'):
-                pre_ptichId = now_ptichId
-                pre_seqno = now_seqno
-                now_ptichId = i["pitchId"].split('_')[-1]
-                now_seqno = i["seqno"]
 
+            if(count == 0):
+                now = 183122
+                pre_pitchId = 0
+                tmp_pitchId = 0
             else:
-                now_ptichId = i["pitchId"]
-                now_seqno = i["seqno"]
-            print(int(now_ptichId) - int(pre_ptichId))
+                pre_pitchId = now
+                now = i["pitchId"].split("_")[-1]
 
+                if(now != '-1'):
+                    if(pre_pitchId == '-1'):
+                        print(int(now) - int(tmp_pitchId))
 
+                    else:
+                        print(int(now) - int(pre_pitchId))
+                else: #now == -1
+                    if(pre_pitchId != '-1'):
+                        tmp_pitchId = pre_pitchId
 
+            count = count + 1
 
 
 t = TextData()
