@@ -1,61 +1,28 @@
-# -*- coding: utf-8 -*-
-import json
-import operator
+import cv2
+import threading
+from data import TextData, SceneData
 
-class TextData():
-    def __init__(self, filename='./_data/20171030KIADUSAN.txt'):
-        data_file = open(filename, "rt", encoding="UTF8")
-        data = json.load(data_file)
-        data_file.close()
-        self.game_info = data["gameInfo"]
-        self.relayTexts = self.sort_with_seqno(data["relayTexts"])
+textData = TextData()
+sceneData = SceneData("./_data/m.csv")
+def video():
+    video = cv2.VideoCapture("./_data/20171030KIADUSAN.mp4")
+    count = 8100
+    video.set(1, count)
+    while True:
+        success, frame = video.read()
+        if not success:
+            break
 
-    def sort_with_seqno(self, relayTexts):
-        newlist = []
-        newlist = newlist + relayTexts['1']
-        newlist = newlist + relayTexts['2']
-        newlist = newlist + relayTexts['3']
-        newlist = newlist + relayTexts['4']
-        newlist = newlist + relayTexts['5']
-        newlist = newlist + relayTexts['6']
-        newlist = newlist + relayTexts['7']
-        newlist = newlist + relayTexts['8']
-        newlist = newlist + relayTexts['9']
-        newlist = newlist + relayTexts['currentBatterTexts']
-        newlist = newlist + [relayTexts['currentOffensiveTeam']]
-        newlist = newlist + [relayTexts['currentBatter']]
+        cv2.imshow("a", frame)
 
-        newlist.sort(key=operator.itemgetter("seqno"))
-        #for i in newlist:
-        #    print(i)
+        if cv2.waitKey(1) == ord('q'):
+            break
 
-        return newlist
-
-    def return_seq(self):
-
-        count = 0
-        for i in self.relayTexts:
-
-            if(count == 0):
-                now = 183122
-                pre_pitchId = 0
-                tmp_pitchId = 0
-            else:
-                pre_pitchId = now
-                now = i["pitchId"].split("_")[-1]
-
-                if(now != '-1'):
-                    if(pre_pitchId == '-1'):
-                        print(int(now) - int(tmp_pitchId))
-
-                    else:
-                        print(int(now) - int(pre_pitchId))
-                else: #now == -1
-                    if(pre_pitchId != '-1'):
-                        tmp_pitchId = pre_pitchId
-
-            count = count + 1
+    cv2.destroyAllWindows()
 
 
-t = TextData()
-t.return_seq()
+
+#textData.return_seq()
+#t.start()
+
+
