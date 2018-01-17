@@ -1,68 +1,28 @@
 import cv2
 import threading
 import time
-from data import TextData, SceneData
+from Video import Video
+from Annotation import Annotation
 
-#sceneData = SceneData("./_data/scene1-1.csv")
-#sceneData.load_image_data()
+annotation = Annotation('./_data/20171030KIADUSAN.txt')
+video = Video(annotation)
 
+naver = threading.Thread(target=annotation.generate_Naver)
+naver.start()
 
+scene = threading.Thread(target=annotation.generate_Scene)
+scene.start()
 
-def video():
-    video = cv2.VideoCapture("./_data/20171030KIADUSAN.mp4")
-    count = 8150
-    #count = 8607
-    video.set(1, count)
-    fps = video.get(cv2.CAP_PROP_FPS)
+video.play(v="./_data/20171030KIADUSAN.mp4")
 
-    while True:
-        success, frame = video.read()
-        if not success:
-            break
-
-        cv2.imshow("a", frame)
-
-
-        if cv2.waitKey(1) == ord('q'):
-            break
-        if cv2.waitKey(1) == ord('a'):
-            print("real " , str(count))
-        count = count + 1
-
-
-    cv2.destroyAllWindows()
+'''
+play = threading.Thread(target=video.play, args=("./_data/20171030KIADUSAN.mp4",))
+play.start()
+'''
 
 
 
-lock = threading.Lock()
 
-video = cv2.VideoCapture("./_data/20171030KIADUSAN.mp4")
-count = 8150
-# count = 8607
-video.set(1, count)
-#fps = video.get(cv2.CAP_PROP_FPS)
-
-
-textData = TextData()
-t = threading.Thread(target=textData.return_seq)
-t.start()
-
-while True:
-    success, frame = video.read()
-    if not success:
-        break
-
-    textData.setframeNo(count)
-
-    cv2.imshow("1030KIADS", frame)
-
-    if cv2.waitKey(1) == ord('q'):
-        break
-    if cv2.waitKey(1) == ord('a'):
-        print("real ", str(count))
-    count = count + 1
-
-cv2.destroyAllWindows()
 
 
 
