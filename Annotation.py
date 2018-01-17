@@ -19,7 +19,7 @@ class Annotation():
             if(self.naverData.long==True):
                 self.sceneData.predict(self.frame_no, self.naverData.now_relayText)
                 self.naverData.long = False
-            time.sleep(5)
+            time.sleep(7)
             self.naverData.long = True
 
 

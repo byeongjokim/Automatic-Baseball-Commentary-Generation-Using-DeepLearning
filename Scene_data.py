@@ -40,7 +40,7 @@ class SceneData():
         return s
 
     def predict(self, frame_no, relayText):
-        print("\t\t\t\t대기시간이 길어 영상처리로 텍스트 생성")
+        #print("\t\t\t\t대기시간이 길어 영상처리로 텍스트 생성")
         image = []
 
         video = cv2.VideoCapture("./_data/20171030KIADUSAN.mp4")
