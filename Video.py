@@ -20,6 +20,7 @@ class Video():
             cv2.imshow("1030KIADS", frame)
 
             self.Annotation.set_frameNo(count)
+            #self.Annotation.set_frame(frame)
 
             if cv2.waitKey(1) == ord('q'):
                 break

@@ -18,6 +18,7 @@ class Annotation():
 
             if(self.naverData.long==True):
                 self.sceneData.predict(self.frame_no, self.naverData.now_relayText)
+                #self.sceneData.predict2(self.frame, self.naverData.now_relayText)
                 self.naverData.long = False
             time.sleep(7)
             self.naverData.long = True
@@ -26,3 +27,6 @@ class Annotation():
 
     def set_frameNo(self, frame_no):
         self.frame_no = frame_no
+
+    def set_frame(self, frame):
+        self.frame = frame

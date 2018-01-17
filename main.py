@@ -12,16 +12,3 @@ scene = threading.Thread(target=annotation.generate_Scene)
 scene.start()
 
 video.play(v="./_data/20171030KIADUSAN.mp4")
-
-'''
-play = threading.Thread(target=video.play, args=("./_data/20171030KIADUSAN.mp4",))
-play.start()
-'''
-
-
-
-
-
-
-
-
