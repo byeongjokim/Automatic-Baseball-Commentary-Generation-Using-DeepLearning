@@ -1,8 +1,6 @@
-import cv2
 import threading
-import time
 from Video import Video
-from Annotation import Annotation
+from Annotation.Annotation import Annotation
 
 annotation = Annotation('./_data/20171030KIADUSAN.txt')
 video = Video(annotation)

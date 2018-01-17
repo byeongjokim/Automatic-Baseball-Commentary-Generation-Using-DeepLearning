@@ -1,6 +1,6 @@
 import time
-from Naver_data import NaverData
-from Scene_data import SceneData
+from Annotation.Naver_data import NaverData
+from Annotation.Scene_data import SceneData
 
 class Annotation():
     frame_no = 0
