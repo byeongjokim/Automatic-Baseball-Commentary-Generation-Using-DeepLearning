@@ -10,8 +10,9 @@ class Annotation():
         self.naverData = NaverData(fileName)
         self.sceneData = SceneData()
 
-    def generate_Naver(self):
-        self.naverData.return_seq()
+    def generate_Naver(self, count_delta, fps, o_start):
+        start, no = self.naverData.calculate_start(count_delta, fps, o_start)
+        self.naverData.return_seq(start, no)
 
     def generate_Scene(self):
         while(True):
@@ -22,7 +23,6 @@ class Annotation():
                 self.naverData.long = False
             time.sleep(7)
             self.naverData.long = True
-
 
 
     def set_frameNo(self, frame_no):

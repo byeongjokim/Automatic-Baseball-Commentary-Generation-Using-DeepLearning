@@ -5,10 +5,8 @@ class Video():
         print("init_video")
         self.Annotation = Annotation
 
-    def play(self, v):
+    def play(self, v, count):
         video = cv2.VideoCapture(v)
-        count = 8150
-        # count = 8607
 
         video.set(1, count)
 
