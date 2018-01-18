@@ -6,8 +6,9 @@ import numpy as np
 from skimage.measure import compare_ssim as ssim
 
 class SceneData():
-    def __init__(self, shape=(320,180)):
+    def __init__(self, Resources, shape=(320,180)):
         print("init_sceneData")
+        self.Resources = Resources
 
         self.width = shape[0]
         self.height = shape[1]
@@ -26,11 +27,11 @@ class SceneData():
         self.image_data = []
         for i in image:
             self.image_data.append({"image":cv2.resize(
-                                            cv2.cvtColor(
-                                                cv2.imread(path+i),
-                                                cv2.COLOR_BGR2GRAY),
-                                            (self.width, self.height)),
-                                    "label":i.split(".")[0].split("_")[0]})
+                cv2.cvtColor(
+                    cv2.imread(path+i),
+                    cv2.COLOR_BGR2GRAY),
+                (self.width, self.height)),
+                "label":i.split(".")[0].split("_")[0]})
 
         print("we have %d image data" %(len(self.image_data)))
 
@@ -51,7 +52,6 @@ class SceneData():
             print("can not load video")
             return 0
 
-        cv2.imwrite(str(frame_no)+".jpg", frame)
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         resize = cv2.resize(gray, (self.width, self.height))
@@ -84,6 +84,8 @@ class SceneData():
             print("\t\t\t\t코치들의 모습이네요.")
         else:
             print('\t\t\t\t기타 장면 입니다.')
+
+        cv2.imwrite(str(frame_no)+".jpg", frame)
 
     def predict2(self, frame, relayText):
         #print("\t\t\t\t대기시간이 길어 영상처리로 텍스트 생성")
@@ -125,7 +127,7 @@ class Make_SceneData():
         print("sceneData")
         self.path = path
         self.fps = fps
-        #self.get_data_csv()
+        self.get_data_csv()
 
         self.width = shape[0]
         self.height = shape[1]
@@ -142,9 +144,11 @@ class Make_SceneData():
             elif(line[0] == str(count)):
                 if(line[5]):
                     result.append({"SceneNumber":count, "start":int(line[1]), "end":int(float(line[4])*self.fps) + int(line[1]), "label":line[5]})
+                else:
+                    result.append({"SceneNumber": count, "start": int(line[1]), "end": int(float(line[4]) * self.fps) + int(line[1]), "label": None})
                 count = count + 1
-
-        self.data = result
+        print(result)
+        self.data = result[:100]
         f.close()
 
     def save_image_data(self):
@@ -191,7 +195,7 @@ class Make_SceneData():
             if not success:
                 break
 
-            cv2.imwrite(str(i["SceneNumber"])+".jpg", frame)
+            #cv2.imwrite(str(i["SceneNumber"])+".jpg", frame)
             if(i["label"]):
                 test_data.append({"image":cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY), "no":i["SceneNumber"], "label":i["label"]})
             else:
@@ -211,14 +215,4 @@ class Make_SceneData():
             max_id = result.index(max(result))
             self.data[i["no"]-1]["label"] = test_data[max_id]["label"]
             count = count + 1
-
-        for i in self.data:
-            print(i)
-
-        with open("result.csv", "wb") as csv_file:
-            writer = csv.writer(csv_file)
-            for i in self.data:
-                for key, value in i.items():
-                    writer.writerow([key, value])
-        #cv2.imwrite(str(i["no"])+".jpg", i["image"])
 

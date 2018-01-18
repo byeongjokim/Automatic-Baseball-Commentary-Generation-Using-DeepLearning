@@ -5,28 +5,24 @@ from Annotation.Scene_data import SceneData
 class Annotation():
     frame_no = 0
 
-    def __init__(self, fileName):
+    def __init__(self, fileName, Resources):
         print("init annotation")
-        self.naverData = NaverData(fileName)
-        self.sceneData = SceneData()
+        self.Resources = Resources
+
+        self.naverData = NaverData(fileName, Resources)
+        self.sceneData = SceneData(Resources)
 
     def generate_Naver(self, count_delta, fps, o_start):
         start, no = self.naverData.calculate_start(count_delta, fps, o_start)
         self.naverData.return_seq(start, no)
 
     def generate_Scene(self):
-        while(True):
+        while(not self.Resources.exit):
 
-            if(self.naverData.long==True):
-                self.sceneData.predict(self.frame_no, self.naverData.now_relayText)
+            if(self.Resources.long==True):
+                self.sceneData.predict(self.Resources.frame_no, self.naverData.now_relayText)
                 #self.sceneData.predict2(self.frame, self.naverData.now_relayText)
-                self.naverData.long = False
+                self.Resources.set_long(False)
             time.sleep(7)
-            self.naverData.long = True
+            self.Resources.set_long(True)
 
-
-    def set_frameNo(self, frame_no):
-        self.frame_no = frame_no
-
-    def set_frame(self, frame):
-        self.frame = frame

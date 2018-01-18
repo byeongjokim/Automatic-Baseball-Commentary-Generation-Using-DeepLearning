@@ -5,13 +5,16 @@ import time
 
 class NaverData():
     threshold = 6
-    long = False
 
-    def __init__(self, filename):
+    def __init__(self, filename, Resources):
+        self.Resources = Resources
+
         data_file = open(filename, "rt", encoding="UTF8")
         data = json.load(data_file)
         data_file.close()
         self.game_info = data["gameInfo"]
+        self.awayTeamLineUp = data["awayTeamLineUp"]
+        self.homeTeamLineUp = data["homeTeamLineUp"]
         self.relayTexts = self.sort_with_seqno(data["relayTexts"])
 
 
@@ -106,7 +109,6 @@ class NaverData():
                 pre_pitchId = now
                 now = i["pitchId"].split("_")[-1]
 
-
                 if(now != '-1'):
                     if(pre_pitchId == '-1'):
                         wait = self.get_timedelta(now, tmp_pitchId)
@@ -117,7 +119,7 @@ class NaverData():
 
                     if (wait > self.threshold):
                         time.sleep(self.threshold)
-                        self.long = True
+                        self.Resources.set_long(True)
                         time.sleep(wait-self.threshold)
                     else:
                         time.sleep(wait)
