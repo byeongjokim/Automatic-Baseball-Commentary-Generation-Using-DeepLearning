@@ -5,7 +5,7 @@ from Person.Person import Person
 from resources import Resources
 from Annotation.Scene_data import Make_SceneData
 
-'''
+
 s = Make_SceneData('./_data/scene1-1.csv')
 s.clustering()
 s.save_image_data()
@@ -21,7 +21,8 @@ o_start = "183122"
 o_count = 8145
 fps = 29.97
 
-count = 10000
+#count = 70233  before start 2
+count = 8145
 
 naver = threading.Thread(target=annotation.generate_Naver, args=(count-o_count, fps, o_start, ))
 naver.start()
@@ -30,3 +31,4 @@ scene = threading.Thread(target=annotation.generate_Scene)
 scene.start()
 
 video.play(v="./_data/20171030KIADUSAN.mp4", count=count)
+'''

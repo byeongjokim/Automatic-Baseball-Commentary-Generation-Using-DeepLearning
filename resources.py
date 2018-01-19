@@ -10,5 +10,8 @@ class Resources():
     def set_long(self, long):
         self.long = long
 
+    def set_now_relayText(self, now_relayText):
+        self.now_relayText = now_relayText
+
     def set_exit(self, exit):
         self.exit = exit

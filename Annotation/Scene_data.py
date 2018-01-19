@@ -52,6 +52,7 @@ class SceneData():
             print("can not load video")
             return 0
 
+        self.predict_motion(frame)
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         resize = cv2.resize(gray, (self.width, self.height))
@@ -86,6 +87,9 @@ class SceneData():
             print('\t\t\t\t기타 장면 입니다.')
 
         cv2.imwrite(str(frame_no)+".jpg", frame)
+
+    def predict_motion(self, frame):
+        print("predict motion")
 
     def predict2(self, frame, relayText):
         #print("\t\t\t\t대기시간이 길어 영상처리로 텍스트 생성")
@@ -147,8 +151,8 @@ class Make_SceneData():
                 else:
                     result.append({"SceneNumber": count, "start": int(line[1]), "end": int(float(line[4]) * self.fps) + int(line[1]), "label": None})
                 count = count + 1
-        print(result)
-        self.data = result[:100]
+
+        self.data = result[:354]
         f.close()
 
     def save_image_data(self):
@@ -215,4 +219,5 @@ class Make_SceneData():
             max_id = result.index(max(result))
             self.data[i["no"]-1]["label"] = test_data[max_id]["label"]
             count = count + 1
+
 

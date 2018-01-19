@@ -81,12 +81,12 @@ class NaverData():
         start = self.secondTotime(start)
         start = self.get_timeadd(o_start, start)
         start = self.secondTotime(start)
-
+        no = 0
         for i in self.relayTexts:
             if(int(i["pitchId"].split("_")[-1]) > int(start)):
+                no = i["seqno"] - 1
                 break
 
-        no = i["seqno"] - 1
         return start, no
 
     def return_seq(self, start, no):
@@ -95,12 +95,13 @@ class NaverData():
 
         #start = "183122"
 
+        now = 0
         count = 0
         pre_pitchId = '000000'
         tmp_pitchId = '000000'
 
         for i in relayText:
-            self.now_relayText = i
+            self.Resources.set_now_relayText(i)
             wait = 0
             if(count == 0):
                 now = start

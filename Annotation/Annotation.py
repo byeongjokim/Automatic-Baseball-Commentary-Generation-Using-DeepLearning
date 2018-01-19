@@ -20,7 +20,7 @@ class Annotation():
         while(not self.Resources.exit):
 
             if(self.Resources.long==True):
-                self.sceneData.predict(self.Resources.frame_no, self.naverData.now_relayText)
+                self.sceneData.predict(self.Resources.frame_no, self.Resources.now_relayText)
                 #self.sceneData.predict2(self.frame, self.naverData.now_relayText)
                 self.Resources.set_long(False)
             time.sleep(7)
