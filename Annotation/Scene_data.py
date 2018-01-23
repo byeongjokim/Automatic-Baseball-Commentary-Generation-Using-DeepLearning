@@ -3,7 +3,12 @@ import csv
 import cv2
 import os
 import numpy as np
+import tensorflow as tf
+
 from skimage.measure import compare_ssim as ssim
+from imutils.object_detection import non_max_suppression
+
+from NN.cnn import conv_layer, pool
 
 class SceneData():
     def __init__(self, Resources, shape=(320,180)):
@@ -14,6 +19,7 @@ class SceneData():
         self.height = shape[1]
 
         self.load_image_data()
+        self.make_motion_model()
 
     def load_image_data(self):
         path = "./_data/scene_image/"
@@ -52,7 +58,6 @@ class SceneData():
             print("can not load video")
             return 0
 
-        self.predict_motion(frame)
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         resize = cv2.resize(gray, (self.width, self.height))
@@ -62,6 +67,16 @@ class SceneData():
             result.append(self.compare_images(i["image"], resize))
 
         label = self.image_data[result.index(max(result))]["label"]
+
+        people, full = self.get_human(resize)
+        for (x, y, w, h) in people:
+            person = resize[y:y + h, x:x + w]
+            person_resize = cv2.resize(person, (self.Resources.motion_weight, self.Resources.motion_height))
+            person_image = np.array(person_resize)
+            motion = self.predict_motion(person_image, full)
+
+            cv2.rectangle(resize, (x, y), (x + w, y + h), (0, 0, 255), 2)
+
 
         if(label == "beforestart"):
             print("\t\t\t\t경기 시작 전입니다.")
@@ -86,12 +101,103 @@ class SceneData():
         else:
             print('\t\t\t\t기타 장면 입니다.')
 
-        cv2.imwrite(str(frame_no)+".jpg", frame)
 
-    def predict_motion(self, frame):
-        print("predict motion")
+        cv2.imwrite(str(frame_no) + ".jpg", resize)
 
-    def predict2(self, frame, relayText):
+
+    def get_human(self, image):
+        body_cascade = cv2.CascadeClassifier('./_data/cascades/haarcascade_fullbody.xml')
+        upper_body_cascade = cv2.CascadeClassifier('./_data/cascades/haarcascade_upperbody.xml')
+
+        people = body_cascade.detectMultiScale(image, 1.05, 3, flags=cv2.CASCADE_SCALE_IMAGE)
+        people = non_max_suppression(people, probs=None, overlapThresh=0.75)
+
+        print(people)
+
+        if len(people) == 0:
+            people = upper_body_cascade.detectMultiScale(image, 1.05, 3, flags=cv2.CASCADE_SCALE_IMAGE)
+            people = non_max_suppression(people, probs=None, overlapThresh=0.75)
+            full = 0
+        else:
+            full = 1
+        print(people)
+        return people, full
+
+    def make_motion_model(self):
+        self.X = tf.placeholder(tf.float32, [None, self.Resources.motion_weight, self.Resources.motion_height, 1])
+        self.Y = tf.placeholder(tf.float32, [None, 4])
+        self.keep_prob = tf.placeholder(tf.float32)
+
+        C1_1 = conv_layer(filter_size=3, fin=1, fout=3, din=self.X, name='C1_1')
+        C1_2 = conv_layer(filter_size=3, fin=3, fout=9, din=C1_1, name='C1_2')
+        P1 = pool(C1_2, option="maxpool")
+        P1 = tf.nn.dropout(P1, keep_prob=self.keep_prob)
+
+        C2_1 = conv_layer(filter_size=3, fin=9, fout=27, din=P1, name='C2_1')
+        C2_2 = conv_layer(filter_size=3, fin=27, fout=54, din=C2_1, name='C2_2')
+        P2 = pool(C2_2, option="maxpool")
+        P2 = tf.nn.dropout(P2, keep_prob=self.keep_prob)
+
+        C3_1 = conv_layer(filter_size=3, fin=54, fout=54, din=P2, name='C3_1')
+        C3_2 = conv_layer(filter_size=3, fin=54, fout=54, din=C3_1, name='C3_2')
+        P3 = pool(C3_2, option="maxpool")
+        P3 = tf.nn.dropout(P3, keep_prob=self.keep_prob)
+
+        C4_1 = conv_layer(filter_size=3, fin=54, fout=54, din=P3, name='C4_1')
+        C4_2 = conv_layer(filter_size=3, fin=54, fout=54, din=C4_1, name='C4_2')
+        P4 = pool(C3_2, option="maxpool")
+        P4 = tf.nn.dropout(P4, keep_prob=self.keep_prob)
+
+        print(P4)
+
+        fc0 = tf.reshape(P4, [-1, 8 * 10 * 54])
+
+        with tf.device("/cpu:0"):
+            W1 = tf.get_variable("W1", shape=[8 * 10 * 54, 4096], initializer=tf.contrib.layers.xavier_initializer())
+            b1 = tf.Variable(tf.random_normal([4096]))
+            fc1 = tf.nn.relu(tf.matmul(fc0, W1) + b1)
+
+            W2 = tf.get_variable("W2", shape=[4096, 4096], initializer=tf.contrib.layers.xavier_initializer())
+            b2 = tf.Variable(tf.random_normal([4096]))
+            fc2 = tf.nn.relu(tf.matmul(fc1, W2) + b2)
+
+            W3 = tf.get_variable("W3", shape=[4096, 4], initializer=tf.contrib.layers.xavier_initializer())
+            b3 = tf.Variable(tf.random_normal([4]))
+            self.model = tf.matmul(fc2, W3) + b3
+
+        chk_full = './_model/action_full/action.ckpt'
+        chk_upper= './_model/action_upper/action.ckpt'
+
+        self.full = tf.Session()
+        self.upper = tf.Session()
+        self.saver = tf.train.Saver()
+
+        self.saver.restore(self.full, chk_full)
+        self.saver.restore(self.upper, chk_upper)
+
+
+    def predict_motion(self, frame, full=1):
+        frame = frame.reshape(-1, self.Resources.motion_weight, self.Resources.motion_height, 1)
+        if(full == 1):
+            result = self.full.run(tf.argmax(self.model, 1), feed_dict={self.X: frame, self.keep_prob: 1})
+        else:
+            result = self.upper.run(tf.argmax(self.model, 1), feed_dict={self.X: frame, self.keep_prob: 1})
+
+        if (result == 0):
+            print("\t\t\t\t누가 걷고 있습니다.")
+
+        elif (result == 1):
+            print("\t\t\t\t누가 조깅하듯이 뛰고 있네요")
+
+        elif (result == 2):
+            print("\t\t\t\t누가 달리고 있습니다.")
+
+        elif (result == 3):
+            print("\t\t\t\t누가 던지고 있습니다.")
+
+        return result
+
+    def predict_with_frame(self, frame, relayText):
         #print("\t\t\t\t대기시간이 길어 영상처리로 텍스트 생성")
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -152,7 +258,7 @@ class Make_SceneData():
                     result.append({"SceneNumber": count, "start": int(line[1]), "end": int(float(line[4]) * self.fps) + int(line[1]), "label": None})
                 count = count + 1
 
-        self.data = result[:354]
+        self.data = result[:100]
         f.close()
 
     def save_image_data(self):
