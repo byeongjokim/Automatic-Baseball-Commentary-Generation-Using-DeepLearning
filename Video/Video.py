@@ -19,7 +19,7 @@ class Video():
 
             cv2.imshow("1030KIADS", frame)
 
-            self.Resources.set_frameNo(count)
+            #self.Resources.set_frameNo(count)
             self.Resources.set_frame(frame)
 
             if cv2.waitKey(1) == ord('q'):
