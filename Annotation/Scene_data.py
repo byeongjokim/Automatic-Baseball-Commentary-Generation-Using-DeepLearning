@@ -46,7 +46,7 @@ class SceneData():
         #print("MSE: %.2f, struct_SSIM: %.2f" % (m, s))
         return s
 
-    def predict(self, frame_no, relayText):
+    def Annotation_with_frameNo(self, frame_no, relayText):
         #print("\t\t\t\t대기시간이 길어 영상처리로 텍스트 생성")
 
         video = cv2.VideoCapture("./_data/20171030KIADUSAN.mp4")
@@ -104,17 +104,13 @@ class SceneData():
 
         cv2.imwrite(str(frame_no) + ".jpg", resize)
 
-    def predict_with_frame(self, frame, relayText):
+    def Annotation_with_frame(self, frame, relayText):
         #print("\t\t\t\t대기시간이 길어 영상처리로 텍스트 생성")
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         resize = cv2.resize(gray, (self.width, self.height))
 
-        result = []
-        for i in self.image_data:
-            result.append(self.compare_images(i["image"], resize))
-
-        label = self.image_data[result.index(max(result))]["label"]
+        label = self.predict_scene(resize)
 
         people, full = self.get_human(resize)
         for (x, y, w, h) in people:
@@ -149,6 +145,15 @@ class SceneData():
             print('\t\t\t\t기타 장면 입니다.')
 
         print("\t\t\t\t==================================================================")
+
+    def predict_scene(self, image):
+        result = []
+        for i in self.image_data:
+            result.append(self.compare_images(i["image"], image))
+
+        label = self.image_data[result.index(max(result))]["label"]
+
+        return label
 
     def get_human(self, image):
         body_cascade = cv2.CascadeClassifier('./_data/cascades/haarcascade_fullbody.xml')

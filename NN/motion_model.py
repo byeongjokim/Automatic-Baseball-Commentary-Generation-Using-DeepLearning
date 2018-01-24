@@ -14,8 +14,6 @@ body_cascade = cv2.CascadeClassifier('./_data/cascades/haarcascade_fullbody.xml'
 #body_cascade = cv2.CascadeClassifier('./_data/cascades/haarcascade_upperbody.xml')
 
 def get_human(image):
-
-
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     people = body_cascade.detectMultiScale(gray, 1.05, 3, flags=cv2.CASCADE_SCALE_IMAGE)

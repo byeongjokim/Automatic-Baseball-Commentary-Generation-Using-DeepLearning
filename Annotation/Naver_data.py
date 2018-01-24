@@ -86,6 +86,8 @@ class NaverData():
             if(int(i["pitchId"].split("_")[-1]) > int(start)):
                 no = i["seqno"] - 1
                 break
+            else:
+                print(i["liveText"])
 
         return start, no
 
@@ -130,6 +132,6 @@ class NaverData():
                         tmp_pitchId = pre_pitchId
                     wait = 0
 
-            print(i["liveText"])
+                print(i["liveText"])
 
             count = count + 1

@@ -28,13 +28,13 @@ class Annotation():
             else:
                 if(ssim(self.Resources.frame, frame, multichannel=True) < 0.75):
                     print("\t\t\t\tscene changed")
-                    self.sceneData.predict_with_frame(self.Resources.frame, self.Resources.now_relayText)
+                    self.sceneData.Annotation_with_frame(self.Resources.frame, self.Resources.now_relayText)
                     frame = self.Resources.frame
 
 
             '''
             if(self.Resources.long==True):
-                #self.sceneData.predict(self.Resources.frame_no, self.Resources.now_relayText)
+                #self.sceneData.Annotation_with_framNo(self.Resources.frame_no, self.Resources.now_relayText)
                 self.Resources.set_long(False)
             time.sleep(7)
             self.Resources.set_long(True)

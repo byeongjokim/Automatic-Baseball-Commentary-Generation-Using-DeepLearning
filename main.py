@@ -67,7 +67,7 @@ o_count = 8145
 fps = 29.97
 
 #count = 70233  before start 2
-count = 10000
+count = 60000
 
 naver = threading.Thread(target=annotation.generate_Naver, args=(count-o_count, fps, o_start, ))
 naver.start()
