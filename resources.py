@@ -10,6 +10,8 @@ class Resources():
     motion_weight = 60
     motion_height = 80
 
+    annotation = ""
+
     def set_frameNo(self, frame_no):
         self.frame_no = frame_no
 
@@ -24,3 +26,6 @@ class Resources():
 
     def set_exit(self, exit):
         self.exit = exit
+
+    def set_annotation(self, annotation):
+        self.annotation = annotation

@@ -40,20 +40,31 @@ def test_act(img):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     people = body_cascade.detectMultiScale(gray, 1.05, 3, flags=cv2.CASCADE_SCALE_IMAGE)
     people = non_max_suppression(people, probs=None, overlapThresh=0.75)
-
+    print(people)
+    print(len(people))
     count = 0
     for (x, y, w, h) in people:
         person = gray[y:y + h, x:x + w]
-        person_resize = cv2.resize(person, (60, 80))
-        person_image = np.array(person_resize)
+        #person = cv2.resize(person, (60, 80))
+        person_image = np.array(person)
 
-        text = act.predict(person_image)
+        #text = act.predict(person_image)
         cv2.imwrite(str(count)+".jpg", person_image)
         count = count+1
 
+    hog = cv2.HOGDescriptor()
+    hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+
+    (rects, weights) = hog.detectMultiScale(gray, winStride=(16,16), padding=(8,8), scale=1.05)
+    rects = np.array([[x, y, x + w, y + h] for (x, y, w, h) in rects])
+    pick = non_max_suppression(rects, probs=None, overlapThresh=0.75)
+    for (xA, yA, xB, yB) in pick:
+        cv2.rectangle(image, (xA, yA), (xB, yB), (0, 255, 0), 2)
+
+    cv2.imwrite("asd"+".jpg", image)
 
 #train_act()
-#test_act("./_data/scene_image/field_48.jpg")
+#test_act("./_data/scene_image/pitcher_39.jpg")
 
 
 resources = Resources()
@@ -67,7 +78,7 @@ o_count = 8145
 fps = 29.97
 
 #count = 70233  before start 2
-count = 60000
+count = 10000
 
 naver = threading.Thread(target=annotation.generate_Naver, args=(count-o_count, fps, o_start, ))
 naver.start()

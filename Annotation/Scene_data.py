@@ -122,29 +122,29 @@ class SceneData():
             cv2.rectangle(resize, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
         if(label == "beforestart"):
-            print("\t\t\t\t경기 시작 전입니다.")
+            print("\t\t경기 시작 전입니다.")
         elif(label == "field"):
-            print("\t\t\t\t경기장을 보여주고 있습니다.")
+            print("\t\t경기장을 보여주고 있습니다.")
         elif (label == "gallery"):
-            print("\t\t\t\t관중들이 응원을 하고 있습니다.")
+            print("\t\t관중들이 응원을 하고 있습니다.")
         elif (label == "closeup"):
-            print("\t\t\t\t선수들이 클로즈업 되었네요. -> 추후 선수정보")
+            print("\t\t선수들이 클로즈업 되었네요.")
         elif (label == "practice"):
-            print("\t\t\t\t투수가 연습 구를 던지고 있습니다.")
+            print("\t\t투수가 연습 구를 던지고 있습니다.")
         elif (label == "batter"):
-            print("\t\t\t\t"+str(relayText["batorder"])+"번 타자의 모습입니다. -> 추후 선수 정보")
+            print("\t\t"+str(relayText["batorder"])+"번 타자의 모습입니다.")
         elif (label == "pitchingbatting"):
-            print("\t\t\t\t투수, 타자 그리고 포수가 영상에 잡히네요. 어떤 공을 던질까요?")
+            print("\t\t투수, 타자 그리고 포수가 영상에 잡히네요.")
         elif (label == "pitcher"):
-            print("\t\t\t\t투수의 모습입니다. -> 추후 선수 정보")
+            print("\t\t투수의 모습입니다.")
         elif (label == "run"):
-            print("\t\t\t\t뛰고 있네요.")
+            print("\t\t뛰고 있네요.")
         elif (label == "coach"):
-            print("\t\t\t\t코치들의 모습이네요.")
+            print("\t\t코치들의 모습이네요.")
         else:
-            print('\t\t\t\t기타 장면 입니다.')
+            print('\t\t기타 장면 입니다.')
 
-        print("\t\t\t\t==================================================================")
+        print("\t\t============================")
 
     def predict_scene(self, image):
         result = []
@@ -232,16 +232,16 @@ class SceneData():
             result = self.upper.run(tf.argmax(self.model, 1), feed_dict={self.X: frame, self.keep_prob: 1})
 
         if (result == 0):
-            print("\t\t\t\t누가 걷고 있습니다.")
+            print("\t\t누가 걷고 있습니다.")
 
         elif (result == 1):
-            print("\t\t\t\t누가 조깅하듯이 뛰고 있네요")
+            print("\t\t누가 조깅하듯이 뛰고 있네요")
 
         elif (result == 2):
-            print("\t\t\t\t누가 달리고 있습니다.")
+            print("\t\t누가 달리고 있습니다.")
 
         elif (result == 3):
-            print("\t\t\t\t누가 던지고 있습니다.")
+            print("\t\t누가 던지고 있습니다.")
 
         return result
 

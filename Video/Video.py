@@ -10,6 +10,7 @@ class Video():
         video = cv2.VideoCapture(v)
 
         video.set(1, count)
+        cv2.namedWindow('play', cv2.WINDOW_NORMAL)
 
         while True:
             success, frame = video.read()
@@ -17,7 +18,9 @@ class Video():
                 self.Resources.set_exit(True)
                 break
 
-            cv2.imshow("1030KIADS", frame)
+            #output = cv2.resize(frame, (960,1080))
+
+            cv2.imshow('play', frame)
 
             #self.Resources.set_frameNo(count)
             self.Resources.set_frame(frame)
