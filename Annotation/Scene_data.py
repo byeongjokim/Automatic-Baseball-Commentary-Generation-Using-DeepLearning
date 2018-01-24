@@ -148,6 +148,7 @@ class SceneData():
         else:
             print('\t\t\t\t기타 장면 입니다.')
 
+        print("\t\t\t\t==================================================================")
 
     def get_human(self, image):
         body_cascade = cv2.CascadeClassifier('./_data/cascades/haarcascade_fullbody.xml')
