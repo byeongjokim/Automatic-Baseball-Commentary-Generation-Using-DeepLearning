@@ -40,8 +40,7 @@ def test_act(img):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     people = body_cascade.detectMultiScale(gray, 1.05, 3, flags=cv2.CASCADE_SCALE_IMAGE)
     people = non_max_suppression(people, probs=None, overlapThresh=0.75)
-    print(people)
-    print(len(people))
+
     count = 0
     for (x, y, w, h) in people:
         person = gray[y:y + h, x:x + w]
