@@ -15,7 +15,7 @@ from collections import Counter
 from NN.cnn import conv_layer, pool
 
 class SceneData():
-    def __init__(self, Resources, shape=(320,180)):
+    def __init__(self, Resources, shape=(320, 180)):
         print("init_sceneData")
         self.Resources = Resources
 
@@ -191,6 +191,13 @@ class SceneData():
         else:
             full = 1
         return people, full
+
+    def make_scene_model(self):
+        self.scene = tf.placeholder(tf.float32, [None, self.width, self.height, 1])
+        self.label = tf.placeholder(tf.float32, [None, 10])
+        self.keep_prob_scene = tf.placeholder(tf.float32)
+
+
 
     def make_motion_model(self):
         self.X = tf.placeholder(tf.float32, [None, self.Resources.motion_weight, self.Resources.motion_height, 1])
