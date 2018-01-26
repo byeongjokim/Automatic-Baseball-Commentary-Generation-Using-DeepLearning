@@ -8,12 +8,12 @@ import numpy as np
 from Annotation.Scene_data import Make_SceneData
 from imutils.object_detection import non_max_suppression
 
-'''
+
 s = Make_SceneData('./_data/scene1-1.csv')
 s.clustering()
-s.save_image_data()
-'''
+#s.save_image_data()
 
+'''
 from NN.motion_model import Data, Action
 
 def train_act():
@@ -86,3 +86,4 @@ scene = threading.Thread(target=annotation.generate_Scene)
 scene.start()
 
 video.play(v="./_data/20171030KIADUSAN.mp4", count=count)
+'''

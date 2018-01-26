@@ -4,9 +4,13 @@ import cv2
 import os
 import numpy as np
 import tensorflow as tf
+import operator
 
+from sklearn.neighbors import NearestNeighbors
 from skimage.measure import compare_ssim as ssim
 from imutils.object_detection import non_max_suppression
+from operator import itemgetter
+from collections import Counter
 
 from NN.cnn import conv_layer, pool
 
@@ -31,6 +35,8 @@ class SceneData():
                     image.append(filename)
 
         self.image_data = []
+        image_data_X = []
+        image_data_y = []
         for i in image:
             self.image_data.append({"image":cv2.resize(
                 cv2.cvtColor(
@@ -38,6 +44,13 @@ class SceneData():
                     cv2.COLOR_BGR2GRAY),
                 (self.width, self.height)),
                 "label":i.split(".")[0].split("_")[0]})
+
+            image_data_X.append(cv2.resize(
+                                    cv2.cvtColor(
+                                        cv2.imread(path+i),
+                                        cv2.COLOR_BGR2GRAY),
+                                    (self.width, self.height)))
+            image_data_y.append(i.split(".")[0].split("_")[0])
 
         print("we have %d image data" %(len(self.image_data)))
 
@@ -110,7 +123,7 @@ class SceneData():
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         resize = cv2.resize(gray, (self.width, self.height))
 
-        label = self.predict_scene(resize)
+        label = self.predict_scene(resize, 3)
 
         people, full = self.get_human(resize)
         for (x, y, w, h) in people:
@@ -125,6 +138,10 @@ class SceneData():
             print("\t\t경기 시작 전입니다.")
         elif(label == "field"):
             print("\t\t경기장을 보여주고 있습니다.")
+        elif(label == "1"):
+            print("\t\t1루 쪽을 보여주네요.")
+        elif (label == "3"):
+            print("\t\t3루 쪽을 보여주네요.")
         elif (label == "gallery"):
             print("\t\t관중들이 응원을 하고 있습니다.")
         elif (label == "closeup"):
@@ -142,16 +159,20 @@ class SceneData():
         elif (label == "coach"):
             print("\t\t코치들의 모습이네요.")
         else:
+            print(label)
             print('\t\t기타 장면 입니다.')
 
         print("\t\t============================")
 
-    def predict_scene(self, image):
+    def predict_scene(self, image, k):
         result = []
+        knn_ = []
         for i in self.image_data:
             result.append(self.compare_images(i["image"], image))
 
+
         label = self.image_data[result.index(max(result))]["label"]
+
 
         return label
 
@@ -266,20 +287,17 @@ class Make_SceneData():
                 pass
 
             elif(line[0] == str(count)):
-                if(line[5]):
-                    result.append({"SceneNumber":count, "start":int(line[1]), "end":int(float(line[4])*self.fps) + int(line[1]), "label":line[5]})
-                else:
-                    result.append({"SceneNumber": count, "start": int(line[1]), "end": int(float(line[4]) * self.fps) + int(line[1]), "label": None})
+                result.append({"SceneNumber": count, "start": int(line[1]), "end": int(float(line[4]) * self.fps) + int(line[1]), "label": None})
                 count = count + 1
 
-        self.data = result[:100]
+        self.data = result[:400]
         f.close()
 
     def save_image_data(self):
         video = cv2.VideoCapture("./_data/20171030KIADUSAN.mp4")
 
         count = 0
-        for i in self.data:
+        for i in self.result:
             no_frame = (i["start"] + i["end"]) / 2
             video.set(1, no_frame)
             success, frame = video.read()
@@ -287,7 +305,7 @@ class Make_SceneData():
             if not success:
                 break
 
-            cv2.imwrite(i["label"]+"_"+str(count)+".jpg", frame)
+            cv2.imwrite("./scene_data/"+i["label"]+"_"+str(count)+".jpg", frame)
             count = count + 1
 
         return 1
@@ -309,6 +327,24 @@ class Make_SceneData():
     def clustering(self):
         train_data = []
         test_data = []
+
+        path = "./scene_data/train/"
+        image = []
+        for (p, dir, files) in os.walk(path):
+            for filename in files:
+                ext = os.path.splitext(filename)[-1]
+                if ext == '.jpg':
+                    image.append(filename)
+
+        train_data=[]
+        for i in image:
+            train_data.append({"image":
+                cv2.cvtColor(
+                    cv2.imread(path + i),
+                    cv2.COLOR_BGR2GRAY),
+                "label": i.split(".")[0].split("_")[0]})
+
+
         video = cv2.VideoCapture("./_data/20171030KIADUSAN.mp4")
 
         for i in self.data:
@@ -319,25 +355,40 @@ class Make_SceneData():
             if not success:
                 break
 
-            #cv2.imwrite(str(i["SceneNumber"])+".jpg", frame)
-            if(i["label"]):
-                test_data.append({"image":cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY), "no":i["SceneNumber"], "label":i["label"]})
-            else:
-                train_data.append({"image":cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY), "no":i["SceneNumber"], "label":None})
+            test_data.append({"image":frame, "label":None})
 
         print("made %d test, %d train data" %(len(test_data), len(train_data)))
         print("will calculate simm")
 
         count = 0
-        for i in train_data:
+        for i in test_data:
             print(count)
-            result = []
-            for j in test_data:
-                s = self.compare_images(j["image"], i["image"])
-                result.append(s)
 
-            max_id = result.index(max(result))
-            self.data[i["no"]-1]["label"] = test_data[max_id]["label"]
+            result = []
+            for j in train_data:
+                s = self.compare_images(j["image"], cv2.cvtColor(i["image"], cv2.COLOR_BGR2GRAY))
+
+                result.append({"label":j["label"], "ssim":s})
+
+            result.sort(key=operator.itemgetter('ssim'), reverse=True)
+            print(result)
+            result = result[:3]
+            print(result)
+            l = [i["label"] for i in result]
+
+            first = result[0]["label"]
+
+            counter = Counter(l)
+            print(counter)
+            if(counter.most_common()[0][1] == 1):
+                label = first
+            else:
+                label = counter.most_common()[0][0]
+
+            print(label)
+            i["label"] = label
+            cv2.imwrite("./scene_data/test/"+str(i["label"])+"_"+str(count)+".jpg", i["image"])
             count = count + 1
+        #self.result = test_data + train_data
 
 
