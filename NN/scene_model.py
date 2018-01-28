@@ -18,8 +18,10 @@ class Scene_Model():
     batch_size = 30
     epoch = 100
 
-    width = 320
-    height = 180
+    width = 224
+    height = 224
+
+    kind_scene = ['field', 'pitcher', 'gallery', 'batter', 'pitchingbatting', 'beforestart', '1', 'coach', 'closeup', '3']
 
     def __init__(self):
         print("init scene_model")
@@ -40,55 +42,67 @@ class Scene_Model():
                     cv2.cvtColor(
                         cv2.imread(path + i),
                         cv2.COLOR_BGR2GRAY),
-                    (320, 180)),
+                    (self.width, self.height)),
                 "label": i.split(".")[0].split("_")[0]})
 
-        self.data = random.shuffle(self.data)
-        print(len(self.data))
-        self.num_label = len(set([i["label"] for i in self.data]))
 
-        print(self.num_label)
+        random.shuffle(self.data)
 
+
+        x = np.array([i["image"] for i in self.data])
+        _y = np.array([i["label"] for i in self.data])
+        y = np.zeros((len(_y), len(set(_y))))
+        y[np.arange(len(_y)), [self.kind_scene.index(i) for i in _y]] = 1
+
+        self.X = x
+        self.Y = y
+        self.num_label = len(set(_y))
+
+    #vggnet - A
     def make_model(self):
         self.scene_X = tf.placeholder(tf.float32, [None, self.width, self.height, 1])
         self.scene_Y = tf.placeholder(tf.float32, [None, self.num_label])
         self.scene_keep_prob = tf.placeholder(tf.float32)
 
-        C1_1 = conv_layer(filter_size=3, fin=1, fout=3, din=self.scene_X, name='scene_C1_1')
-        C1_2 = conv_layer(filter_size=3, fin=3, fout=9, din=C1_1, name='scene_C1_2')
-        P1 = pool(C1_2, option="maxpool")
+        C1 = conv_layer(filter_size=3, fin=1, fout=64, din=self.scene_X, name='scene_C1')
+        P1 = pool(C1, option="maxpool")
         P1 = tf.nn.dropout(P1, keep_prob=self.scene_keep_prob)
 
-        C2_1 = conv_layer(filter_size=3, fin=9, fout=27, din=P1, name='scene_C2_1')
-        C2_2 = conv_layer(filter_size=3, fin=27, fout=54, din=C2_1, name='scene_C2_2')
-        P2 = pool(C2_2, option="maxpool")
+        C2 = conv_layer(filter_size=3, fin=64, fout=128, din=P1, name='scene_C2')
+        P2 = pool(C2, option="maxpool")
         P2 = tf.nn.dropout(P2, keep_prob=self.scene_keep_prob)
 
-        C3_1 = conv_layer(filter_size=3, fin=54, fout=54, din=P2, name='scene_C3_1')
-        C3_2 = conv_layer(filter_size=3, fin=54, fout=54, din=C3_1, name='scene_C3_2')
+        C3_1 = conv_layer(filter_size=3, fin=128, fout=256, din=P2, name='scene_C3_1')
+        C3_2 = conv_layer(filter_size=3, fin=256, fout=256, din=C3_1, name='scene_C3_2')
         P3 = pool(C3_2, option="maxpool")
         P3 = tf.nn.dropout(P3, keep_prob=self.scene_keep_prob)
 
-        C4_1 = conv_layer(filter_size=3, fin=54, fout=54, din=P3, name='scene_C4_1')
-        C4_2 = conv_layer(filter_size=3, fin=54, fout=54, din=C4_1, name='scene_C4_2')
-        P4 = pool(C3_2, option="maxpool")
+        C4_1 = conv_layer(filter_size=3, fin=256, fout=512, din=P3, name='scene_C4_1')
+        C4_2 = conv_layer(filter_size=3, fin=512, fout=512, din=C4_1, name='scene_C4_2')
+        P4 = pool(C4_2, option="maxpool")
         P4 = tf.nn.dropout(P4, keep_prob=self.scene_keep_prob)
 
-        print(P4)
 
-        fc0 = tf.reshape(P4, [-1, 8 * 10 * 54])
+        C5_1 = conv_layer(filter_size=3, fin=512, fout=512, din=P4, name='scene_C5_1')
+        C5_2 = conv_layer(filter_size=3, fin=512, fout=512, din=C5_1, name='scene_C5_2')
+        P5 = pool(C5_2, option="maxpool")
+        P5 = tf.nn.dropout(P5, keep_prob=self.scene_keep_prob)
+
+        print(P5)
+
+        fc0 = tf.reshape(P4, [-1, 7 * 7 * 512])
 
         with tf.device("/cpu:0"):
-            W1 = tf.get_variable("scene_W1", shape=[8 * 10 * 54, 4096],
+            W1 = tf.get_variable("scene_W1", shape=[7 * 7 * 512, 4096],
                                  initializer=tf.contrib.layers.xavier_initializer())
             b1 = tf.Variable(tf.random_normal([4096]))
             fc1 = tf.nn.relu(tf.matmul(fc0, W1) + b1)
 
-            W2 = tf.get_variable("scene_W2", shape=[4096, 4096], initializer=tf.contrib.layers.xavier_initializer())
-            b2 = tf.Variable(tf.random_normal([4096]))
+            W2 = tf.get_variable("scene_W2", shape=[4096, 1000], initializer=tf.contrib.layers.xavier_initializer())
+            b2 = tf.Variable(tf.random_normal([1000]))
             fc2 = tf.nn.relu(tf.matmul(fc1, W2) + b2)
 
-            W3 = tf.get_variable("scene_W3", shape=[4096, self.num_label], initializer=tf.contrib.layers.xavier_initializer())
+            W3 = tf.get_variable("scene_W3", shape=[1000, self.num_label], initializer=tf.contrib.layers.xavier_initializer())
             b3 = tf.Variable(tf.random_normal([self.num_label]))
             self.scene_model = tf.matmul(fc2, W3) + b3
 
@@ -106,8 +120,8 @@ class Scene_Model():
 
 
     def train(self):
-        train_x = np.array([i["image"] for i in self.data[:-10]])
-        train_y = np.array([i["label"] for i in self.data[:-10]])
+        train_x = self.X[:-10]
+        train_y = self.Y[:-10]
 
 
         total_batch = int(len(train_x) / self.batch_size)
@@ -144,8 +158,8 @@ class Scene_Model():
         self.saver.save(self.sess, self.chk_scene)
 
     def test(self):
-        test_x = np.array([i["image"] for i in self.data[-10:]])
-        test_y = np.array([i["label"] for i in self.data[-10:]])
+        test_x = self.X[-10:]
+        test_y = self.Y[-10:]
 
         is_correct = tf.equal(tf.argmax(self.scene_model, 1), tf.argmax(self.scene_Y, 1))
         accuracy = tf.reduce_mean(tf.cast(is_correct, tf.float32))

@@ -51,8 +51,12 @@ def test_act(img):
     cv2.imwrite("asd"+".jpg", image)
 
 def train_scene():
-    a = Scene_Model()
-    a.load_data()
+    s = Scene_Model()
+    s.load_data()
+
+    s.make_model()
+    s.train()
+
 def test_scene():
     return 2
 
