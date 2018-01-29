@@ -90,7 +90,7 @@ class Scene_Model():
 
         print(P5)
 
-        fc0 = tf.reshape(P4, [-1, 7 * 7 * 512])
+        fc0 = tf.reshape(P5, [-1, 7 * 7 * 512])
 
         with tf.device("/cpu:0"):
             W1 = tf.get_variable("scene_W1", shape=[7 * 7 * 512, 4096],
@@ -106,6 +106,7 @@ class Scene_Model():
             b3 = tf.Variable(tf.random_normal([self.num_label]))
             self.scene_model = tf.matmul(fc2, W3) + b3
 
+        print(self.scene_model)
         self.cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=self.scene_model, labels=self.scene_Y))
         self.optimizer = tf.train.AdamOptimizer(0.001).minimize(self.cost)
 
@@ -122,7 +123,6 @@ class Scene_Model():
     def train(self):
         train_x = self.X[:-10]
         train_y = self.Y[:-10]
-
 
         total_batch = int(len(train_x) / self.batch_size)
 
@@ -150,7 +150,7 @@ class Scene_Model():
 
                 total_cost = total_cost + cost_val
 
-            if (total_cost / total_batch < 0.01):
+            if (total_cost / total_batch < 0.03):
                 break
             print('Epoch:', '%d' % (e + 1), 'Average cost =', '{:.3f}'.format(total_cost / total_batch))
 
@@ -169,11 +169,16 @@ class Scene_Model():
               self.sess.run(accuracy, feed_dict={self.scene_X: test_x, self.scene_Y: test_y, self.scene_keep_prob: 1}) * 100)
 
         print("Label: ", self.sess.run(tf.argmax(test_y, 1)))
-        print("Prediction: ", self.sess.run(tf.argmax(self.scene_model, 1), feed_dict={self.X: test_x, self.scene_keep_prob: 1}))
+        print("Prediction: ", self.sess.run(tf.argmax(self.scene_model, 1), feed_dict={self.scene_X: test_x, self.scene_keep_prob: 1}))
 
-    def predict(self):
-        return 1
+    def predict(self, image):
+        image = cv2.resize(image, (self.width, self.height))
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        image = image.reshape(-1, self.width, self.height, 1)
 
+        result = self.sess.run(tf.argmax(self.scene_model, 1), feed_dict={self.scene_X: image, self.scene_keep_prob: 1})
+        #result = self.sess.run(self.scene_model, feed_dict={self.scene_X: image, self.scene_keep_prob: 1})
+        print(self.kind_scene[result[0]])
 
 
 class Make_SceneData():

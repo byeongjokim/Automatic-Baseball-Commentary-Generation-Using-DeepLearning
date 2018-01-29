@@ -56,11 +56,16 @@ def train_scene():
 
     s.make_model()
     s.train()
+    s.test()
 
 def test_scene():
-    return 2
+    s = Scene_Model()
+    s.num_label = 10
+    image = cv2.imread("./scene_data/train/pitchingbatting_230.jpg")
+    s.make_model()
+    s.predict(image)
 
 #train_act()
 #test_act("./_data/scene_image/pitcher_39.jpg")
-train_scene()
+#train_scene()
 test_scene()
