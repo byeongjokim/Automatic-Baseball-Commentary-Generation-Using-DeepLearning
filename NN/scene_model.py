@@ -182,14 +182,13 @@ class Scene_Model():
         return result[0]
 
 class Make_SceneData():
-    def __init__(self, path, shape=(320,180),fps=29.970):
+    def __init__(self, path, video, fps=29.970):
         print("sceneData")
         self.path = path
+        self.video = video
         self.fps = fps
         self.get_data_csv()
 
-        self.width = shape[0]
-        self.height = shape[1]
 
     def get_data_csv(self):
         f = open(self.path, 'r', encoding='utf-8')
@@ -207,24 +206,6 @@ class Make_SceneData():
         self.data = result[:400]
         f.close()
 
-    def save_image_data(self):
-        video = cv2.VideoCapture("./_data/20171030KIADUSAN.mp4")
-
-        count = 0
-        for i in self.result:
-            no_frame = (i["start"] + i["end"]) / 2
-            video.set(1, no_frame)
-            success, frame = video.read()
-
-            if not success:
-                break
-
-            cv2.imwrite("./scene_data/"+i["label"]+"_"+str(count)+".jpg", frame)
-            count = count + 1
-
-        return 1
-
-
 
     def mse(self, A, B):
         err = np.sum((A.astype('float') - B.astype('float')) ** 2)
@@ -237,6 +218,57 @@ class Make_SceneData():
         #print("MSE: %.2f, struct_SSIM: %.2f" % (m, s))
         return s
 
+    def clustering2(self):
+        train_data = []
+        test_data = []
+
+        path = "./scene_data/train/"
+        image = []
+        for (p, dir, files) in os.walk(path):
+            for filename in files:
+                ext = os.path.splitext(filename)[-1]
+                if ext == '.jpg':
+                    image.append(filename)
+
+        train_data = []
+        for i in image:
+            train_data.append({"image":
+                cv2.cvtColor(
+                    cv2.imread(path + i),
+                    cv2.COLOR_BGR2GRAY),
+                "label": i.split(".")[0].split("_")[0]})
+
+        video = cv2.VideoCapture(self.video)
+
+        start = 30000
+        end = 60000
+
+        while True:
+            video.set(1, start)
+            success, frame = video.read()
+            if not success:
+                break
+            if (start > end):
+                break
+
+            test_data.append({"image": frame, "label":None})
+            start = start + 200
+
+        print("made %d test, %d train data" % (len(test_data), len(train_data)))
+        print("will calculate simm")
+
+        s = Scene_Model()
+        s.num_label = 10
+        s.make_model()
+        kind_scene = ['field', 'pitcher', 'gallery', 'batter', 'pitchingbatting', 'beforestart', '1', 'coach',
+                      'closeup', '3']
+        count = 0
+        for i in test_data:
+            result = s.predict(i["image"])
+
+            cv2.imwrite("./scene_data/test/20171029KIADUSAN/" + str(kind_scene[result]) + "_" + str(count) + ".jpg", i["image"])
+            count = count + 1
+        # self.result = test_data + train_data
 
     def clustering(self):
         train_data = []
@@ -306,3 +338,19 @@ class Make_SceneData():
         #self.result = test_data + train_data
 
 
+    def save_image_data(self):
+        video = cv2.VideoCapture(self.video)
+
+        count = 0
+        for i in self.result:
+            no_frame = (i["start"] + i["end"]) / 2
+            video.set(1, no_frame)
+            success, frame = video.read()
+
+            if not success:
+                break
+
+            cv2.imwrite("./scene_data/"+i["label"]+"_"+str(count)+".jpg", frame)
+            count = count + 1
+
+        return 1

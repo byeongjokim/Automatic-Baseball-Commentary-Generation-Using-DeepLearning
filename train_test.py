@@ -61,11 +61,17 @@ def train_scene():
 def test_scene():
     s = Scene_Model()
     s.num_label = 10
-    image = cv2.imread("./scene_data/train/pitchingbatting_230.jpg")
+    image = cv2.imread("./scene_data/test/20171029KIADUSAN/closeup_25.jpg")
     s.make_model()
     s.predict(image)
+
+def make_scene_data():
+    s = Make_SceneData('./_data/scene1-1.csv', "./_data/20171029KIADUSAN.mp4")
+    s.clustering2()
 
 #train_act()
 #test_act("./_data/scene_image/pitcher_39.jpg")
 #train_scene()
-test_scene()
+#test_scene()
+
+#make_scene_data()

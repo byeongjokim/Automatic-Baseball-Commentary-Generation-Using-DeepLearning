@@ -70,65 +70,6 @@ class SceneData():
         s = ssim(A, B, multichannel=True)
         #print("MSE: %.2f, struct_SSIM: %.2f" % (m, s))
         return s
-    '''
-    def Annotation_with_frameNo(self, frame_no, relayText):
-        #print("\t\t\t\t대기시간이 길어 영상처리로 텍스트 생성")
-
-        video = cv2.VideoCapture("./_data/20171030KIADUSAN.mp4")
-
-        video.set(1, frame_no)
-        success, frame = video.read()
-
-        if not success:
-            print("can not load video")
-            return 0
-
-
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        resize = cv2.resize(gray, (self.width, self.height))
-
-        result = []
-        for i in self.image_data:
-            result.append(self.compare_images(i["image"], resize))
-
-        label = self.image_data[result.index(max(result))]["label"]
-
-        people, full = self.get_human(resize)
-        for (x, y, w, h) in people:
-            person = resize[y:y + h, x:x + w]
-            person_resize = cv2.resize(person, (self.Resources.motion_weight, self.Resources.motion_height))
-            person_image = np.array(person_resize)
-            motion = self.predict_motion(person_image, full)
-
-            cv2.rectangle(resize, (x, y), (x + w, y + h), (0, 0, 255), 2)
-
-
-        if(label == "beforestart"):
-            print("\t\t\t\t경기 시작 전입니다.")
-        elif(label == "field"):
-            print("\t\t\t\t경기장을 보여주고 있습니다.")
-        elif (label == "gallery"):
-            print("\t\t\t\t관중들이 응원을 하고 있습니다.")
-        elif (label == "closeup"):
-            print("\t\t\t\t선수들이 클로즈업 되었네요. -> 추후 선수정보")
-        elif (label == "practice"):
-            print("\t\t\t\t투수가 연습 구를 던지고 있습니다.")
-        elif (label == "batter"):
-            print("\t\t\t\t"+str(relayText["batorder"])+"번 타자의 모습입니다. -> 추후 선수 정보")
-        elif (label == "pitchingbatting"):
-            print("\t\t\t\t투수, 타자 그리고 포수가 영상에 잡히네요. 어떤 공을 던질까요?")
-        elif (label == "pitcher"):
-            print("\t\t\t\t투수의 모습입니다. -> 추후 선수 정보")
-        elif (label == "run"):
-            print("\t\t\t\t뛰고 있네요.")
-        elif (label == "coach"):
-            print("\t\t\t\t코치들의 모습이네요.")
-        else:
-            print('\t\t\t\t기타 장면 입니다.')
-
-
-        cv2.imwrite(str(frame_no) + ".jpg", resize)
-        '''
 
     def Annotation_with_frame(self, frame, relayText):
         #print("\t\t\t\t대기시간이 길어 영상처리로 텍스트 생성")

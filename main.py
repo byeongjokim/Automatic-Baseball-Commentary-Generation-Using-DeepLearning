@@ -6,13 +6,6 @@ from Person.Person import Person
 from resources import Resources
 
 
-'''
-s = Make_SceneData('./_data/scene1-1.csv')
-s.clustering()
-#s.save_image_data()
-
-'''
-
 resources = Resources()
 
 annotation = Annotation('./_data/20171030KIADUSAN.txt', resources)

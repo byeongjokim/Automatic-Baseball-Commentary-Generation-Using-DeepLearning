@@ -334,3 +334,7 @@ class Action():
             return "person is pitching"
         else:
             return "nothing"
+
+class Action_model():
+    def __init__(self, full):
+        return 1
