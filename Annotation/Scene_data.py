@@ -13,6 +13,8 @@ from operator import itemgetter
 from collections import Counter
 
 from NN.cnn import conv_layer, pool
+from NN.scene_model import Scene_Model
+
 
 class SceneData():
     def __init__(self, Resources, shape=(320, 180)):
@@ -22,8 +24,18 @@ class SceneData():
         self.width = shape[0]
         self.height = shape[1]
 
-        self.load_image_data()
-        self.make_motion_model()
+        self.scene = Scene_Model()
+        self.scene.num_label = 10
+        self.scene.make_model()
+
+        #self.load_image_data()
+        #self.make_motion_model()
+
+
+
+        image = cv2.imread("./scene_data/train/pitchingbatting_230.jpg")
+
+        self.scene.predict(image)
 
     def load_image_data(self):
         path = "./_data/scene_image/"
@@ -58,7 +70,7 @@ class SceneData():
         s = ssim(A, B, multichannel=True)
         #print("MSE: %.2f, struct_SSIM: %.2f" % (m, s))
         return s
-
+    '''
     def Annotation_with_frameNo(self, frame_no, relayText):
         #print("\t\t\t\t대기시간이 길어 영상처리로 텍스트 생성")
 
@@ -116,50 +128,47 @@ class SceneData():
 
 
         cv2.imwrite(str(frame_no) + ".jpg", resize)
+        '''
 
     def Annotation_with_frame(self, frame, relayText):
         #print("\t\t\t\t대기시간이 길어 영상처리로 텍스트 생성")
 
+        label = self.predict_scene(frame)
+
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         resize = cv2.resize(gray, (self.width, self.height))
 
-        label = self.predict_scene(resize, 3)
 
         people, full = self.get_human(resize)
         for (x, y, w, h) in people:
             person = resize[y:y + h, x:x + w]
             person_resize = cv2.resize(person, (self.Resources.motion_weight, self.Resources.motion_height))
             person_image = np.array(person_resize)
-            motion = self.predict_motion(person_image, full)
+            #motion = self.predict_motion(person_image, full)
 
             cv2.rectangle(resize, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
-        if(label == "beforestart"):
+        if(label == 5):
             print("\t\t경기 시작 전입니다.")
-        elif(label == "field"):
+        elif(label == 0):
             print("\t\t경기장을 보여주고 있습니다.")
-        elif(label == "1"):
+        elif(label == 6):
             print("\t\t1루 쪽을 보여주네요.")
-        elif (label == "3"):
+        elif (label == 9):
             print("\t\t3루 쪽을 보여주네요.")
-        elif (label == "gallery"):
+        elif (label == 2):
             print("\t\t관중들이 응원을 하고 있습니다.")
-        elif (label == "closeup"):
+        elif (label == 8):
             print("\t\t선수들이 클로즈업 되었네요.")
-        elif (label == "practice"):
-            print("\t\t투수가 연습 구를 던지고 있습니다.")
-        elif (label == "batter"):
+        elif (label == 3):
             print("\t\t"+str(relayText["batorder"])+"번 타자의 모습입니다.")
-        elif (label == "pitchingbatting"):
+        elif (label == 4):
             print("\t\t투수, 타자 그리고 포수가 영상에 잡히네요.")
-        elif (label == "pitcher"):
+        elif (label == 1):
             print("\t\t투수의 모습입니다.")
-        elif (label == "run"):
-            print("\t\t뛰고 있네요.")
-        elif (label == "coach"):
+        elif (label == 7):
             print("\t\t코치들의 모습이네요.")
         else:
-            print(label)
             print('\t\t기타 장면 입니다.')
 
         print("\t\t============================")
@@ -180,65 +189,8 @@ class SceneData():
             full = 1
         return people, full
 
-    def make_scene_model(self):
-        self.scene_X = tf.placeholder(tf.float32, [None, self.width, self.height, 1])
-        self.scene_Y = tf.placeholder(tf.float32, [None, 10])
-        self.scene_keep_prob = tf.placeholder(tf.float32)
-
-        C1_1 = conv_layer(filter_size=3, fin=1, fout=3, din=self.scene_X, name='scene_C1_1')
-        C1_2 = conv_layer(filter_size=3, fin=3, fout=9, din=C1_1, name='scene_C1_2')
-        P1 = pool(C1_2, option="maxpool")
-        P1 = tf.nn.dropout(P1, keep_prob=self.scene_keep_prob)
-
-        C2_1 = conv_layer(filter_size=3, fin=9, fout=27, din=P1, name='scene_C2_1')
-        C2_2 = conv_layer(filter_size=3, fin=27, fout=54, din=C2_1, name='scene_C2_2')
-        P2 = pool(C2_2, option="maxpool")
-        P2 = tf.nn.dropout(P2, keep_prob=self.scene_keep_prob)
-
-        C3_1 = conv_layer(filter_size=3, fin=54, fout=54, din=P2, name='scene_C3_1')
-        C3_2 = conv_layer(filter_size=3, fin=54, fout=54, din=C3_1, name='scene_C3_2')
-        P3 = pool(C3_2, option="maxpool")
-        P3 = tf.nn.dropout(P3, keep_prob=self.scene_keep_prob)
-
-        C4_1 = conv_layer(filter_size=3, fin=54, fout=54, din=P3, name='scene_C4_1')
-        C4_2 = conv_layer(filter_size=3, fin=54, fout=54, din=C4_1, name='scene_C4_2')
-        P4 = pool(C3_2, option="maxpool")
-        P4 = tf.nn.dropout(P4, keep_prob=self.scene_keep_prob)
-
-        print(P4)
-
-        fc0 = tf.reshape(P4, [-1, 8 * 10 * 54])
-
-        with tf.device("/cpu:0"):
-            W1 = tf.get_variable("scene_W1", shape=[8 * 10 * 54, 4096], initializer=tf.contrib.layers.xavier_initializer())
-            b1 = tf.Variable(tf.random_normal([4096]))
-            fc1 = tf.nn.relu(tf.matmul(fc0, W1) + b1)
-
-            W2 = tf.get_variable("scene_W2", shape=[4096, 4096], initializer=tf.contrib.layers.xavier_initializer())
-            b2 = tf.Variable(tf.random_normal([4096]))
-            fc2 = tf.nn.relu(tf.matmul(fc1, W2) + b2)
-
-            W3 = tf.get_variable("scene_W3", shape=[4096, 10], initializer=tf.contrib.layers.xavier_initializer())
-            b3 = tf.Variable(tf.random_normal([4]))
-            self.scene_model = tf.matmul(fc2, W3) + b3
-
-        chk_scene = './_model/action_full/action.ckpt'
-
-        self.scene = tf.Session()
-        self.saver = tf.train.Saver()
-
-        self.saver.restore(self.full, chk_scene)
-
-
-    def predict_scene(self, image, k):
-        result = []
-        knn_ = []
-        for i in self.image_data:
-            result.append(self.compare_images(i["image"], image))
-
-
-        label = self.image_data[result.index(max(result))]["label"]
-
+    def predict_scene(self, image):
+        label = self.scene.predict(image)
 
         return label
 
@@ -289,10 +241,12 @@ class SceneData():
 
         self.full = tf.Session()
         self.upper = tf.Session()
-        self.saver = tf.train.Saver()
 
-        self.saver.restore(self.full, chk_full)
-        self.saver.restore(self.upper, chk_upper)
+        self.saver1 = tf.train.Saver()
+        self.saver2 = tf.train.Saver()
+
+        self.saver1.restore(self.full, chk_full)
+        self.saver2.restore(self.upper, chk_upper)
 
 
     def predict_motion(self, frame, full=1):

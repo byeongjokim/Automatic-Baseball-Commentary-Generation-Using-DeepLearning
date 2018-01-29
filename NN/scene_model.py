@@ -178,8 +178,8 @@ class Scene_Model():
 
         result = self.sess.run(tf.argmax(self.scene_model, 1), feed_dict={self.scene_X: image, self.scene_keep_prob: 1})
         #result = self.sess.run(self.scene_model, feed_dict={self.scene_X: image, self.scene_keep_prob: 1})
-        print(self.kind_scene[result[0]])
-
+        #print(self.kind_scene[result[0]])
+        return result[0]
 
 class Make_SceneData():
     def __init__(self, path, shape=(320,180),fps=29.970):
