@@ -66,16 +66,11 @@ class SceneData():
 
         print("we have %d image data" %(len(self.image_data)))
 
-    def compare_images(self, A, B):
-        s = ssim(A, B, multichannel=True)
-        #print("MSE: %.2f, struct_SSIM: %.2f" % (m, s))
-        return s
 
     def Annotation_with_frame(self, frame, relayText):
         #print("\t\t\t\t대기시간이 길어 영상처리로 텍스트 생성")
 
-        label = self.predict_scene(frame)
-
+        label = self.scene.predict(frame)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         resize = cv2.resize(gray, (self.width, self.height))
 
@@ -129,11 +124,6 @@ class SceneData():
         else:
             full = 1
         return people, full
-
-    def predict_scene(self, image):
-        label = self.scene.predict(image)
-
-        return label
 
     def make_motion_model(self):
         self.X = tf.placeholder(tf.float32, [None, self.Resources.motion_weight, self.Resources.motion_height, 1])

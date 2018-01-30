@@ -240,8 +240,8 @@ class Make_SceneData():
 
         video = cv2.VideoCapture(self.video)
 
-        start = 30000
-        end = 60000
+        start = 50000
+        end = 80000
 
         while True:
             video.set(1, start)
@@ -252,7 +252,7 @@ class Make_SceneData():
                 break
 
             test_data.append({"image": frame, "label":None})
-            start = start + 200
+            start = start + 10
 
         print("made %d test, %d train data" % (len(test_data), len(train_data)))
         print("will calculate simm")
@@ -264,9 +264,11 @@ class Make_SceneData():
                       'closeup', '3']
         count = 0
         for i in test_data:
-            result = s.predict(i["image"])
+            print(count)
+            #result = s.predict(i["image"])
 
-            cv2.imwrite("./scene_data/test/20171029KIADUSAN/" + str(kind_scene[result]) + "_" + str(count) + ".jpg", i["image"])
+            #cv2.imwrite("./scene_data/test/20171029KIADUSAN/" + str(kind_scene[result]) + "_" + str(count) + ".jpg", i["image"])
+            cv2.imwrite("./motion_data/" + str(count) + ".jpg", i["image"])
             count = count + 1
         # self.result = test_data + train_data
 
