@@ -66,7 +66,7 @@ def test_scene():
     s.predict(image)
 
 def make_scene_data():
-    s = Make_SceneData('./_data/scene1-1.csv', "./_data/20171030KIADUSAN.mp4")
+    s = Make_SceneData('./_data/scene1-1.csv', "./_data/20171029KIADUSAN.mp4")
     s.clustering2()
 
 #train_act()

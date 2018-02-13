@@ -28,14 +28,6 @@ class SceneData():
         self.scene.num_label = 10
         self.scene.make_model()
 
-        #self.load_image_data()
-        #self.make_motion_model()
-
-
-
-        image = cv2.imread("./scene_data/train/pitchingbatting_230.jpg")
-
-        self.scene.predict(image)
 
     def load_image_data(self):
         path = "./_data/scene_image/"
@@ -74,7 +66,7 @@ class SceneData():
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         resize = cv2.resize(gray, (self.width, self.height))
 
-
+        """
         people, full = self.get_human(resize)
         for (x, y, w, h) in people:
             person = resize[y:y + h, x:x + w]
@@ -83,6 +75,7 @@ class SceneData():
             #motion = self.predict_motion(person_image, full)
 
             cv2.rectangle(resize, (x, y), (x + w, y + h), (0, 0, 255), 2)
+        """
 
         if(label == 5):
             print("\t\t경기 시작 전입니다.")

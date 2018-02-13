@@ -268,7 +268,7 @@ class Make_SceneData():
             #result = s.predict(i["image"])
 
             #cv2.imwrite("./scene_data/test/20171029KIADUSAN/" + str(kind_scene[result]) + "_" + str(count) + ".jpg", i["image"])
-            cv2.imwrite("./motion_data/" + str(count) + ".jpg", i["image"])
+            cv2.imwrite("./motion_data/2_" + str(count) + ".jpg", i["image"])
             count = count + 1
         # self.result = test_data + train_data
 

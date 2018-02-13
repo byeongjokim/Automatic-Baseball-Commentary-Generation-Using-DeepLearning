@@ -21,6 +21,10 @@ class Motion_model():
         return people, full
 
     def load_data(self):
+        #get data from excel
+        return 1
+
+    def make_model(self):
         return 1
 
     def train(self):
