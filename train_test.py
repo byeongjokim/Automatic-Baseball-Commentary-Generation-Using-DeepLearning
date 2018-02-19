@@ -24,6 +24,7 @@ def test_scene():
 def train_motion():
     m = Motion_model()
     m.load_data()
+    m.CNN_pretrain()
     m.make_model()
     m.train()
     m.test()
@@ -34,6 +35,8 @@ def test_motion():
 def make_scene_data():
     s = Make_SceneData("./_data/20171029KIADUSAN.mp4")
     s.save_image_with_frame_interval()
+
+
 
 
 
