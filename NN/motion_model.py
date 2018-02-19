@@ -42,14 +42,15 @@ class Motion_model():
         reader = csv.reader(f)
         for line in reader:
             sett = {"start":line[0], "end":line[1], "label":line[2], "interval":line[3]}
-
             dataset.append(sett)
         f.close()
 
 
         self.cnn_X = []
+        self.rnn_X = []
         __cnn_y = []
-        train_data = []
+        __rnn_y = []
+
         for i in dataset:
             image_set = []
             for j in range(int(i["start"]), int(i["end"])+1):
@@ -70,18 +71,18 @@ class Motion_model():
             image_set = image_set + [np.zeros((self.width, self.height)) for i in range(remain)]
             image_set = np.array(image_set)
 
-            sett = {"image" : image_set, "label" : i["label"]}
-            train_data.append(sett)
+            self.rnn_X.append(image_set)
+            __rnn_y.append(i["label"])
 
         self.cnn_X = np.array(self.cnn_X)
-        _cnn_y = np.array([i for i in __cnn_y])
+        _cnn_y = np.array(__cnn_y)
         cnn_y = np.zeros((len(_cnn_y), len(set(_cnn_y))))
         cnn_y[np.arange(len(_cnn_y)), [self.kind_motion.index(i) for i in _cnn_y]] = 1
         self.cnn_Y = cnn_y
 
 
-        self.rnn_X = np.array([i["image"] for i in train_data])
-        _rnn_y = np.array([i["label"] for i in train_data])
+        self.rnn_X = np.array(self.rnn_X)
+        _rnn_y = np.array(__rnn_y)
         rnn_y = np.zeros((len(_rnn_y), len(set(_rnn_y))))
         rnn_y[np.arange(len(_rnn_y)), [self.kind_motion.index(i) for i in _rnn_y]] = 1
         self.rnn_Y = rnn_y
@@ -92,8 +93,6 @@ class Motion_model():
         print(self.cnn_Y.shape)
         print(self.rnn_X.shape)
         print(self.rnn_Y.shape)
-
-        return 1
 
     def CNN_pretrain(self):
         self.cnn_X = tf.placeholder(tf.float32, [None, self.width, self.height, 1])
