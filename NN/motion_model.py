@@ -13,6 +13,10 @@ class Motion_model():
 
     max_num = 10
 
+    cnn_batch_size = 2
+    cnn_chk = './_model/motion/cnn/cnn.ckpt'
+    cnn_ckpt = tf.train.get_checkpoint_state(("./_model/motion/cnn/"))
+
     kind_motion = ["pitching", "swinging", "running"]
 
     def __init__(self):
@@ -46,8 +50,8 @@ class Motion_model():
         f.close()
 
 
-        self.cnn_X = []
-        self.rnn_X = []
+        _cnn_X = []
+        _rnn_X = []
         __cnn_y = []
         __rnn_y = []
 
@@ -64,24 +68,24 @@ class Motion_model():
 
                 image_set.append(image)
 
-                self.cnn_X.append(image)
+                _cnn_X.append(image)
                 __cnn_y.append(i["label"])
 
             remain = self.max_num - len(image_set)
             image_set = image_set + [np.zeros((self.width, self.height)) for i in range(remain)]
             image_set = np.array(image_set)
 
-            self.rnn_X.append(image_set)
+            _rnn_X.append(image_set)
             __rnn_y.append(i["label"])
 
-        self.cnn_X = np.array(self.cnn_X)
+        self.cnn_X = np.array(_cnn_X)
         _cnn_y = np.array(__cnn_y)
         cnn_y = np.zeros((len(_cnn_y), len(set(_cnn_y))))
         cnn_y[np.arange(len(_cnn_y)), [self.kind_motion.index(i) for i in _cnn_y]] = 1
         self.cnn_Y = cnn_y
 
 
-        self.rnn_X = np.array(self.rnn_X)
+        self.rnn_X = np.array(_rnn_X)
         _rnn_y = np.array(__rnn_y)
         rnn_y = np.zeros((len(_rnn_y), len(set(_rnn_y))))
         rnn_y[np.arange(len(_rnn_y)), [self.kind_motion.index(i) for i in _rnn_y]] = 1
@@ -95,11 +99,11 @@ class Motion_model():
         print(self.rnn_Y.shape)
 
     def CNN_pretrain(self):
-        self.cnn_X = tf.placeholder(tf.float32, [None, self.width, self.height, 1])
-        self.cnn_Y = tf.placeholder(tf.float32, [None, self.num_label])
+        self.CNN_X = tf.placeholder(tf.float32, [None, self.width, self.height, 1])
+        self.CNN_Y = tf.placeholder(tf.float32, [None, self.num_label])
         self.cnn_keep_prob = tf.placeholder(tf.float32)
 
-        C1_1 = conv_layer(filter_size=3, fin=1, fout=64, din=self.cnn_X, name='model_C1_1')
+        C1_1 = conv_layer(filter_size=3, fin=1, fout=64, din=self.CNN_X, name='model_C1_1')
         C1_2 = conv_layer(filter_size=3, fin=64, fout=64, din=C1_1, name='model_C1_2')
         P1 = pool(C1_2, option="maxpool")
 
@@ -135,8 +139,58 @@ class Motion_model():
             b2 = tf.Variable(tf.random_normal([4096]))
             fc2 = tf.nn.relu(tf.matmul(fc1, W2) + b2)
 
+            W3 = tf.get_variable("model_W3", shape=[4096, self.num_label], initializer=tf.contrib.layers.xavier_initializer())
+            b3 = tf.Variable(tf.random_normal([self.num_label]))
+            self.cnn_model = tf.matmul(fc2, W3) + b3
 
 
+        self.cnn_cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=self.cnn_model, labels=self.CNN_Y))
+        self.cnn_optimizer = tf.train.AdamOptimizer(0.001).minimize(self.cnn_cost)
+
+        self.cnn_sess = tf.Session()
+        self.cnn_saver = tf.train.Saver()
+
+        if self.cnn_ckpt and tf.train.checkpoint_exists(self.cnn_ckpt.model_checkpoint_path):
+            print("rstore the sess!!")
+            self.cnn_saver.restore(self.cnn_sess, self.cnn_chk)
+        else:
+            self.cnn_sess.run(tf.global_variables_initializer())
+
+    def CNN_train(self):
+        print("start cnn pre train")
+        train_x = self.cnn_X
+        train_y = self.cnn_Y
+
+        total_batch = int(47 / self.cnn_batch_size)
+
+        if (total_batch == 0):
+            total_batch = 1
+
+        for e in range(1000):
+            total_cost = 0
+
+            j = 0
+            for i in range(total_batch):
+                if (j + self.cnn_batch_size > 47):
+                    batch_x = train_x[j:]
+                    batch_y = train_y[j:]
+                else:
+                    batch_x = train_x[j:j + self.cnn_batch_size]
+                    batch_y = train_y[j:j + self.cnn_batch_size]
+                    j = j + self.cnn_batch_size
+
+                batch_x = batch_x.reshape(-1, self.width, self.height, 1)
+
+                _, cost_val = self.cnn_sess.run([self.cnn_optimizer, self.cnn_cost], feed_dict={self.CNN_X: batch_x, self.CNN_Y: batch_y})
+
+                total_cost = total_cost + cost_val
+
+            if (total_cost / total_batch < 0.03):
+                break
+            print('Epoch:', '%d' % (e + 1), 'Average cost =', '{:.3f}'.format(total_cost / total_batch))
+
+        print("complete")
+        self.cnn_saver.save(self.cnn_sess, self.cnn_chk)
 
     def make_model(self):
         X = tf.placeholder(tf.float32, [None, None, self.width, self.height])

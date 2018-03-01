@@ -6,11 +6,11 @@ class Make_SceneData():
         self.video = video
         self.fps = fps
 
-    def save_image_with_frame_interval(self, start=50000, end=80000, interval=10):
+    def save_image_with_frame_interval(self, start=10000, end=80000, interval=5):
 
         data = []
         video = cv2.VideoCapture(self.video)
-
+        print("start")
         while True:
             video.set(1, start)
             success, frame = video.read()
@@ -19,13 +19,14 @@ class Make_SceneData():
             if (start > end):
                 break
 
-            data.append({"image": frame, "label":None})
+            data.append(frame)
             start = start + interval
-
+        print("end")
+        print("save start")
         count = 0
         for i in data:
             print(count)
-            cv2.imwrite("./motion_data/2_" + str(count) + ".jpg", i["image"])
+            cv2.imwrite("./motion_data/train3/" + str(count) + ".jpg", i)
             count = count + 1
 
     def amplification(self):

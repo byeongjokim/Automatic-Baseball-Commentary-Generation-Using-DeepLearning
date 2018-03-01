@@ -25,6 +25,7 @@ def train_motion():
     m = Motion_model()
     m.load_data()
     m.CNN_pretrain()
+    m.CNN_train()
     m.make_model()
     m.train()
     m.test()
@@ -40,8 +41,8 @@ def make_scene_data():
 
 
 
-#train_scene()
+train_scene()
 #test_scene()
-train_motion()
+#train_motion()
 
 #make_scene_data()

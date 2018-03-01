@@ -3,25 +3,60 @@ import tensorflow as tf
 import numpy as np
 import os
 import random
+import csv
 from NN.cnn import conv_layer, pool
 
 class Scene_Model():
-    num_label = 0
     chk_scene = './_model/scene/scene.ckpt'
     ckpt = tf.train.get_checkpoint_state(("./_model/scene"))
 
-    batch_size = 30
+    batch_size = 100
     epoch = 100
 
     width = 224
     height = 224
 
-    kind_scene = ['field', 'pitcher', 'gallery', 'batter', 'pitchingbatting', 'beforestart', '1', 'coach', 'closeup', '3']
+    #kind_scene = ['field', 'pitcher', 'gallery', 'batter', 'pitchingbatting', 'beforestart', '1', 'coach', 'closeup', '3']
+    kind_scene = ["pitchingbatting", "1", "batter", "closeup", "coach", "gallery", "field", "etc", "3"]
+    num_label = len(kind_scene)
 
     def __init__(self):
         print("init scene_model")
 
     def load_data(self):
+        csv_path = "./_data/train2.csv"
+        folder_path = "./motion_data/train2/"
+
+        dataset=[]
+        f = open(csv_path, "r")
+        reader = csv.reader(f)
+        for line in reader:
+            sett = {"start":line[0], "end":line[1], "label":line[2]}
+            dataset.append(sett)
+        f.close()
+
+        data_set = []
+        for i in dataset:
+            for j in range(int(i["start"]), int(i["end"])+1):
+                image = cv2.resize(
+                    cv2.cvtColor(
+                        cv2.imread(folder_path + str(j) + ".jpg"),
+                        cv2.COLOR_BGR2GRAY
+                    ),
+                    (self.width, self.height)
+                )
+                data_set.append({"image":image, "label":int(i["label"])})
+
+        self.X = np.array([i["image"] for i in data_set])
+        _y = np.array([i["label"] for i in data_set])
+        self.Y = np.zeros((len(_y), len(set(_y))))
+        self.Y[np.arange(len(_y)), [i-1 for i in _y]] = 1
+
+        print(self.X.shape)
+        print(self.Y.shape)
+
+
+        '''
         path = "./scene_data/test/"
         image = []
         for (p, dir, files) in os.walk(path):
@@ -51,10 +86,57 @@ class Scene_Model():
 
         self.X = x
         self.Y = y
-        self.num_label = len(set(_y))
+        '''
+
 
     #vggnet - A
     def make_model(self):
+        """
+        self.scene_X = tf.placeholder(tf.float32, [None, self.width, self.height, 1])
+        self.scene_Y = tf.placeholder(tf.float32, [None, self.num_label])
+        self.scene_keep_prob = tf.placeholder(tf.float32)
+
+        C1_1 = conv_layer(filter_size=3, fin=1, fout=64, din=self.scene_X, name='scene_C1_1')
+        C1_2 = conv_layer(filter_size=3, fin=64, fout=64, din=C1_1, name='scene_C1_2')
+        P1 = pool(C1_2, option="maxpool")
+
+        C2_1 = conv_layer(filter_size=3, fin=64, fout=128, din=P1, name='scene_C2_1')
+        C2_2 = conv_layer(filter_size=3, fin=128, fout=128, din=C2_1, name='scene_C2_2')
+        P2 = pool(C2_2, option="maxpool")
+
+        C3_1 = conv_layer(filter_size=3, fin=128, fout=256, din=P2, name='scene_C3_1')
+        C3_2 = conv_layer(filter_size=3, fin=256, fout=256, din=C3_1, name='scene_C3_2')
+        C3_3 = conv_layer(filter_size=1, fin=256, fout=256, din=C3_2, name='mscene_C3_3')
+        P3 = pool(C3_3, option="maxpool")
+
+        C4_1 = conv_layer(filter_size=3, fin=256, fout=512, din=P3, name='scene_C4_1')
+        C4_2 = conv_layer(filter_size=3, fin=512, fout=512, din=C4_1, name='scene_C4_2')
+        C4_3 = conv_layer(filter_size=1, fin=512, fout=512, din=C4_2, name='scene_C4_3')
+        P4 = pool(C4_3, option="maxpool")
+
+        C5_1 = conv_layer(filter_size=3, fin=512, fout=512, din=P4, name='scene_C5_1')
+        C5_2 = conv_layer(filter_size=3, fin=512, fout=512, din=C5_1, name='scene_C5_2')
+        C5_3 = conv_layer(filter_size=1, fin=512, fout=512, din=C5_2, name='mscene_C5_3')
+        P5 = pool(C5_3, option="maxpool")
+
+        print(P5)
+
+        fc0 = tf.reshape(P5, [-1, 7 * 7 * 512])
+
+        with tf.device("/cpu:0"):
+            W1 = tf.get_variable("scene_W1", shape=[7 * 7 * 512, 4096],
+                                 initializer=tf.contrib.layers.xavier_initializer())
+            b1 = tf.Variable(tf.random_normal([4096]))
+            fc1 = tf.nn.relu(tf.matmul(fc0, W1) + b1)
+
+            W2 = tf.get_variable("model_W2", shape=[4096, 4096], initializer=tf.contrib.layers.xavier_initializer())
+            b2 = tf.Variable(tf.random_normal([4096]))
+            fc2 = tf.nn.relu(tf.matmul(fc1, W2) + b2)
+
+            W3 = tf.get_variable("model_W3", shape=[4096, self.num_label], initializer=tf.contrib.layers.xavier_initializer())
+            b3 = tf.Variable(tf.random_normal([self.num_label]))
+            self.scene_model = tf.matmul(fc2, W3) + b3
+        """
         self.scene_X = tf.placeholder(tf.float32, [None, self.width, self.height, 1])
         self.scene_Y = tf.placeholder(tf.float32, [None, self.num_label])
         self.scene_keep_prob = tf.placeholder(tf.float32)
@@ -77,7 +159,6 @@ class Scene_Model():
         P4 = pool(C4_2, option="maxpool")
         P4 = tf.nn.dropout(P4, keep_prob=self.scene_keep_prob)
 
-
         C5_1 = conv_layer(filter_size=3, fin=512, fout=512, din=P4, name='scene_C5_1')
         C5_2 = conv_layer(filter_size=3, fin=512, fout=512, din=C5_1, name='scene_C5_2')
         P5 = pool(C5_2, option="maxpool")
@@ -97,7 +178,8 @@ class Scene_Model():
             b2 = tf.Variable(tf.random_normal([1000]))
             fc2 = tf.nn.relu(tf.matmul(fc1, W2) + b2)
 
-            W3 = tf.get_variable("scene_W3", shape=[1000, self.num_label], initializer=tf.contrib.layers.xavier_initializer())
+            W3 = tf.get_variable("scene_W3", shape=[1000, self.num_label],
+                                 initializer=tf.contrib.layers.xavier_initializer())
             b3 = tf.Variable(tf.random_normal([self.num_label]))
             self.scene_model = tf.matmul(fc2, W3) + b3
 
