@@ -16,8 +16,7 @@ def train_scene():
 
 def test_scene():
     s = Scene_Model()
-    s.num_label = 10
-    image = cv2.imread("./scene_data/test/20171029KIADUSAN/closeup_25.jpg")
+    image = cv2.imread("./motion_data/train3/9362.jpg")
     s.make_model()
     s.predict(image)
 

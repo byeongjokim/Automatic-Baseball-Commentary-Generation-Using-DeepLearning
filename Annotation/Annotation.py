@@ -26,7 +26,7 @@ class Annotation():
                 frame = self.Resources.frame
                 count = count + 1
             else:
-                if(ssim(self.Resources.frame, frame, multichannel=True) < 0.65):
+                if(ssim(self.Resources.frame, frame, multichannel=True) < 0.6):
                     frame = self.Resources.frame
                     print("\t\tscene changed")
                     self.sceneData.Annotation_with_frame(self.Resources.frame, self.Resources.now_relayText)

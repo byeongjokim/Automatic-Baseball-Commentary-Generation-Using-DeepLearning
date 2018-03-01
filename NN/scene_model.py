@@ -10,7 +10,7 @@ class Scene_Model():
     chk_scene = './_model/scene/scene.ckpt'
     ckpt = tf.train.get_checkpoint_state(("./_model/scene"))
 
-    batch_size = 100
+    batch_size = 30
     epoch = 100
 
     width = 224
@@ -24,28 +24,37 @@ class Scene_Model():
         print("init scene_model")
 
     def load_data(self):
-        csv_path = "./_data/train2.csv"
-        folder_path = "./motion_data/train2/"
+        csv_ = ["./_data/20171029KIADUSAN.csv", "./_data/20171030KIADUSAN.csv"]
+        folder_ = ["./_data/20171029KIADUSAN/", "./_data/20171030KIADUSAN/"]
+
+        play = ["20171029KIADUSAN", "20171030KIADUSAN"]
 
         dataset=[]
-        f = open(csv_path, "r")
-        reader = csv.reader(f)
-        for line in reader:
-            sett = {"start":line[0], "end":line[1], "label":line[2]}
-            dataset.append(sett)
-        f.close()
-
         data_set = []
-        for i in dataset:
-            for j in range(int(i["start"]), int(i["end"])+1):
-                image = cv2.resize(
-                    cv2.cvtColor(
-                        cv2.imread(folder_path + str(j) + ".jpg"),
-                        cv2.COLOR_BGR2GRAY
-                    ),
-                    (self.width, self.height)
-                )
-                data_set.append({"image":image, "label":int(i["label"])})
+
+        for p in play:
+            folder_path = "./_data/" + p + "/"
+            csv_path = folder_path + p + ".csv"
+            print(csv_path)
+
+            f = open(csv_path, "r")
+            reader = csv.reader(f)
+            for line in reader:
+                sett = {"start":line[0], "end":line[1], "label":line[2]}
+                dataset.append(sett)
+            f.close()
+
+
+            for i in dataset:
+                for j in range(int(i["start"]), int(i["end"])+1, 7):
+                    image = cv2.resize(
+                        cv2.cvtColor(
+                            cv2.imread(folder_path + str(j) + ".jpg"),
+                            cv2.COLOR_BGR2GRAY
+                        ),
+                        (self.width, self.height)
+                    )
+                    data_set.append({"image":image, "label":int(i["label"])})
 
         self.X = np.array([i["image"] for i in data_set])
         _y = np.array([i["label"] for i in data_set])
@@ -255,5 +264,5 @@ class Scene_Model():
 
         result = self.sess.run(tf.argmax(self.scene_model, 1), feed_dict={self.scene_X: image, self.scene_keep_prob: 1})
         #result = self.sess.run(self.scene_model, feed_dict={self.scene_X: image, self.scene_keep_prob: 1})
-        #print(self.kind_scene[result[0]])
+        print(self.kind_scene[result[0]])
         return result[0]
