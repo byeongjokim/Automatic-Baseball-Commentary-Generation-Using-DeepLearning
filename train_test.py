@@ -16,7 +16,7 @@ def train_scene():
 
 def test_scene():
     s = Scene_Model()
-    image = cv2.imread("./motion_data/train3/9362.jpg")
+    image = cv2.imread("./_data/20171029KIADUSAN/76.jpg")
     s.make_model()
     s.predict(image)
 
@@ -33,15 +33,15 @@ def test_motion():
     return 1
 
 def make_scene_data():
-    s = Make_SceneData("./_data/20171029KIADUSAN.mp4")
+    s = Make_SceneData("./_data/20171028KIADUSAN/20171028KIADUSAN.mp4")
     s.save_image_with_frame_interval()
 
 
 
 
 
-train_scene()
+#train_scene()
 #test_scene()
 #train_motion()
 
-#make_scene_data()
+make_scene_data()

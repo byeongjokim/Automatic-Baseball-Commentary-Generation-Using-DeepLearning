@@ -24,12 +24,9 @@ class Scene_Model():
         print("init scene_model")
 
     def load_data(self):
-        csv_ = ["./_data/20171029KIADUSAN.csv", "./_data/20171030KIADUSAN.csv"]
-        folder_ = ["./_data/20171029KIADUSAN/", "./_data/20171030KIADUSAN/"]
-
         play = ["20171029KIADUSAN", "20171030KIADUSAN"]
 
-        dataset=[]
+
         data_set = []
 
         for p in play:
@@ -37,6 +34,7 @@ class Scene_Model():
             csv_path = folder_path + p + ".csv"
             print(csv_path)
 
+            dataset = []
             f = open(csv_path, "r")
             reader = csv.reader(f)
             for line in reader:
@@ -46,7 +44,7 @@ class Scene_Model():
 
 
             for i in dataset:
-                for j in range(int(i["start"]), int(i["end"])+1, 7):
+                for j in range(int(i["start"]), int(i["end"])+1, 10):
                     image = cv2.resize(
                         cv2.cvtColor(
                             cv2.imread(folder_path + str(j) + ".jpg"),
@@ -264,5 +262,5 @@ class Scene_Model():
 
         result = self.sess.run(tf.argmax(self.scene_model, 1), feed_dict={self.scene_X: image, self.scene_keep_prob: 1})
         #result = self.sess.run(self.scene_model, feed_dict={self.scene_X: image, self.scene_keep_prob: 1})
-        print(self.kind_scene[result[0]])
+        #print(self.kind_scene[result[0]])
         return result[0]

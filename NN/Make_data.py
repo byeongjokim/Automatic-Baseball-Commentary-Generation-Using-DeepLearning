@@ -26,7 +26,7 @@ class Make_SceneData():
         count = 0
         for i in data:
             print(count)
-            cv2.imwrite("./motion_data/20171029KIADUSAN/" + str(count) + ".jpg", i)
+            cv2.imwrite("./_data/20171028KIADUSAN/" + str(count) + ".jpg", i)
             count = count + 1
 
     def amplification(self):
