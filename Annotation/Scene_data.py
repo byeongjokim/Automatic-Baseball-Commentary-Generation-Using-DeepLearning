@@ -44,7 +44,7 @@ class SceneData():
         elif (label == 3):
             print("\t\t선수들이 클로즈업 되었네요. 혹은 투수")
         elif (label == 2):
-            print("\t\t"+str(relayText["batorder"])+"번 타자의 모습입니다.")
+            print("\t\t"+str(relayText["batorder"])+"번 타자의 모습입니다. (싱크 안맞춤)")
         elif (label == 0):
             print("\t\t투수, 타자 그리고 포수가 영상에 잡히네요.")
         elif (label == 4):

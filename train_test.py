@@ -37,11 +37,8 @@ def make_scene_data():
     s.save_image_with_frame_interval()
 
 
-
-
-
 #train_scene()
 #test_scene()
-#train_motion()
+train_motion()
 
-make_scene_data()
+#make_scene_data()
