@@ -5,6 +5,7 @@ from NN.Make_data import Make_SceneData
 
 from NN.scene_model import Scene_Model
 from NN.motion_model import Motion_model
+from NN.person_model import Person_model
 
 def train_scene():
     s = Scene_Model()
@@ -20,6 +21,10 @@ def test_scene():
     s.make_model()
     s.predict(image)
 
+def make_scene_data():
+    s = Make_SceneData("./_data/20171028KIADUSAN/20171028KIADUSAN.mp4")
+    s.save_image_with_frame_interval()
+
 def train_motion():
     m = Motion_model()
     m.load_data()
@@ -32,13 +37,15 @@ def train_motion():
 def test_motion():
     return 1
 
-def make_scene_data():
-    s = Make_SceneData("./_data/20171028KIADUSAN/20171028KIADUSAN.mp4")
-    s.save_image_with_frame_interval()
+def train_person():
+    p = Person_model()
+    p.load_data()
 
 
-train_scene()
-#test_scene()
+
+#train_scene()
 #train_motion()
+train_person()
+#test_scene()
 
 #make_scene_data()
