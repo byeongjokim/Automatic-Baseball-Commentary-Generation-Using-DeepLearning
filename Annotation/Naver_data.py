@@ -87,7 +87,7 @@ class NaverData():
                 no = i["seqno"] - 1
                 break
             #else:
-                #print(i["liveText"])
+            #    print(i["liveText"])
 
         return start, no
 

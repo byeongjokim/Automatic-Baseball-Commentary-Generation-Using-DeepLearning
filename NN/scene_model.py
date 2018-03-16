@@ -11,7 +11,7 @@ class Scene_Model():
     ckpt = tf.train.get_checkpoint_state(("./_model/scene"))
 
     batch_size = 30
-    epoch = 100
+    epoch = 500
 
     width = 224
     height = 224
@@ -24,7 +24,7 @@ class Scene_Model():
         print("init scene_model")
 
     def load_data(self):
-        play = ["20171029KIADUSAN", "20171030KIADUSAN"]
+        play = ["20171028KIADUSAN", "20171029KIADUSAN", "20171030KIADUSAN"]
 
 
         data_set = []
