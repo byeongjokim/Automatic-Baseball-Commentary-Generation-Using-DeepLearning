@@ -8,7 +8,6 @@ from resources import Resources
 resources = Resources()
 
 annotation = Annotation('./_data/20171030KIADUSAN/20171030KIADUSAN.txt', resources)
-person = Person(annotation, resources)
 video = Video(resources)
 
 o_start = "183122"

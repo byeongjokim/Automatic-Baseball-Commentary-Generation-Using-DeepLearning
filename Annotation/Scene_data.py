@@ -33,24 +33,25 @@ class SceneData():
             cv2.rectangle(resize, (x, y), (x + w, y + h), (0, 0, 255), 2)
         """
 
-        if(label == 6):
-            print("\t\t경기장을 보여주고 있습니다.")
+
+        if (label == 0):
+            print("\t\t투수, 타자 그리고 포수가 영상에 잡히네요.")
         elif(label == 1):
             print("\t\t1루 쪽을 보여주네요.")
-        elif (label == 8):
-            print("\t\t3루 쪽을 보여주네요.")
-        elif (label == 5):
-            print("\t\t관중들이 응원을 하고 있습니다.")
-        elif (label == 3):
-            print("\t\t선수들이 클로즈업 되었네요. 혹은 투수")
         elif (label == 2):
             print("\t\t"+str(relayText["batorder"])+"번 타자의 모습입니다. (싱크 안맞춤)")
-        elif (label == 0):
-            print("\t\t투수, 타자 그리고 포수가 영상에 잡히네요.")
+        elif (label == 3):
+            print("\t\t선수들이 클로즈업 되었네요. 혹은 투수")
         elif (label == 4):
             print("\t\t코치들의 모습이네요.")
+        elif (label == 5):
+            print("\t\t관중들이 응원을 하고 있습니다.")
+        elif (label == 6):
+            print("\t\t경기장을 보여주고 있습니다.")
         elif (label == 7):
             print('\t\t기타 장면 입니다.')
+        elif (label == 8):
+            print("\t\t3루 쪽을 보여주네요.")
 
         print("\t\t============================")
 
