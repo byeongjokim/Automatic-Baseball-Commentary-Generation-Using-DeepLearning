@@ -20,10 +20,14 @@ class Person_model():
         mnist = input_data.read_data_sets("_data/MNIST_data", one_hot=True)
 
         print("use " + str(mnist.train.num_examples) + " Mnist Data")
-
         return 1
 
     def pre_train_CNN(self):
+        leraning_rate = 0.001
+        epoch = 15
+        batch_size = 100
+
+
         return 1
 
     def make_model(self):
@@ -37,3 +41,4 @@ class Person_model():
 
     def predict(self, image):
         return 1
+

@@ -21,15 +21,21 @@ class Annotation():
     def generate_Scene(self):
         count = 0
         frame = []
+        flag = 0
         while(not self.Resources.exit):
             if len(frame) == 0 or count == 0:
                 frame = self.Resources.frame
                 count = count + 1
             else:
                 if(ssim(self.Resources.frame, frame, multichannel=True) < 0.6):
+                    flag = 0
                     frame = self.Resources.frame
                     print("\t\tscene changed")
-                    self.sceneData.Annotation_with_frame(self.Resources.frame, self.Resources.now_relayText)
+                    label = self.sceneData.Annotation_with_frame(self.Resources.frame, self.Resources.now_relayText)
+                else:
+                    if(flag == 15 and label == 3):
+                        print("투수입니다")
+                    flag = flag + 1
 
 
             '''

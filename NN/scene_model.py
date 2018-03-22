@@ -5,6 +5,7 @@ import os
 import random
 import csv
 from NN.cnn import conv_layer, pool
+import pytesseract as tes
 
 class Scene_Model():
     chk_scene = './_model/scene/scene.ckpt'
@@ -258,9 +259,14 @@ class Scene_Model():
     def predict(self, image):
         image = cv2.resize(image, (self.width, self.height))
         image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        image = image.reshape(-1, self.width, self.height, 1)
+        image_X = image.reshape(-1, self.width, self.height, 1)
 
-        result = self.sess.run(tf.argmax(self.scene_model, 1), feed_dict={self.scene_X: image, self.scene_keep_prob: 1})
+        result = self.sess.run(tf.argmax(self.scene_model, 1), feed_dict={self.scene_X: image_X, self.scene_keep_prob: 1})
         #result = self.sess.run(self.scene_model, feed_dict={self.scene_X: image, self.scene_keep_prob: 1})
         #print(self.kind_scene[result[0]])
+        if(result[0] == 3):
+            tes.pytesseract.tesseract_cmd = 'C:/Program Files (x86)/Tesseract-OCR/tesseract'
+            results = tes.image_to_string(image)
+            if(results):
+                print(results +" 번 선수가 보이네요.")
         return result[0]

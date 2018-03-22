@@ -55,3 +55,5 @@ class SceneData():
 
         print("\t\t============================")
 
+        return label
+
