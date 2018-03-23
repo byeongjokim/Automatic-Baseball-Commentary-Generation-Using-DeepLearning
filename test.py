@@ -7,6 +7,8 @@ import numpy as np
 from PIL import Image
 import pytesseract as tes
 
+from pytesseract import pytesseract as pt
+
 def get_closeup():
     s = Scene_Model()
     s.make_model()
@@ -59,7 +61,7 @@ def make_rec():
                 wr.writerow([i, r[0], r[1], r[2], r[3]])
         f.close()
 
-make_rec()
+#make_rec()
 def check():
     play = ["20171029KIADUSAN", "20171030KIADUSAN"]
 
@@ -84,19 +86,59 @@ def check():
 #check()
 #make_rec()
 
+def crop_img(img, scale=1.0):
+    center_x, center_y = img.shape[1] / 2, img.shape[0] / 2
+    width_scaled, height_scaled = img.shape[1] * scale, img.shape[0] * scale
+    left_x, right_x = center_x - width_scaled / 2, center_x + width_scaled / 2
+    top_y, bottom_y = center_y - height_scaled / 2, center_y + height_scaled / 2
+    img_cropped = img[int(top_y):int(bottom_y), int(left_x):int(right_x)]
+    return img_cropped
+
 def extract():
     tes.pytesseract.tesseract_cmd = 'C:/Program Files (x86)/Tesseract-OCR/tesseract'
-    p = "20171030KIADUSAN"
-    folder_path = "./_data/" + p + "/"
-    image = folder_path + "12205.jpg"
-    test_image = "../../123.png"
-    print(image)
-    #results = tes.image_to_string(Image.open(test_image))
-    results = tes.image_to_string(cv2.imread(test_image))
-    print(results)
-    cv2.imshow("ads", cv2.imread(test_image))
+    image = "111.png"
+    image = cv2.imread(image, cv2.IMREAD_GRAYSCALE)
+    thresh = 127
+    image = cv2.threshold(image, thresh, 255, cv2.THRESH_BINARY_INV)[1]
+
+    image = crop_img(image, 0.75)
+
+    result = tes.image_to_string(image)
+
+    print(result)
+
+    cv2.imshow("ads", image)
+    cv2.waitKey(0)
+
+def extract2():
+    tes.pytesseract.tesseract_cmd = 'C:/Program Files (x86)/Tesseract-OCR/tesseract'
+    image = "7028.jpg"
+    image = cv2.imread(image, cv2.IMREAD_GRAYSCALE)
+    image = cv2.GaussianBlur(image, (3,3),1)
+    thresh = 127
+    image = cv2.threshold(image, thresh, 255, cv2.THRESH_BINARY_INV)[1]
+    image = crop_img(image, 0.75)
+    (w, h) = image.shape
+    M = cv2.getRotationMatrix2D((h / 2, w / 2), 5, 1)
+    image = cv2.warpAffine(image, M, (h, w))
+
+    y, x = image.shape
+    long = 150
+    for i in range(0,x, 50):
+        for j in range(0, y, 50):
+            try:
+                im = image[i:j, i+long:j+long]
+                print(tes.image_to_string(im))
+            except:
+                pass
+
+
+
+
+    #print(tes.image_to_string(im))
+
+    cv2.imshow("asd", image)
     cv2.waitKey(0)
 
 
-
-#extract()
+extract2()

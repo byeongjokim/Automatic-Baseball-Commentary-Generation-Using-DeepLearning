@@ -22,6 +22,8 @@ class Annotation():
         count = 0
         frame = []
         flag = 0
+        label = -1
+
         while(not self.Resources.exit):
             if len(frame) == 0 or count == 0:
                 frame = self.Resources.frame
