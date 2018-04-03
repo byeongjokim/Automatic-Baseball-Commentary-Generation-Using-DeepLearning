@@ -3,6 +3,7 @@ import tensorflow as tf
 import numpy as np
 import os
 import random
+import matplotlib.pyplot as plt
 import csv
 from NN.cnn import conv_layer, pool
 import pytesseract as tes
@@ -20,9 +21,19 @@ class Scene_Model():
     #kind_scene = ['field', 'pitcher', 'gallery', 'batter', 'pitchingbatting', 'beforestart', '1', 'coach', 'closeup', '3']
     kind_scene = ["pitchingbatting", "1", "batter", "closeup", "coach", "gallery", "field", "etc", "3"]
     num_label = len(kind_scene)
+    rgb = 3
 
     def __init__(self):
         print("init scene_model")
+
+
+    def crop_img(self, img, scale=1.0):
+        center_x, center_y = img.shape[1] / 2, img.shape[0] / 2
+        width_scaled, height_scaled = img.shape[1] * scale, img.shape[0] * scale
+        left_x, right_x = center_x - width_scaled / 2, center_x + width_scaled / 2
+        top_y, bottom_y = center_y - height_scaled / 2, center_y + height_scaled / 2
+        img_cropped = img[int(top_y):int(bottom_y), int(left_x):int(right_x)]
+        return img_cropped
 
     def load_data(self):
         play = ["20171028KIADUSAN", "20171029KIADUSAN", "20171030KIADUSAN"]
@@ -40,20 +51,36 @@ class Scene_Model():
             reader = csv.reader(f)
             for line in reader:
                 sett = {"start":line[0], "end":line[1], "label":line[2]}
-                dataset.append(sett)
+                if (int(sett["label"]) != 9):
+                    dataset.append(sett)
+
             f.close()
 
-
+            interval = 7
             for i in dataset:
-                for j in range(int(i["start"]), int(i["end"])+1, 10):
-                    image = cv2.resize(
-                        cv2.cvtColor(
-                            cv2.imread(folder_path + str(j) + ".jpg"),
-                            cv2.COLOR_BGR2GRAY
-                        ),
-                        (self.width, self.height)
-                    )
+                for j in range(int(i["start"]), int(i["end"])+1, interval):
+                    if(self.rgb == 1):
+                        image = cv2.resize(
+                            self.crop_img(
+                                cv2.cvtColor(
+                                    cv2.imread(folder_path + str(j) + ".jpg"),
+                                    cv2.COLOR_BGR2GRAY
+                                ), 1),
+                            (self.width, self.height)
+                        )
+                    elif(self.rgb == 3):
+                        image = cv2.resize(
+                            self.crop_img(
+                                cv2.imread(folder_path + str(j) + ".jpg"),
+                                1),
+                            (self.width, self.height)
+                        )
+
                     data_set.append({"image":image, "label":int(i["label"])})
+
+                    if (int(i["label"]) == 2):
+                        image = cv2.flip(image, 1)
+                        data_set.append({"image":image, "label":9})
 
         self.X = np.array([i["image"] for i in data_set])
         _y = np.array([i["label"] for i in data_set])
@@ -100,11 +127,11 @@ class Scene_Model():
     #vggnet - A
     def make_model(self):
         """
-        self.scene_X = tf.placeholder(tf.float32, [None, self.width, self.height, 1])
+        self.scene_X = tf.placeholder(tf.float32, [None, self.width, self.height, self.rgb])
         self.scene_Y = tf.placeholder(tf.float32, [None, self.num_label])
         self.scene_keep_prob = tf.placeholder(tf.float32)
 
-        C1_1 = conv_layer(filter_size=3, fin=1, fout=64, din=self.scene_X, name='scene_C1_1')
+        C1_1 = conv_layer(filter_size=3, fin=self.rgb, fout=64, din=self.scene_X, name='scene_C1_1')
         C1_2 = conv_layer(filter_size=3, fin=64, fout=64, din=C1_1, name='scene_C1_2')
         P1 = pool(C1_2, option="maxpool")
 
@@ -145,11 +172,12 @@ class Scene_Model():
             b3 = tf.Variable(tf.random_normal([self.num_label]))
             self.scene_model = tf.matmul(fc2, W3) + b3
         """
-        self.scene_X = tf.placeholder(tf.float32, [None, self.width, self.height, 1])
+
+        self.scene_X = tf.placeholder(tf.float32, [None, self.width, self.height, self.rgb])
         self.scene_Y = tf.placeholder(tf.float32, [None, self.num_label])
         self.scene_keep_prob = tf.placeholder(tf.float32)
 
-        C1 = conv_layer(filter_size=3, fin=1, fout=64, din=self.scene_X, name='scene_C1')
+        C1 = conv_layer(filter_size=3, fin=self.rgb, fout=64, din=self.scene_X, name='scene_C1')
         P1 = pool(C1, option="maxpool")
         P1 = tf.nn.dropout(P1, keep_prob=self.scene_keep_prob)
 
@@ -191,6 +219,8 @@ class Scene_Model():
             b3 = tf.Variable(tf.random_normal([self.num_label]))
             self.scene_model = tf.matmul(fc2, W3) + b3
 
+        #"""
+
         print(self.scene_model)
         self.cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=self.scene_model, labels=self.scene_Y))
         self.optimizer = tf.train.AdamOptimizer(0.001).minimize(self.cost)
@@ -206,6 +236,10 @@ class Scene_Model():
 
 
     def train(self):
+
+        xs = []
+        ys = []
+
         train_x = self.X[:-10]
         train_y = self.Y[:-10]
 
@@ -227,7 +261,7 @@ class Scene_Model():
                     batch_y = train_y[j:j + self.batch_size]
                     j = j + self.batch_size
 
-                batch_x = batch_x.reshape(-1, self.width, self.height, 1)
+                batch_x = batch_x.reshape(-1, self.width, self.height, self.rgb)
                 batch_y = batch_y.reshape(-1, self.num_label)
 
                 _, cost_val = self.sess.run([self.optimizer, self.cost],
@@ -238,8 +272,11 @@ class Scene_Model():
             if (total_cost / total_batch < 0.03):
                 break
             print('Epoch:', '%d' % (e + 1), 'Average cost =', '{:.3f}'.format(total_cost / total_batch))
-
+            xs.append(e+1)
+            ys.append(total_cost / total_batch)
         print("complete")
+        plt.plot(xs, ys)
+        plt.show()
         self.saver.save(self.sess, self.chk_scene)
 
     def test(self):
@@ -249,7 +286,7 @@ class Scene_Model():
         is_correct = tf.equal(tf.argmax(self.scene_model, 1), tf.argmax(self.scene_Y, 1))
         accuracy = tf.reduce_mean(tf.cast(is_correct, tf.float32))
 
-        test_x = test_x.reshape(-1, self.width, self.height, 1)
+        test_x = test_x.reshape(-1, self.width, self.height, self.rgb)
         print('accuracy: ',
               self.sess.run(accuracy, feed_dict={self.scene_X: test_x, self.scene_Y: test_y, self.scene_keep_prob: 1}) * 100)
 
@@ -258,8 +295,9 @@ class Scene_Model():
 
     def predict(self, image):
         image = cv2.resize(image, (self.width, self.height))
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        image_X = image.reshape(-1, self.width, self.height, 1)
+        if(self.rgb == 1):
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        image_X = image.reshape(-1, self.width, self.height, self.rgb)
 
         result = self.sess.run(tf.argmax(self.scene_model, 1), feed_dict={self.scene_X: image_X, self.scene_keep_prob: 1})
         #result = self.sess.run(self.scene_model, feed_dict={self.scene_X: image, self.scene_keep_prob: 1})

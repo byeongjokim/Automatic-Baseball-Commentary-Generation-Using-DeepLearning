@@ -17,13 +17,18 @@ def train_scene():
 
 def test_scene():
     s = Scene_Model()
-    image = cv2.imread("./_data/20171029KIADUSAN/76.jpg")
+    #image = cv2.imread("C:\\Users\\kbj\\Desktop\\3\\266.jpg")
+    image = cv2.imread("_data/20171030KIADUSAN/1126.jpg")
     s.make_model()
-    s.predict(image)
+    print(s.predict(image))
 
 def make_scene_data():
-    s = Make_SceneData("./_data/20171028KIADUSAN/20171028KIADUSAN.mp4")
-    s.save_image_with_frame_interval()
+    l = ["180401DUSANKT", "180401KIALG", "180401NCLT", "180401NESAM", "180401SKHW"]
+    s = Make_SceneData()
+
+    for p in l:
+        s.set_path(p)
+        s.save_image_with_frame_interval(start=0)
 
 def train_motion():
     m = Motion_model()
@@ -44,8 +49,10 @@ def train_person():
 
 
 #train_scene()
-#train_motion()
-train_person()
 #test_scene()
 
-#make_scene_data()
+
+#train_motion()
+#train_person()
+
+make_scene_data()

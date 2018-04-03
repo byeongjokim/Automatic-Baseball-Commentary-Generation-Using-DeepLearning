@@ -112,29 +112,32 @@ def extract():
 
 def extract2():
     tes.pytesseract.tesseract_cmd = 'C:/Program Files (x86)/Tesseract-OCR/tesseract'
-    image = "7028.jpg"
+    image = "_data/ocr_test/11.png"
     image = cv2.imread(image, cv2.IMREAD_GRAYSCALE)
+
+
     image = cv2.GaussianBlur(image, (3,3),1)
     thresh = 127
     image = cv2.threshold(image, thresh, 255, cv2.THRESH_BINARY_INV)[1]
-    image = crop_img(image, 0.75)
-    (w, h) = image.shape
-    M = cv2.getRotationMatrix2D((h / 2, w / 2), 5, 1)
-    image = cv2.warpAffine(image, M, (h, w))
+    #image = crop_img(image, 0.75)
 
+    print(tes.image_to_string(image, lang='chi_sim'))
+
+    #(w, h) = image.shape
+    #M = cv2.getRotationMatrix2D((h / 2, w / 2), 5, 1)
+    #image = cv2.warpAffine(image, M, (h, w))
+
+    '''
     y, x = image.shape
     long = 150
     for i in range(0,x, 50):
         for j in range(0, y, 50):
             try:
                 im = image[i:j, i+long:j+long]
-                print(tes.image_to_string(im))
+                print(tes.image_to_string(im, lang='eng', boxes=False, config='--psm 10 --eom 3 -c tessedit_char_whitelist=0123456789'))
             except:
-                pass
-
-
-
-
+              pass
+    '''
     #print(tes.image_to_string(im))
 
     cv2.imshow("asd", image)

@@ -1,15 +1,17 @@
 import cv2
 
 class Make_SceneData():
-    def __init__(self, video, fps=29.970):
+    def __init__(self):
         print("sceneData")
-        self.video = video
-        self.fps = fps
 
-    def save_image_with_frame_interval(self, start=60000, end=130000, interval=5):
+    def set_path(self, path):
+        self.path = path
 
+    def save_image_with_frame_interval(self, start=10000, end=130000, interval=5):
+        video_path = "_data/" + self.path + "/" + self.path + ".mp4"
+        path = "_data/" + self.path + "/"
         data = []
-        video = cv2.VideoCapture(self.video)
+        video = cv2.VideoCapture(video_path)
         print("start")
         while True:
             video.set(1, start)
@@ -25,8 +27,7 @@ class Make_SceneData():
         print("save start")
         count = 0
         for i in data:
-            print(count)
-            cv2.imwrite("./_data/20171028KIADUSAN/" + str(count) + ".jpg", i)
+            cv2.imwrite(path + str(count) + ".jpg", i)
             count = count + 1
 
     def amplification(self):
