@@ -18,12 +18,12 @@ def train_scene():
 def test_scene():
     s = Scene_Model()
     #image = cv2.imread("C:\\Users\\kbj\\Desktop\\3\\266.jpg")
-    image = cv2.imread("_data/20171030KIADUSAN/1126.jpg")
+    image = cv2.imread("_data/180403LGDUSAN/1691.jpg")
     s.make_model()
     print(s.predict(image))
 
 def make_scene_data():
-    l = ["180401DUSANKT", "180401KIALG", "180401NCLT", "180401NESAM", "180401SKHW"]
+    l = ["180403LGDUSAN"]
     s = Make_SceneData()
 
     for p in l:
@@ -49,10 +49,10 @@ def train_person():
 
 
 #train_scene()
-#test_scene()
+test_scene()
 
 
 #train_motion()
 #train_person()
 
-make_scene_data()
+#make_scene_data()

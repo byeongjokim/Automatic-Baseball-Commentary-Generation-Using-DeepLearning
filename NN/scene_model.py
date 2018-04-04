@@ -21,7 +21,7 @@ class Scene_Model():
     #kind_scene = ['field', 'pitcher', 'gallery', 'batter', 'pitchingbatting', 'beforestart', '1', 'coach', 'closeup', '3']
     kind_scene = ["pitchingbatting", "1", "batter", "closeup", "coach", "gallery", "field", "etc", "3"]
     num_label = len(kind_scene)
-    rgb = 3
+    rgb = 1
 
     def __init__(self):
         print("init scene_model")
@@ -36,7 +36,7 @@ class Scene_Model():
         return img_cropped
 
     def load_data(self):
-        play = ["20171028KIADUSAN", "20171029KIADUSAN", "20171030KIADUSAN"]
+        play = ["180401KIALG", "180401NCLT", "180401NESAM", "180401SKHW", "180401DUSANKT"]#, "20171028KIADUSAN", "20171029KIADUSAN", "20171030KIADUSAN"]
 
 
         data_set = []
@@ -56,7 +56,7 @@ class Scene_Model():
 
             f.close()
 
-            interval = 7
+            interval = 3
             for i in dataset:
                 for j in range(int(i["start"]), int(i["end"])+1, interval):
                     if(self.rgb == 1):
