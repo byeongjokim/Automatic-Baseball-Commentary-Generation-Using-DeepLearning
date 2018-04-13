@@ -36,8 +36,8 @@ class Scene_Model():
         return img_cropped
 
     def load_data(self):
-        play = ["180401KIALG", "180401NCLT", "180401NESAM", "180401SKHW", "180401DUSANKT"]#, "20171028KIADUSAN", "20171029KIADUSAN", "20171030KIADUSAN"]
-
+        #play = ["180401KIALG", "180401NCLT", "180401NESAM", "180401SKHW", "180401DUSANKT"]#, "20171028KIADUSAN", "20171029KIADUSAN", "20171030KIADUSAN"]
+        play = ["180401DUSANKT", "180401KIALG", "180401NCLT", "180401NESAM", "180401SKHW", "180403KIASK", "180403KTNE", "180403LGDUSAN", "180403LTHW", "180403SAMNC", "180404KIASK", "180404KTNE"]
 
         data_set = []
 
@@ -50,13 +50,14 @@ class Scene_Model():
             f = open(csv_path, "r")
             reader = csv.reader(f)
             for line in reader:
-                sett = {"start":line[0], "end":line[1], "label":line[2]}
-                if (int(sett["label"]) != 9):
-                    dataset.append(sett)
+                if(int(line[0]) < int(line[1]) and int(line[1]) - int(line[0]) < 200):
+                    sett = {"start":line[0], "end":line[1], "label":line[2]}
+                    if (int(sett["label"]) != 9):
+                        dataset.append(sett)
 
             f.close()
 
-            interval = 3
+            interval = 4
             for i in dataset:
                 for j in range(int(i["start"]), int(i["end"])+1, interval):
                     if(self.rgb == 1):
@@ -90,38 +91,6 @@ class Scene_Model():
         print(self.X.shape)
         print(self.Y.shape)
 
-
-        '''
-        path = "./scene_data/test/"
-        image = []
-        for (p, dir, files) in os.walk(path):
-            for filename in files:
-                ext = os.path.splitext(filename)[-1]
-                if ext == '.jpg':
-                    image.append(filename)
-
-        self.data = []
-        for i in image:
-            self.data.append({"image":
-                cv2.resize(
-                    cv2.cvtColor(
-                        cv2.imread(path + i),
-                        cv2.COLOR_BGR2GRAY),
-                    (self.width, self.height)),
-                "label": i.split(".")[0].split("_")[0]})
-
-
-        random.shuffle(self.data)
-
-
-        x = np.array([i["image"] for i in self.data])
-        _y = np.array([i["label"] for i in self.data])
-        y = np.zeros((len(_y), len(set(_y))))
-        y[np.arange(len(_y)), [self.kind_scene.index(i) for i in _y]] = 1
-
-        self.X = x
-        self.Y = y
-        '''
 
 
     #vggnet - A
@@ -302,9 +271,11 @@ class Scene_Model():
         result = self.sess.run(tf.argmax(self.scene_model, 1), feed_dict={self.scene_X: image_X, self.scene_keep_prob: 1})
         #result = self.sess.run(self.scene_model, feed_dict={self.scene_X: image, self.scene_keep_prob: 1})
         #print(self.kind_scene[result[0]])
+        '''
         if(result[0] == 3):
             tes.pytesseract.tesseract_cmd = 'C:/Program Files (x86)/Tesseract-OCR/tesseract'
             results = tes.image_to_string(image)
             if(results):
                 print(results +" 번 선수가 보이네요.")
+        '''
         return result[0]

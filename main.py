@@ -26,5 +26,5 @@ scene = threading.Thread(target=annotation.generate_Scene)
 scene.start()
 
 v = "20171030KIADUSAN"
-v= "180403LGDUSAN"
+v= "180407LGLT"
 video.play(v="./_data/"+v+"/"+v+".mp4", count=count)
