@@ -83,14 +83,32 @@ class Scene_Model():
                         image = cv2.flip(image, 1)
                         data_set.append({"image":image, "label":9})
 
-        self.X = np.array([i["image"] for i in data_set])
+        random.shuffle(data_set)
+
+        X = np.array([i["image"] for i in data_set])
         _y = np.array([i["label"] for i in data_set])
-        self.Y = np.zeros((len(_y), len(set(_y))))
-        self.Y[np.arange(len(_y)), [i-1 for i in _y]] = 1
+        Y = np.zeros((len(_y), len(set(_y))))
+        Y[np.arange(len(_y)), [i-1 for i in _y]] = 1
 
-        print(self.X.shape)
-        print(self.Y.shape)
+        num_data = len(X)
 
+        num_test = 30
+        num_test = num_test * -1
+
+        num_validation = 100
+        num_validation = num_validation * -1
+
+        self.train_x = X[:num_validation + num_test]
+        self.train_y = Y[:num_validation + num_test]
+
+        self.valid_x = X[num_validation + num_test:num_test].reshape(-1, self.width, self.height, self.rgb)
+        self.valid_y = Y[num_validation + num_test:num_test]
+
+        self.test_x = X[num_test:].reshape(-1, self.width, self.height, self.rgb)
+        self.test_y = Y[num_test:]
+
+        print(self.train_x.shape)
+        print(str(num_data) + " data, " + str(len(self.train_x)) + " train data " + str(len(self.valid_x)) + " valid data " + str(len(self.test_x)) + " test data ")
 
 
     #vggnet - A
@@ -197,6 +215,9 @@ class Scene_Model():
         self.sess = tf.Session()
         self.saver = tf.train.Saver()
 
+        is_correct = tf.equal(tf.argmax(self.scene_model, 1), tf.argmax(self.scene_Y, 1))
+        self.accuracy = tf.reduce_mean(tf.cast(is_correct, tf.float32))
+
         if self.ckpt and tf.train.checkpoint_exists(self.ckpt.model_checkpoint_path):
             print("rstore the sess!!")
             self.saver.restore(self.sess, self.chk_scene)
@@ -209,10 +230,11 @@ class Scene_Model():
         xs = []
         ys = []
 
-        train_x = self.X[:-10]
-        train_y = self.Y[:-10]
+        xv = []
+        yv = []
 
-        total_batch = int(len(train_x) / self.batch_size)
+
+        total_batch = int(len(self.train_x) / self.batch_size)
 
         if (total_batch == 0):
             total_batch = 1
@@ -222,12 +244,12 @@ class Scene_Model():
 
             j = 0
             for i in range(total_batch):
-                if (j + self.batch_size > len(train_x)):
-                    batch_x = train_x[j:]
-                    batch_y = train_y[j:]
+                if (j + self.batch_size > len(self.train_x)):
+                    batch_x = self.train_x[j:]
+                    batch_y = self.train_y[j:]
                 else:
-                    batch_x = train_x[j:j + self.batch_size]
-                    batch_y = train_y[j:j + self.batch_size]
+                    batch_x = self.train_x[j:j + self.batch_size]
+                    batch_y = self.train_y[j:j + self.batch_size]
                     j = j + self.batch_size
 
                 batch_x = batch_x.reshape(-1, self.width, self.height, self.rgb)
@@ -238,29 +260,38 @@ class Scene_Model():
 
                 total_cost = total_cost + cost_val
 
-            if (total_cost / total_batch < 0.03):
-                break
             print('Epoch:', '%d' % (e + 1), 'Average cost =', '{:.3f}'.format(total_cost / total_batch))
+
+            validation_acc = self.sess.run(self.accuracy, feed_dict={self.scene_X: self.valid_x, self.scene_Y: self.valid_y, self.scene_keep_prob: 1}) * 100
+            print("Validation Set Accuracy : ", validation_acc)
+
+            if (total_cost / total_batch < 0.04):
+                break
+            if(int(validation_acc) > 99):
+                break
+
             xs.append(e+1)
             ys.append(total_cost / total_batch)
+
+            yv.append(validation_acc)
+
         print("complete")
-        plt.plot(xs, ys)
-        plt.show()
         self.saver.save(self.sess, self.chk_scene)
+        plt.plot(xs, ys, 'b')
+        plt.plot(xs, yv, 'r')
+        plt.show()
+
 
     def test(self):
-        test_x = self.X[-10:]
-        test_y = self.Y[-10:]
 
         is_correct = tf.equal(tf.argmax(self.scene_model, 1), tf.argmax(self.scene_Y, 1))
         accuracy = tf.reduce_mean(tf.cast(is_correct, tf.float32))
 
-        test_x = test_x.reshape(-1, self.width, self.height, self.rgb)
         print('accuracy: ',
-              self.sess.run(accuracy, feed_dict={self.scene_X: test_x, self.scene_Y: test_y, self.scene_keep_prob: 1}) * 100)
+              self.sess.run(accuracy, feed_dict={self.scene_X: self.test_x, self.scene_Y: self.test_y, self.scene_keep_prob: 1}) * 100)
 
-        print("Label: ", self.sess.run(tf.argmax(test_y, 1)))
-        print("Prediction: ", self.sess.run(tf.argmax(self.scene_model, 1), feed_dict={self.scene_X: test_x, self.scene_keep_prob: 1}))
+        print("Label: ", self.sess.run(tf.argmax(self.test_y, 1)))
+        print("Prediction: ", self.sess.run(tf.argmax(self.scene_model, 1), feed_dict={self.scene_X: self.test_x, self.scene_keep_prob: 1}))
 
     def predict(self, image):
         image = cv2.resize(image, (self.width, self.height))

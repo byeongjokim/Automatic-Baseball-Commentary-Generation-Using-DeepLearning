@@ -48,8 +48,8 @@ def train_person():
 
 
 
-#train_scene()
-test_scene()
+train_scene()
+#test_scene()
 
 
 #train_motion()
