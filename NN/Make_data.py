@@ -1,4 +1,5 @@
 import cv2
+import csv
 
 class Make_SceneData():
     def __init__(self):
@@ -30,73 +31,87 @@ class Make_SceneData():
             cv2.imwrite(path + str(count) + ".jpg", i)
             count = count + 1
 
-    def amplification(self):
+    def change_9_to_13(self, p):
+        path = "../_data/" + p + "/"
+        csv_path = path + p + ".csv"
+        csv_path2 = path + p + "2.csv"
+        print(csv_path)
 
-        """
-        train_data = []
-        test_data = []
+        f = open(csv_path, "r")
+        f2 = open(csv_path2, "w", newline='')
+        reader = csv.reader(f)
 
-        path = "./scene_data/train/"
-        image = []
-        for (p, dir, files) in os.walk(path):
-            for filename in files:
-                ext = os.path.splitext(filename)[-1]
-                if ext == '.jpg':
-                    image.append(filename)
+        sett = {"start": None, "end": None, "label": None}
+        keys = ["start", "end", "label"]
+        writer = csv.DictWriter(f2, keys)
 
-        train_data=[]
-        for i in image:
-            train_data.append({"image":
-                cv2.cvtColor(
-                    cv2.imread(path + i),
-                    cv2.COLOR_BGR2GRAY),
-                "label": i.split(".")[0].split("_")[0]})
+        data = []
+        for line in reader:
+            if (int(line[0]) < int(line[1]) and int(line[1]) - int(line[0]) < 200):
+                sett = {"start": line[0], "end": line[1], "label": line[2]}
+
+                if(sett["label"] == '9' or sett["label"] == "7"):
 
 
-        video = cv2.VideoCapture("./_data/20171030KIADUSAN.mp4")
+                    new_data = []
+                    for j in range(int(sett["start"]), int(sett["end"]) + 1):
 
-        for i in self.data:
-            no_frame = (i["start"] + i["end"]) / 2
-            video.set(1, no_frame)
-            success, frame = video.read()
+                        cv2.imshow(
+                            "a",
+                            cv2.imread(
+                                path+str(j)+".jpg"
+                            )
+                        )
+                        key = cv2.waitKey(0)
 
-            if not success:
-                break
+                        if(str(key) == "97"): #a
+                            label = "11"
+                        elif(str(key) == "115"): #s
+                            label = "13"
+                        elif(str(key) == "100"): #d
+                            label = "9"
+                        elif (str(key) == "102"): #f
+                            label = "6"
+                        elif (str(key) == "113"): #q
+                            label = "12"
+                        elif (str(key) == "101" or str(key) == "119"):  # e, w
+                            label = '7'
+                        elif (str(key) == "114"): #r
+                            label = "8"
 
-            test_data.append({"image":frame, "label":None})
 
-        print("made %d test, %d train data" %(len(test_data), len(train_data)))
-        print("will calculate simm")
+                        new = {"image": str(j), "label": label}
+                        new_data.append(new)
+                        print(str(label)+"asdasdas"+str(j))
 
-        count = 0
-        for i in test_data:
-            print(count)
 
-            result = []
-            for j in train_data:
-                s = self.compare_images(j["image"], cv2.cvtColor(i["image"], cv2.COLOR_BGR2GRAY))
 
-                result.append({"label":j["label"], "ssim":s})
+                    result_data = []
+                    before = {"image": None, "label": None}
+                    new_sett = {"start": None, "end": None, "label": None}
 
-            result.sort(key=operator.itemgetter('ssim'), reverse=True)
-            print(result)
-            result = result[:3]
-            print(result)
-            l = [i["label"] for i in result]
+                    for i in new_data:
+                        if(i["label"] != before["label"]):
+                            if(before["label"] != None):
+                                new_sett["end"] = before["image"]
+                                print(new_sett)
+                                result_data.append(new_sett)
 
-            first = result[0]["label"]
+                            new_sett = {"start": i["image"], "end": None, "label": i["label"]}
 
-            counter = Counter(l)
-            print(counter)
-            if(counter.most_common()[0][1] == 1):
-                label = first
-            else:
-                label = counter.most_common()[0][0]
 
-            print(label)
-            i["label"] = label
-            cv2.imwrite("./scene_data/test/"+str(i["label"])+"_"+str(count)+".jpg", i["image"])
-            count = count + 1
-        #self.result = test_data + train_data
-        """
-        return 1
+                        before = i
+
+                    new_sett["end"] = before["image"]
+                    result_data.append(new_sett)
+
+                    data = data + result_data
+                else:
+                    data.append(sett)
+
+        writer.writerows(data)
+
+
+
+        f.close()
+        f2.close()

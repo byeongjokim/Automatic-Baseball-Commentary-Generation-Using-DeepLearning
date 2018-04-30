@@ -23,7 +23,7 @@ class Scene_Model():
 
     ratio_crop = 1
 
-    num_label = 12
+    num_label = 13
     rgb = 1
 
     def __init__(self):
@@ -46,7 +46,7 @@ class Scene_Model():
 
         for p in play:
             folder_path = "./_data/" + p + "/"
-            csv_path = folder_path + p + ".csv"
+            csv_path = folder_path + p + "2.csv"
             print(csv_path)
 
             dataset = []
