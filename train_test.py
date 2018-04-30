@@ -6,8 +6,7 @@ from NN.scene_model import Scene_Model
 
 def train_scene(play):
     s = Scene_Model()
-    play = ["180401DUSANKT", "180401KIALG", "180401NCLT", "180401NESAM", "180401SKHW", "180403KIASK", "180403KTNE",
-            "180403LGDUSAN", "180403LTHW"]
+    play = ["180401DUSANKT", "180401KIALG", "180401NCLT", "180401NESAM", "180401SKHW", "180403KIASK", "180403KTNE", "180403LGDUSAN", "180403LTHW"]
 
     s.load_data(play)
 
