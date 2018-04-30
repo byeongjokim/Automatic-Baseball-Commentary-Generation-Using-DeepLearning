@@ -9,3 +9,4 @@ Classify the scene in KBO game(video), and make an annotation.
 
 ## Scene Classify
 ![Flow_chart](/PNG/scene_classify.png)
+![Flow_chart](/PNG/field_classify.png)
