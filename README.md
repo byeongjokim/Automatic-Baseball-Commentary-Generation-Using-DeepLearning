@@ -4,14 +4,40 @@ Classify the scene in KBO game(video), and make an annotation.
 
 [what is kbo?](https://www.koreabaseball.com "Korea Baseball League")
 
-## Model
-### Model of Making Annotation
+## Models
 ![Flow_chart](/PNG/flow_chart.png)
 
-### Scene Classify
+#### Scene Classifier
 ![Flow_chart](/PNG/scene_classify.png)
+- 1 : Pitching and Batting Scene
+- 2 : Closeup Batter
+- 3 : Closeup Others
+- 4 : Closeup Coach
+- 5 : Gallery
+- 6 ~ 9 : Center, Right Field
+- 10 : etc. (Ad., before playing)
+- 11 ~ 13 : Left Field
 
+##### Field Classifier
 ![Flow_chart](/PNG/field_classify.png)
+- 6 : About 1st Base
+- 7 : About OutField
+- 8 : About Right OutField
+- 9 : About 2nd Base and InField
+- 11 : About 3rd Base (with Zero-Shot Laerning)
+- 12 : About Left OutField (with Zero-Shot Laerning)
+- 13 : About SS
+
+##### Zero-Shot Learning
+![Flow_chart](/PNG/zero_shot.png)
+
+#### Motion Classifier
+Underconstruct
+
+#### Web Data
+![Flow_chart](/PNG/TextBroadcasting.png)
+
+---
 
 ## Train and Test
 
@@ -22,14 +48,14 @@ Classify the scene in KBO game(video), and make an annotation.
 
 ### Training Scene Classifier Model:
 - Make DataSet
-	````
+  ````
     python train_test.py -m --videos path/to/video path/to/another/video
     ````
     - `-m or --make` Flag, when you want to make train_data images.
-    - `--videos` Videos, which you tend to train
-    -	you can find images in **_data/video_name** folder
-	- make **video_name.csv** in **_data/video_name**.
-    - In **video_name.csv** you should write start image number, end image number, label of **_data/video_name** images. [Scene Label](/PNG/field_classify.png)
+    - `--videos` Videos, which you tend to make dataset.
+    - you can find images in **_data/video_name** folder.
+  - make **video_name.csv** in **_data/video_name**.
+    - in **video_name.csv** you should write start number, end number and label of **_data/video_name** images. [View Scene Label](/PNG/field_classify.png)
 
 |start | end | label|
 |------|-----|------|
@@ -48,7 +74,7 @@ Classify the scene in KBO game(video), and make an annotation.
 
 
 - **In my project**
-	- Using n KBO HighLight Videos(2018. 04.01 ~ 2018.04.30) in [YouTube](https://www.youtube.com/playlist?list=PL7MQjbfOyOE19FCi85BcECO-zNYQcDbE0)
+  - Using n KBO HighLight Videos(2018. 04.01 ~ 2018.04.30) in [YouTube](https://www.youtube.com/playlist?list=PL7MQjbfOyOE19FCi85BcECO-zNYQcDbE0)
     - Download DataSet in [here](https://github.com/byeongjokim/KBO_annotation) to _data/**
     - Donwload Trained Model (tensorflow) in [here](https://github.com/byeongjokim/KBO_annotation) to _model/**
 
