@@ -38,9 +38,7 @@ class Scene_Model():
         img_cropped = img[int(top_y):int(bottom_y), int(left_x):int(right_x)]
         return img_cropped
 
-    def load_data(self):
-        #play = ["180401KIALG", "180401NCLT", "180401NESAM", "180401SKHW", "180401DUSANKT"]#, "20171028KIADUSAN", "20171029KIADUSAN", "20171030KIADUSAN"]
-        play = ["180401DUSANKT", "180401KIALG", "180401NCLT", "180401NESAM", "180401SKHW", "180403KIASK", "180403KTNE", "180403LGDUSAN", "180403LTHW"]
+    def load_data(self, play):
 
         data_set = []
 
@@ -258,7 +256,7 @@ class Scene_Model():
         print("Label: ", self.sess.run(tf.argmax(self.test_y, 1)))
         print("Prediction: ", self.sess.run(tf.argmax(self.scene_model, 1), feed_dict={self.scene_X: self.test_x, self.scene_keep_prob: 1}))
 
-    def predict(self, image):
+    def predict(self, image, threshold=0.7):
         image = cv2.resize(image, (self.width, self.height))
         if(self.rgb == 1):
             image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -278,8 +276,8 @@ class Scene_Model():
                         print(results +" 번 선수가 보이네요.")
                 '''
         result, softmax = self.sess.run([tf.argmax(self.scene_model, 1), self.sotfmax], feed_dict={self.scene_X: image_X, self.scene_keep_prob: 1})
-        print(max(softmax[0]))
-        if(max(softmax[0]) > 0.7):
+        #print(max(softmax[0]))
+        if(max(softmax[0]) > threshold):
             return result[0]
         else:
             return 9

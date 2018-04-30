@@ -1,5 +1,6 @@
 import cv2
 import csv
+import os
 
 class Make_SceneData():
     def __init__(self):
@@ -7,16 +8,21 @@ class Make_SceneData():
 
     def set_path(self, path):
         self.path = path
+        os.mkdir("_data/"+path)
+        print("mkdir _data/"+path)
+
+    def set_video(self, v):
+        self.video  = cv2.VideoCapture(v)
 
     def save_image_with_frame_interval(self, start=10000, end=130000, interval=5):
-        video_path = "_data/" + self.path + "/" + self.path + ".mp4"
+        #video_path = "_data/" + self.path + "/" + self.path + ".mp4"
         path = "_data/" + self.path + "/"
         data = []
-        video = cv2.VideoCapture(video_path)
+        #video = cv2.VideoCapture(video_path)
         print("start")
         while True:
-            video.set(1, start)
-            success, frame = video.read()
+            self.video.set(1, start)
+            success, frame = self.video.read()
             if not success:
                 break
             if (start > end):

@@ -1,9 +1,9 @@
 import threading
-import cv2
+import argparse
+
 from Video.Video import Video
 from Annotation.Annotation import Annotation
 from resources import Resources
-
 
 resources = Resources()
 
