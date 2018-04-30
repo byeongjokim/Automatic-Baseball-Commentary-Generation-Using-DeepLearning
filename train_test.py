@@ -18,7 +18,7 @@ def train_scene():
 def test_scene():
     s = Scene_Model()
 
-    image = cv2.imread("_data/180407SAMSUNGSK/885.jpg")
+    image = cv2.imread("_data/180407LGLT/510.jpg")
     s.make_model()
     print(s.predict(image))
 
@@ -48,8 +48,8 @@ def train_person():
 
 
 
-train_scene()
-#test_scene()
+#train_scene()
+test_scene()
 
 
 #train_motion()

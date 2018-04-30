@@ -178,6 +178,8 @@ class Scene_Model():
         self.sess = tf.Session()
         self.saver = tf.train.Saver()
 
+        self.sotfmax = tf.nn.softmax(self.scene_model)
+
         is_correct = tf.equal(tf.argmax(self.scene_model, 1), tf.argmax(self.scene_Y, 1))
         self.accuracy = tf.reduce_mean(tf.cast(is_correct, tf.float32))
 
@@ -268,14 +270,17 @@ class Scene_Model():
 
         image_X = image.reshape(-1, self.width, self.height, self.rgb)
 
-        result = self.sess.run(tf.argmax(self.scene_model, 1), feed_dict={self.scene_X: image_X, self.scene_keep_prob: 1})
-        #result = self.sess.run(self.scene_model, feed_dict={self.scene_X: image, self.scene_keep_prob: 1})
-        #print(self.kind_scene[result[0]])
         '''
-        if(result[0] == 3):
-            tes.pytesseract.tesseract_cmd = 'C:/Program Files (x86)/Tesseract-OCR/tesseract'
-            results = tes.image_to_string(image)
-            if(results):
-                print(results +" 번 선수가 보이네요.")
-        '''
-        return result[0]
+                if(result[0] == 3):
+                    tes.pytesseract.tesseract_cmd = 'C:/Program Files (x86)/Tesseract-OCR/tesseract'
+                    results = tes.image_to_string(image)
+                    if(results):
+                        print(results +" 번 선수가 보이네요.")
+                '''
+        result, softmax = self.sess.run([tf.argmax(self.scene_model, 1), self.sotfmax], feed_dict={self.scene_X: image_X, self.scene_keep_prob: 1})
+        print(max(softmax[0]))
+        if(max(softmax[0]) > 0.7):
+            return result[0]
+        else:
+            return 9
+

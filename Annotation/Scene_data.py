@@ -66,7 +66,7 @@ class SceneData():
                 print('\t\t1루쪽 외야 입니다.')
 
             elif (label == 8):
-                print("\t\t경기장 내야 입니다.")
+                print("\t\t2루 혹은 내야 입니다.")
 
             elif (label == 9):
                 print("\t\t기타 장면 입니다..")
@@ -76,6 +76,9 @@ class SceneData():
 
             elif (label == 11):
                 print("\t\t3루쪽 외야 입니다.")
+
+            elif (label == 12):
+                print("\t\t유격수 내야 입니다.")
 
             print("\t\t============================")
 
