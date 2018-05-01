@@ -9,6 +9,9 @@ Classify the scene in KBO game(video), and make an annotation.
 
 #### Scene Classifier
 ![Flow_chart](/PNG/scene_classify.png)
+
+##### Labeling
+![Flow_chart](/PNG/labeling.png)
 - 1 : Pitching and Batting Scene
 - 2 : Closeup Batter
 - 3 : Closeup Others
@@ -18,7 +21,7 @@ Classify the scene in KBO game(video), and make an annotation.
 - 10 : etc. (Ad., before playing)
 - 11 ~ 13 : Left Field
 
-##### Field Classifier
+##### About Field
 ![Flow_chart](/PNG/field_classify.png)
 - 6 : About 1st Base
 - 7 : About OutField

@@ -24,8 +24,6 @@ def test_scene(image_name, t):
     print(s.predict(image, int(t))+1)
 
 def make_scene_data(l):
-    file_name = [os.path.splitext(os.path.basename(v))[0] for v in l]
-
     s = Make_SceneData()
 
     for p in l:
@@ -34,6 +32,7 @@ def make_scene_data(l):
         s.set_video(p)
         s.save_image_with_frame_interval(start=0)
 
+'''
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-v', '--videos', nargs='+', help='Input Video name')
@@ -56,8 +55,9 @@ if __name__ == "__main__":
     if(args.test):
         test_scene(args.image, args.threshold)
 
+'''
 
-#train_scene()
+train_scene(1)
 #test_scene()
 
 #make_scene_data()
