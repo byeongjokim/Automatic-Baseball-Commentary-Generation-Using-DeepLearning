@@ -4,21 +4,21 @@ Classify the scene in KBO game(video), and make an annotation.
 
 [what is kbo?](https://www.koreabaseball.com "Korea Baseball League")
 
-<br><br>
+<br>
 
 ## Models
 ![Flow_chart](/PNG/flow_chart.png)
 
 explain about Models
 
-<br><br>
+<br>
 
 ### Scene Classifier
 ![Flow_chart](/PNG/scene_classify.png)
 
 explain about scene classifier
 
-<br><br>
+<br>
 
 #### Labeling
 ![Flow_chart](/PNG/labeling.png)
@@ -31,7 +31,7 @@ explain about scene classifier
 - 10 : etc. (Ad., before playing)
 - 11 ~ 13 : Left Field
 
-<br><br>
+<br>
 
 #### About Field
 ![Flow_chart](/PNG/field_classify.png)
@@ -43,7 +43,7 @@ explain about scene classifier
 - 12 : About Left OutField (with Zero-Shot Laerning)
 - 13 : About SS
 
-<br><br>
+<br>
 
 #### Zero-Shot Learning
 ![Flow_chart](/PNG/zero_shot.png)
@@ -52,7 +52,7 @@ explain about scene classifier
 - 3rd Base <-> 1st Base
 - Left OutField <-> Right OutField
 
-<br><br>
+<br>
 
 ---
 
@@ -61,7 +61,7 @@ Underconstruct
 
 ---
 
-#### Web Data
+### Web Data
 ![Flow_chart](/PNG/TextBroadcasting.png)
 - In [N company](http://www.naver.com), there is a KBO Text Broadcasting site. I can get text data in real time, when game is playing. [Text Broadcasting](http://sports.news.naver.com/kbaseball/schedule/indexnhn)
 
@@ -85,12 +85,7 @@ Underconstruct
   - make **video_name.csv** in **_data/video_name**.
     - in **video_name.csv** you should write start number, end number and label of **_data/video_name** images. [View Scene Label](/PNG/field_classify.png)
 
-|start | end | label|
-|------|-----|------|
-|0|35|10|
-|36|40|3|
-|41|52|1|
-|...|...|...|
+![Flow_chart](/PNG/scene_labeling.png)
 
 
 - Train
@@ -106,7 +101,7 @@ Underconstruct
     - Download DataSet in [here](https://github.com/byeongjokim/KBO_annotation) to _data/**
     - Donwload Trained Model (tensorflow) in [here](https://github.com/byeongjokim/KBO_annotation) to _model/**
 
-### preparation for Testing Scene Classifier Model:
+### Testing Scene Classifier Model:
 - Test
   ````
   python train_test.py -T --image path/to/image --threshold 0.7
@@ -115,12 +110,14 @@ Underconstruct
   - `--image` Image, which you tend to test.
   - `--threshold` Threshold, when you predict label.
 
+---
 
 ### Training Motion Classifier Model:
-### preparation for Testing Motion Classifier Model:
+### Testing Motion Classifier Model:
 
+---
 
-### preparation for Testing(Video):
+### Demo:
 - Test
   ````
   python main.py -v path/to/video
