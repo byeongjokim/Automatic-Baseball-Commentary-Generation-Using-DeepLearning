@@ -19,7 +19,7 @@ fps = 29.97
 count = 165050
 count = 9500 #3
 
-count = 900
+count = 4300
 
 naver = threading.Thread(target=annotation.generate_Naver, args=(count-o_count, fps, o_start, ))
 naver.start()
@@ -29,7 +29,8 @@ scene.start()
 
 v = "20171030KIADUSAN"
 #v= "180407LGLT"
-v= "180407NCDUSAN"
+#v= "180407NCDUSAN"
+v = "180407NEKIA"
 
 #6ghl
 video.play(v="./_data/"+v+"/"+v+".mp4", count=count)

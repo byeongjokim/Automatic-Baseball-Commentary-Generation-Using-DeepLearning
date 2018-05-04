@@ -37,87 +37,97 @@ class Make_SceneData():
             cv2.imwrite(path + str(count) + ".jpg", i)
             count = count + 1
 
-    def change_9_to_13(self, p):
+    def labeling(self, p):
         path = "../_data/" + p + "/"
-        csv_path = path + p + ".csv"
-        csv_path2 = path + p + "2.csv"
-        print(csv_path)
+        csv_path2 = path + p + ".csv"
 
-        f = open(csv_path, "r")
         f2 = open(csv_path2, "w", newline='')
-        reader = csv.reader(f)
 
         sett = {"start": None, "end": None, "label": None}
         keys = ["start", "end", "label"]
         writer = csv.DictWriter(f2, keys)
 
         data = []
-        for line in reader:
-            if (int(line[0]) < int(line[1]) and int(line[1]) - int(line[0]) < 200):
-                sett = {"start": line[0], "end": line[1], "label": line[2]}
+        new_data = []
+        for j in range(0, 3000):
 
-                if(sett["label"] == '9' or sett["label"] == "7"):
-
-
-                    new_data = []
-                    for j in range(int(sett["start"]), int(sett["end"]) + 1):
-
-                        cv2.imshow(
-                            "a",
-                            cv2.imread(
-                                path+str(j)+".jpg"
-                            )
-                        )
-                        key = cv2.waitKey(0)
-
-                        if(str(key) == "97"): #a
-                            label = "11"
-                        elif(str(key) == "115"): #s
-                            label = "13"
-                        elif(str(key) == "100"): #d
-                            label = "9"
-                        elif (str(key) == "102"): #f
-                            label = "6"
-                        elif (str(key) == "113"): #q
-                            label = "12"
-                        elif (str(key) == "101" or str(key) == "119"):  # e, w
-                            label = '7'
-                        elif (str(key) == "114"): #r
-                            label = "8"
+            cv2.imshow(
+                "a",
+                cv2.imread(
+                    path+str(j)+".jpg"
+                )
+            )
+            key = cv2.waitKey(0)
 
 
-                        new = {"image": str(j), "label": label}
-                        new_data.append(new)
-                        print(str(label)+"asdasdas"+str(j))
+            if (str(key) == "48"):  # 0 etc
+                label = "10"
+            elif (str(key) == "49"):  # 1 pitchingbatting
+                label = "1"
+            elif (str(key) == "50"):  # 2 batter
+                label = "2"
+            elif (str(key) == "51"):  # 3 closeup
+                label = "3"
+            elif (str(key) == "52"):  # 4 coach
+                label = "4"
+            elif (str(key) == "53"):  # 5 gallery
+                label = "5"
+
+            elif(str(key) == "97"): #a
+                label = "11"
+            elif(str(key) == "115"): #s
+                label = "13"
+            elif(str(key) == "100"): #d
+                label = "9"
+            elif (str(key) == "102"): #f
+                label = "6"
+            elif (str(key) == "113"): #q
+                label = "12"
+            elif (str(key) == "101" or str(key) == "119"):  # e, w
+                label = '7'
+            elif (str(key) == "114"): #r
+                label = "8"
+
+            elif (str(key) == "125"):
+                break
+
+            else:
+                label = None
+
+
+            if(label):
+                new = {"image": str(j), "label": label}
+                new_data.append(new)
+                print(str(label)+"asdasdas"+str(j))
 
 
 
-                    result_data = []
-                    before = {"image": None, "label": None}
-                    new_sett = {"start": None, "end": None, "label": None}
 
-                    for i in new_data:
-                        if(i["label"] != before["label"]):
-                            if(before["label"] != None):
-                                new_sett["end"] = before["image"]
-                                print(new_sett)
-                                result_data.append(new_sett)
+        result_data = []
+        before = {"image": None, "label": None}
+        new_sett = {"start": None, "end": None, "label": None}
 
-                            new_sett = {"start": i["image"], "end": None, "label": i["label"]}
-
-
-                        before = i
-
-                    new_sett["end"] = before["image"]
+        for i in new_data:
+            if(i["label"] != before["label"] or int(i["image"])-int(before["image"]) != 1 ):
+                if(before["label"] != None):
+                    new_sett["end"] = str(int(before["image"])-1)
                     result_data.append(new_sett)
 
-                    data = data + result_data
-                else:
-                    data.append(sett)
+                new_sett = {"start": i["image"], "end": None, "label": i["label"]}
+
+
+            before = i
+
+        new_sett["end"] = str(int(before["image"])-1)
+        if(int(new_sett["end"]) > int(new_sett["start"])):
+            result_data.append(new_sett)
+            print(result_data)
+        data = data + result_data
 
         writer.writerows(data)
 
 
-
-        f.close()
         f2.close()
+
+a = Make_SceneData()
+a.labeling("180404LTHW")

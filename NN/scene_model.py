@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import csv
 from NN.cnn import conv_layer, pool
 import pytesseract as tes
+from collections import Counter
 
 class Scene_Model():
     chk_scene = './_model/scene/scene.ckpt'
@@ -44,7 +45,7 @@ class Scene_Model():
 
         for p in play:
             folder_path = "./_data/" + p + "/"
-            csv_path = folder_path + p + "2.csv"
+            csv_path = folder_path + p + ".csv"
             print(csv_path)
 
             dataset = []
@@ -53,7 +54,7 @@ class Scene_Model():
             for line in reader:
                 if(int(line[0]) < int(line[1]) and int(line[1]) - int(line[0]) < 200):
                     sett = {"start":line[0], "end":line[1], "label":line[2]}
-                    if (int(sett["label"]) != 11 or int(sett["label"]) != 12):
+                    if (int(sett["label"]) != 11 and int(sett["label"]) != 12):
                         dataset.append(sett)
 
             f.close()
@@ -93,6 +94,7 @@ class Scene_Model():
 
         X = np.array([i["image"] for i in data_set])
         _y = np.array([i["label"] for i in data_set])
+        print(Counter(_y))
         Y = np.zeros((len(_y), len(set(_y))))
         Y[np.arange(len(_y)), [i-1 for i in _y]] = 1
 
@@ -256,7 +258,7 @@ class Scene_Model():
         print("Label: ", self.sess.run(tf.argmax(self.test_y, 1)))
         print("Prediction: ", self.sess.run(tf.argmax(self.scene_model, 1), feed_dict={self.scene_X: self.test_x, self.scene_keep_prob: 1}))
 
-    def predict(self, image, threshold=0.7):
+    def predict(self, image, threshold=0.75):
         image = cv2.resize(image, (self.width, self.height))
         if(self.rgb == 1):
             image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -277,8 +279,11 @@ class Scene_Model():
                 '''
         result, softmax = self.sess.run([tf.argmax(self.scene_model, 1), self.sotfmax], feed_dict={self.scene_X: image_X, self.scene_keep_prob: 1})
         #print(max(softmax[0]))
-        if(max(softmax[0]) > threshold):
-            return result[0]
+
+        score = max(softmax[0])
+
+        if(score > threshold):
+            return result[0], score
         else:
-            return 9
+            return 13, score
 
