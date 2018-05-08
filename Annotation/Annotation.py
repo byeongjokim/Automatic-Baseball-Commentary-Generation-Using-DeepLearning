@@ -29,8 +29,7 @@ class Annotation():
                 frame = self.Resources.frame
                 count = count + 1
             else:
-                if(ssim(self.Resources.frame, frame, multichannel=True) < 0.6
-                ):
+                if(ssim(self.Resources.frame, frame, multichannel=True) < 0.6):
                     flag = 0
                     frame = self.Resources.frame
                     #print("\t\tscene changed")
@@ -40,12 +39,3 @@ class Annotation():
                     if(flag == 15 and label == 2):
                         print("투수입니다")
                     flag = flag + 1
-
-            '''
-            if(self.Resources.long==True):
-                #self.sceneData.Annotation_with_framNo(self.Resources.frame_no, self.Resources.now_relayText)
-                self.Resources.set_long(False)
-            time.sleep(7)
-            self.Resources.set_long(True)
-            '''
-

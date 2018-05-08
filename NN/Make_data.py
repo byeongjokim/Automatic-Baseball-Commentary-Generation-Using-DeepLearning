@@ -49,7 +49,7 @@ class Make_SceneData():
 
         data = []
         new_data = []
-        for j in range(0, 3000):
+        for j in range(0, 2800):
 
             cv2.imshow(
                 "a",
@@ -130,4 +130,4 @@ class Make_SceneData():
         f2.close()
 
 a = Make_SceneData()
-a.labeling("180404LTHW")
+a.labeling("180404SAMNC")

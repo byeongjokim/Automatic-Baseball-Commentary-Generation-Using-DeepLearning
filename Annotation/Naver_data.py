@@ -59,7 +59,7 @@ class NaverData():
         m1 = start[2:4]
         s1 = start[4:]
 
-        s = int(h1) * 3600 + int(m1)*60 + int(s1)
+        s = int(h1) * 3600 + int(m1) * 60 + int(s1)
 
         h2 = end[:2]
         m2 = end[2:4]
@@ -132,6 +132,6 @@ class NaverData():
                         tmp_pitchId = pre_pitchId
                     wait = 0
 
-                #print(i["liveText"])
+                print(i["liveText"])
 
             count = count + 1

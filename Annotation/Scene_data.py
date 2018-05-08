@@ -22,21 +22,6 @@ class SceneData():
         #print("\t\t\t\t대기시간이 길어 영상처리로 텍스트 생성")
 
         label, score = self.scene.predict(frame)
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        resize = cv2.resize(gray, (self.width, self.height))
-
-        """
-        people, full = self.get_human(resize)
-        for (x, y, w, h) in people:
-            person = resize[y:y + h, x:x + w]
-            person_resize = cv2.resize(person, (self.Resources.motion_weight, self.Resources.motion_height))
-            person_image = np.array(person_resize)
-            #motion = self.predict_motion(person_image, full)
-
-            cv2.rectangle(resize, (x, y), (x + w, y + h), (0, 0, 255), 2)
-        """
-
-        #return label
 
         if(self.prev != label):
 

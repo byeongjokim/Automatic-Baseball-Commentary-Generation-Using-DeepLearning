@@ -11,15 +11,14 @@ annotation = Annotation('./_data/20171030KIADUSAN/20171030KIADUSAN.txt', resourc
 video = Video(resources)
 
 o_start = "183122"
-o_count = 8145
+o_count = 5800
 fps = 29.97
 
 #count = 70233  before start 2
 #count = 10000
-count = 165050
-count = 9500 #3
+count = 300050
 
-count = 4300
+count = 10000
 
 naver = threading.Thread(target=annotation.generate_Naver, args=(count-o_count, fps, o_start, ))
 naver.start()
