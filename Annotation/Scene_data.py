@@ -18,7 +18,7 @@ class SceneData():
         self.scene.make_model()
 
 
-    def Annotation_with_frame(self, frame, relayText):
+    def Annotation_with_frame(self, frame):
         #print("\t\t\t\t대기시간이 길어 영상처리로 텍스트 생성")
 
         label, score = self.scene.predict(frame)

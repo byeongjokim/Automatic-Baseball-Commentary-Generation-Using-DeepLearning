@@ -3,7 +3,7 @@ import json
 import operator
 import requests
 import time
-
+from Annotation.EventData import *
 '''
 relayText
         "inn":1,
@@ -61,8 +61,7 @@ ballData
 
 class NaverData():
 
-    def __init__(self, gameName, Resources):
-        self.Resources = Resources
+    def __init__(self, gameName):
 
         fileName = "_data/"+gameName+"/"+gameName + ".txt"
         data_file = open(fileName, "rt", encoding="UTF8")
@@ -156,28 +155,21 @@ class NaverData():
 
         return None
 
-    def set_relayText(self, relayText, ball_data):
-        if(ball_data is None):
-            print("later")
-
-
-        else: # pitching and batting
-            inn = relayText["inn"]
-            btop = relayText["btop"]
-            pitchId = relayText["pitchId"]
-
-            batorder = relayText["batorder"]
-            ilsun = relayText["ilsun"]
-
-            ballcount = relayText["ballcount"]
-            print(pitchId)
-
-    def get_relayText(self):
+    def get_Annotation(self):
+        a = PitchingBatting()
         for relayText in self.relayTexts:
             pitchId = relayText["pitchId"]
             ball_data = self.find_ball_data_with_pitchId(pitchId)
 
-            self.set_relayText(relayText, ball_data)
+            if (ball_data is None):
+                print("later")
+                # 아웃
+                # 교체
+                # n번타자
+
+
+            else:  # pitching and batting
+                a.set(0, relayText, ball_data)
 
             print(relayText["liveText"])
 

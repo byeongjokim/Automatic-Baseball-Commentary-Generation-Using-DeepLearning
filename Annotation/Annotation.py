@@ -2,6 +2,9 @@ import time
 import random
 from Annotation.Naver_data import NaverData
 from Annotation.Scene_data import SceneData
+
+from Annotation.EventData import *
+
 from skimage.measure import compare_ssim as ssim
 
 class Annotation():
@@ -12,39 +15,14 @@ class Annotation():
         print("init annotation")
         self.Resources = Resources
 
-        self.naverData = NaverData(gameName, Resources)
+        self.naverData = NaverData(gameName)
         self.sceneData = SceneData(Resources)
 
     def generate_Naver(self, count_delta, fps, o_start):
-        self.naverData.get_relayText()
+        self.naverData.get_Annotation()
 
     def generate_Scene(self):
-        count = 0
-        frame = []
-        flag = 0
-        label = -1
-
-        while(not self.Resources.exit):
-            if len(frame) == 0 or count == 0:
-                frame = self.Resources.frame
-                count = count + 1
-            else:
-                if(ssim(self.Resources.frame, frame, multichannel=True) < 0.6):
-                    flag = 0
-                    frame = self.Resources.frame
-                    #print("\t\tscene changed")
-                    label = self.sceneData.Annotation_with_frame(self.Resources.frame, self.Resources.now_relayText)
-
-                else:
-                    if(flag == 15 and label == 2):
-                        print("투수입니다")
-                    flag = flag + 1
-
-
-
-
-
-
+        return 1
 
 
 
