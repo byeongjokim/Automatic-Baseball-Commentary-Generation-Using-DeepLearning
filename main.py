@@ -7,7 +7,7 @@ from resources import Resources
 
 resources = Resources()
 
-annotation = Annotation('./_data/20171030KIADUSAN/20171030KIADUSAN.txt', resources)
+annotation = Annotation('20171030HTOB', resources)
 video = Video(resources)
 
 o_start = "183122"
@@ -26,10 +26,10 @@ naver.start()
 scene = threading.Thread(target=annotation.generate_Scene)
 scene.start()
 
-v = "20171030KIADUSAN"
+v = "20171030HTOB"
 #v= "180407LGLT"
 #v= "180407NCDUSAN"
-v = "180407NEKIA"
+#v = "180407NEKIA"
 
 #6ghl
 video.play(v="./_data/"+v+"/"+v+".mp4", count=count)
