@@ -17,6 +17,7 @@ class Annotation():
         self.sceneData = SceneData(Resources)
 
     def generate_Naver(self, count_delta, fps, o_start):
+        #self.naverData.set_Start(count_delta, fps, o_start)
         self.naverData.get_Annotation()
 
     def generate_Scene(self):

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import cv2
 from NN.scene_model import Scene_Model
+from Annotation.String import *
 
 
 class SceneData():
@@ -22,6 +23,7 @@ class SceneData():
         #print("\t\t\t\t대기시간이 길어 영상처리로 텍스트 생성")
 
         label, score = self.scene.predict(frame)
+        print("점수 : " + str(score * 100) + "%")
 
         if(self.prev != label):
 

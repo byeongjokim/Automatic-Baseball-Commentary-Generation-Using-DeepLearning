@@ -9,11 +9,11 @@ resources = Resources()
 
 v = "20171030HTOB"
 
-annotation = Annotation('180501LGHH', resources)
+annotation = Annotation(v, resources)
 video = Video(resources)
 
 o_start = "183122"
-o_count = 5800
+o_count = 8155
 fps = 29.97
 
 count = 10000
