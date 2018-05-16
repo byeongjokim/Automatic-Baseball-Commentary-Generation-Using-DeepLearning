@@ -75,8 +75,10 @@ class NaverData():
 
         self.set_game_info(data["gameInfo"])
 
-        self.awayTeamPitchers, self.awayTeamBatters = self.set_TeamLineUp(data["awayTeamLineUp"])
-        self.homeTeamPitchers, self.homeTeamBatters = self.set_TeamLineUp(data["homeTeamLineUp"])
+        awayTeamPitchers, awayTeamBatters = self.set_TeamLineUp(data["awayTeamLineUp"])
+        homeTeamPitchers, homeTeamBatters = self.set_TeamLineUp(data["homeTeamLineUp"])
+
+        self.LineUp = {"AwayPitchers" : awayTeamPitchers, "AwayBatters" : awayTeamBatters, "HomePitchers" : homeTeamPitchers, "HomeBatters" : homeTeamBatters}
 
         self.relayTexts = self.set_relayTexts(data["relayTexts"])
 
@@ -108,6 +110,8 @@ class NaverData():
         homeTeam = game_info["hName"]
         awayTeam = game_info["aName"]
 
+
+
         homeCode = game_info["hCode"]
         awayCode = game_info["aCode"]
 
@@ -115,7 +119,8 @@ class NaverData():
 
         stadium = game_info["stadium"]
 
-        print(stadium)
+        self.GameInfo = {"homeTeam": homeTeam, "awayTeam": awayTeam, "stadium": stadium, "data" : date}
+
         #input of ontology (game)
 
         return 1
@@ -156,21 +161,22 @@ class NaverData():
         return None
 
     def get_Annotation(self):
-        a = PitchingBatting()
+        pb = PitchingBatting()
+        change = Change(self.GameInfo, self.LineUp)
+        r = Result(self.GameInfo, self.LineUp)
+
         for relayText in self.relayTexts:
             pitchId = relayText["pitchId"]
             ball_data = self.find_ball_data_with_pitchId(pitchId)
 
             if (ball_data is None):
-                print("later")
-                # 아웃
-                # 교체
-                # n번타자
-
+                if(relayText["ballcount"] == 0): #모든 교체(수비위치, 타석, 주자, 팀공격)
+                    change.set(relayText)
+                r.set(relayText)
 
             else:  # pitching and batting
-                a.set(0, relayText, ball_data)
+                pb.set(0, relayText, ball_data)
 
-            print(relayText["liveText"])
+            #print(relayText["liveText"])
 
 
