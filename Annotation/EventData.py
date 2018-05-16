@@ -256,7 +256,11 @@ class Result():
         text = relayText["liveText"]
 
         annotation = ""
-        if("아웃" in text):
+
+        if("비디오" in text):
+            annotation = text
+
+        elif("아웃" in text):
             annotation = self.out(relayText)
 
         elif("고의" in text or "볼넷" in text or "몸에" in text or "출루" in text or "루타" in text or "내야안타" in text or "홈런" in text): #출루, 안타, 홈런
@@ -364,14 +368,56 @@ class Result():
             return strikeOut(batter)
 
         elif ("플라이" in text):
-            return 1
+            pos = "?"
+            text_ = text.split(" ")
+            if (text_[1] == ":"):
+                pos = text.split(" ")[2]
+
+            return flyOut(batter, pos)
 
         elif ("땅볼" in text):
-            return 1
+            pos = "?"
+            text_ = text.split(" ")
+            if (text_[1] == ":"):
+                pos = text.split(" ")[2]
+
+            return groundBallOut(batter, pos)
 
         elif ("라인드라이브" in text):
-            return 1
+            pos = "?"
+            text_ = text.split(" ")
+            if (text_[1] == ":"):
+                pos = text.split(" ")[2]
 
+            return lineDriveOut(batter, pos)
+
+        elif ("병살" in text):
+            pos = "?"
+            text_ = text.split(" ")
+            if (text_[1] == ":"):
+                pos = text.split(" ")[2]
+
+            return doublePlayedOut(batter, pos)
+
+        elif ("낫 아웃" in text):
+            pos = "?"
+            text_ = text.split(" ")
+            if (text_[1] == ":"):
+                pos = text.split(" ")[2]
+
+            return strikeNotOut(batter, pos)
+
+        elif ("희생번트" in text):
+            pos = "?"
+            text_ = text.split(" ")
+            if (text_[1] == ":"):
+                pos = text.split(" ")[2]
+
+            return sacrificeBunt(batter, pos)
+
+        else:
+            name = text.split(" ")[1]
+            return tagNforceOut(name)
 
     def get_batter(self, batorder, btop):
         if (btop == 1):

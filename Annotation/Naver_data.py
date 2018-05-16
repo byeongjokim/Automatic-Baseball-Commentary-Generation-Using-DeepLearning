@@ -177,6 +177,6 @@ class NaverData():
             else:  # pitching and batting
                 pb.set(0, relayText, ball_data)
 
-            #print(relayText["liveText"])
+            #print(relayText["liveText"]+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
 
 

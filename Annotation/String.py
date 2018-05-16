@@ -313,14 +313,54 @@ def strikeOut(batter):
         "삼진~! " + name + " 선수를 삼진 처리하면서 아웃카운트 하나를 따내는군요."
     ]
     return random.choice(annotation)
-'''
-def lineDriveOut(batter):
 
+def lineDriveOut(batter, pos):
+    name = str(batter["name"])
     annotation = [
         "아~ 잘 맞았지만 " + pos + "의 글러브에 빨려 들어갑니다. 라인드라이브 아웃으로 " + name + " 선수는 들어갑니다."
     ]
-'''
+    return random.choice(annotation)
 
+def flyOut(batter, pos):
+    name = str(batter["name"])
+    annotation = [
+        "뜬공~ " + pos + "가 잡아냅니다. 아웃!"
+    ]
+    return random.choice(annotation)
+
+def groundBallOut(batter, pos):
+    name = str(batter["name"])
+    annotation = [
+        pos + " 쪽으로 흐르는 볼. " + pos + "가 잡아서 1루에 던집니다.\n" + name + " 선수는 땅볼로 물러납니다."
+    ]
+    return random.choice(annotation)
+
+def doublePlayedOut(batter, pos):
+    name = str(batter["name"])
+    annotation = [
+        pos + "부터 이어지는 병살타! " + name + " 선수는 병살타를 치고 덕아웃으로 들어갑니다."
+    ]
+    return random.choice(annotation)
+
+def strikeNotOut(batter, pos):
+    name = str(batter["name"])
+    annotation = [
+        "낫 아웃!"
+    ]
+    return random.choice(annotation)
+
+def sacrificeBunt(batter, pos):
+    name = str(batter["name"])
+    annotation = [
+        pos + "가 잡아서 1루에 던집니다. " + name + " 선수는 희생번트로 물러납니다."
+    ]
+    return random.choice(annotation)
+
+def tagNforceOut(name):
+    annotation = [
+        name + " 선수 아웃 됩니다."
+    ]
+    return random.choice(annotation)
 #######################################################################################################안타
 def fourBall(name):
     annotation = [

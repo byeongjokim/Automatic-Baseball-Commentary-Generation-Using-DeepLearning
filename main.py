@@ -7,16 +7,14 @@ from resources import Resources
 
 resources = Resources()
 
-annotation = Annotation('20171030HTOB', resources)
+v = "20171030HTOB"
+
+annotation = Annotation('180501LGHH', resources)
 video = Video(resources)
 
 o_start = "183122"
 o_count = 5800
 fps = 29.97
-
-#count = 70233  before start 2
-#count = 10000
-count = 300050
 
 count = 10000
 
@@ -26,10 +24,4 @@ naver.start()
 scene = threading.Thread(target=annotation.generate_Scene)
 scene.start()
 
-v = "20171030HTOB"
-#v= "180407LGLT"
-#v= "180407NCDUSAN"
-#v = "180407NEKIA"
-
-#6ghl
 video.play(v="./_data/"+v+"/"+v+".mp4", count=count)

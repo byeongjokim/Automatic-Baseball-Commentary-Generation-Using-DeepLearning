@@ -71,3 +71,9 @@ class SceneData():
 
         return label
 
+    def about_player(self):
+        return 1
+
+    def about_game(self):
+        return 1
+
