@@ -1,6 +1,6 @@
 import json
 import random
-from Annotation.String import *
+from Annotation.RuleString import *
 
 class Change():
     def __init__(self, GameInfo, TeamLineup):

@@ -2,26 +2,26 @@ import threading
 import argparse
 
 from Video.Video import Video
-from Annotation.Annotation import Annotation
+from Annotation.Middle import Middle
 from resources import Resources
 
 resources = Resources()
 
 v = "20171030HTOB"
 
-annotation = Annotation(v, resources)
+annotation = Middle(v, resources)
 video = Video(resources)
 
 o_start = "183122"
 o_count = 8155
 fps = 29.97
 
-count = 10000
+count = 100000
 
-naver = threading.Thread(target=annotation.generate_Naver, args=(count-o_count, fps, o_start, ))
-naver.start()
+rule = threading.Thread(target=annotation.generate_Annotation_with_Rule, args=(count-o_count, fps, o_start, ))
+rule.start()
 
-scene = threading.Thread(target=annotation.generate_Scene)
+scene = threading.Thread(target=annotation.generate_Annotation_with_Scene)
 scene.start()
 
 video.play(v="./_data/"+v+"/"+v+".mp4", count=count)

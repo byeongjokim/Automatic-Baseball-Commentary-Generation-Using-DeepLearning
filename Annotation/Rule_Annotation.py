@@ -59,7 +59,7 @@ ballData
         "speed":"136"
 '''
 
-class NaverData():
+class RuleData():
 
     def __init__(self, gameName):
 
@@ -186,17 +186,15 @@ class NaverData():
         start = self.secondTotime(start)
         start = self.add_time_delta_between_two_pichId(o_start, start)
         start = self.secondTotime(start)
+        self.start_pitchId = start
         no = 0
 
         for i in self.relayTexts:
             if (int(i["pitchId"].split("_")[-1]) > int(start)):
-                no = i["seqno"] - 1
+                no = i["seqno"]
                 break
 
         self.relayTexts = self.relayTexts[no:]
-
-
-
 
     def find_ball_data_with_pitchId(self, pitchId):
         for i in self.ball_data:
@@ -210,14 +208,13 @@ class NaverData():
         change = Change(self.GameInfo, self.LineUp)
         r = Result(self.GameInfo, self.LineUp)
 
-        #pre_pitchId = "000000_183122"
+        pre_pitchId = "000000_"+str(self.start_pitchId)
+        print(pre_pitchId)
         #pre_pitchId = self.relayTexts[0]["pitchId"]
+
         for relayText in self.relayTexts:
             pitchId = relayText["pitchId"]
             ball_data = self.find_ball_data_with_pitchId(pitchId)
-
-            #if not (pitchId == "-1"):
-            #    time.sleep(self.get_time_delta_between_two_pichId(pre_pitchId.split("_")[-1], pitchId.split("_")[-1]))
 
             if (ball_data is None):
                 if(relayText["ballcount"] == 0): #모든 교체(수비위치, 타석, 주자, 팀공격)
@@ -225,6 +222,8 @@ class NaverData():
                 r.set(relayText)
 
             else:  # pitching and batting
+                time.sleep(self.get_time_delta_between_two_pichId(pre_pitchId.split("_")[-1], pitchId.split("_")[-1]))
+
                 pb.set(0, relayText, ball_data)
                 pre_pitchId = pitchId
 

@@ -21,7 +21,7 @@ def test_scene(image_name, t):
     s.make_model()
     if not (t):
         t = 0.7
-    print(s.predict(image, int(t))+1)
+    print(s.predict(image))
 
 def make_scene_data(l):
     s = Make_SceneData()

@@ -258,7 +258,7 @@ class Scene_Model():
         print("Label: ", self.sess.run(tf.argmax(self.test_y, 1)))
         print("Prediction: ", self.sess.run(tf.argmax(self.scene_model, 1), feed_dict={self.scene_X: self.test_x, self.scene_keep_prob: 1}))
 
-    def predict(self, image, threshold=0.75):
+    def predict(self, image):
         image = cv2.resize(image, (self.width, self.height))
         if(self.rgb == 1):
             image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -278,12 +278,7 @@ class Scene_Model():
                         print(results +" 번 선수가 보이네요.")
                 '''
         result, softmax = self.sess.run([tf.argmax(self.scene_model, 1), self.sotfmax], feed_dict={self.scene_X: image_X, self.scene_keep_prob: 1})
-        #print(max(softmax[0]))
 
         score = max(softmax[0])
 
-        if(score > threshold):
-            return result[0], score
-        else:
-            return 13, score
-
+        return result[0], score
