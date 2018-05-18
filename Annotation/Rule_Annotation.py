@@ -193,6 +193,7 @@ class RuleData():
             if (int(i["pitchId"].split("_")[-1]) > int(start)):
                 no = i["seqno"]
                 break
+            print(i["liveText"])
 
         self.relayTexts = self.relayTexts[no:]
 
@@ -222,7 +223,8 @@ class RuleData():
                 r.set(relayText)
 
             else:  # pitching and batting
-                time.sleep(self.get_time_delta_between_two_pichId(pre_pitchId.split("_")[-1], pitchId.split("_")[-1]))
+                interval = self.get_time_delta_between_two_pichId(pre_pitchId.split("_")[-1], pitchId.split("_")[-1])
+                time.sleep(interval)
 
                 pb.set(0, relayText, ball_data)
                 pre_pitchId = pitchId

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import cv2
 from NN.scene_model import Scene_Model
-from Annotation.RuleString import *
+from Annotation.SceneString import *
 
 
 class SceneData():
@@ -22,9 +22,10 @@ class SceneData():
         #print("\t\t\t\t대기시간이 길어 영상처리로 텍스트 생성")
 
         label, score = self.scene.predict(frame)
-        print("점수 : " + str(score * 100) + "%")
+        #print("점수 : " + str(score * 100) + "%")
         if(score > t):
             if(self.prev != label):
+                annotation = ""
                 if (label == 0):
                     annotation = self.batterBox()
 
@@ -65,52 +66,52 @@ class SceneData():
                     annotation = self.sS()
 
                 self.prev = label
-                print(annotation)
-                print(label)
+                print("\t\t\t"+annotation)
+
         return label
 
 
     def batterBox(self):
-        return 1
+        return BatterBox()
 
     def coach(self):
-        return 1
+        return coach()
 
     def gallery(self):
-        return 1
+        return gallery()
 
 
 
     def leftOutField(self):
-        return 1
+        return OutField("left")
 
     def centerOutField(self):
-        return 1
+        return OutField("center")
 
     def rightOutField(self):
-        return 1
+        return OutField("right")
 
 
 
     def firstBase(self):
-        return 1
+        return Base("1")
 
     def secondBase(self):
-        return 1
-
-    def sS(self):
-        return 1
+        return Base("2")
 
     def thirdBase(self):
-        return 1
+        return Base("3")
 
-    def player(self, pos):
-        return 1
+    def sS(self):
+        return Player("ss")
+
+    def player(self, player):
+        return Player(player)
 
 
 
     def etc(self):
-        return 1
+        return etc()
 
 
 
