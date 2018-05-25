@@ -6,19 +6,13 @@ class Make_SceneData():
     def __init__(self):
         print("sceneData")
 
-    def set_path(self, path):
-        self.path = path
-        os.mkdir("_data/"+path)
-        print("mkdir _data/"+path)
-
-    def set_video(self, v):
-        self.video  = cv2.VideoCapture(v)
-
-    def save_image_with_frame_interval(self, start=10000, end=130000, interval=5):
-        #video_path = "_data/" + self.path + "/" + self.path + ".mp4"
-        path = "_data/" + self.path + "/"
+    def save_image_with_frame_interval(self, v, start=1000, end=130000, interval=5):
+        #videos = ["180408LGLT"]
+        print(v)
+        video_path = "../_data/" + v + "/" + v + ".mp4"
+        path = "../_data/" + v + "/"
         data = []
-        #video = cv2.VideoCapture(video_path)
+        self.video = cv2.VideoCapture(video_path)
         print("start")
         while True:
             self.video.set(1, start)
@@ -32,10 +26,14 @@ class Make_SceneData():
             start = start + interval
         print("end")
         print("save start")
+
         count = 0
+
         for i in data:
             cv2.imwrite(path + str(count) + ".jpg", i)
             count = count + 1
+
+        print("save end")
 
     def labeling(self, p):
         path = "../_data/" + p + "/"
@@ -130,4 +128,11 @@ class Make_SceneData():
         f2.close()
 
 a = Make_SceneData()
-a.labeling("180404SAMNC")
+
+"""
+videos = ["180412HTHH", "180412KTNC", "180412OBSS", "180412SKLG", "180412WOLT", "180413KTLG", "180413LTHT", "180413NCSK", "180413OBWO", "180413SSHH"]
+for i in videos:
+    a.save_image_with_frame_interval(i, start=8000)
+"""
+
+a.labeling("")

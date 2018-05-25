@@ -6,7 +6,18 @@ from NN.scene_model import Scene_Model
 
 def train_scene(play):
     s = Scene_Model()
-    play = ["180401HTLG", "180401NCLT", "180401OBKT", "180401SKHH", "180401WOSS", "180403HTSK", "180403KTWO", "180403LGOB", "180403LTHH", "180403SSNC", "180404HTSK", "180404KTWO", "180404LGOB", "180404LTHH", "180404SSNC"]
+    play = ["180401HTLG", "180401NCLT", "180401OBKT", "180401SKHH", "180401WOSS",
+            "180403HTSK", "180403KTWO", "180403LGOB", "180403LTHH", "180403SSNC",
+            "180404HTSK", "180404KTWO", "180404LGOB", "180404LTHH", "180404SSNC",
+            "180405KTWO", "180405SSNC",
+            "180406LGLT", "180406WOHT",
+            "180407HHKT", "180407LGLT", "180407NCOB", "180407SSSK", "180407WOHT",
+            "180408HHKT", "180408LGLT", "180408NCOB", "180408SSSK", "180408WOHT",
+            "180410HTHH", "180410KTNC", "180410OBSS", "180410SKLG", "180410WOLT",
+            "180411HTHH", "180411KTNC", "180411OBSS", "180411SKLG", "180411WOLT",
+            "180412HTHH", "180412KTNC", "180412OBSS", "180412SKLG", "180412WOLT",
+            "180413KTLG", "180413LTHT", "180413NCSK", "180413OBWO", "180413SSHH"
+            ]
 
     s.load_data(play)
 
@@ -19,18 +30,7 @@ def test_scene(image_name, t):
 
     image = cv2.imread(image_name)
     s.make_model()
-    if not (t):
-        t = 0.7
     print(s.predict(image))
-
-def make_scene_data(l):
-    s = Make_SceneData()
-
-    for p in l:
-        file_name = os.path.splitext(os.path.basename(p))[0]
-        s.set_path(file_name)
-        s.set_video(p)
-        s.save_image_with_frame_interval(start=0)
 
 '''
 if __name__ == "__main__":
@@ -58,6 +58,6 @@ if __name__ == "__main__":
 '''
 
 #train_scene(1)
-#test_scene()
+test_scene()
 
 #make_scene_data()
