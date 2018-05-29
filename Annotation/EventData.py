@@ -3,16 +3,17 @@ import random
 from Annotation.RuleString import *
 
 class Change():
-    def __init__(self, GameInfo, TeamLineup):
+    def __init__(self, GameInfo, TeamLineup, onto):
         self.GameInfo = GameInfo
         self.TeamLineup = TeamLineup
+        self.onto = onto
 
     def set(self, relayText):
         text = relayText["liveText"]
 
         annotation = ""
         if("번타자" in text):
-            annotation = self.batterBox(relayText)
+            annotation = self.batterbox(relayText)
 
         elif("교체" in text):
             annotation = self.change_player(relayText)
@@ -25,7 +26,7 @@ class Change():
 
         print(annotation)
 
-    def batterBox(self, relayText):
+    def batterbox(self, relayText):
         batorder = relayText["batorder"]
         btop = relayText["btop"]
 
@@ -54,7 +55,15 @@ class Change():
 
 
 class PitchingBatting():
-    def set(self, batterbox_no, relayText, ball_data):
+    def __init__(self, GameInfo, TeamLineup, onto):
+        self.GameInfo = GameInfo
+        self.TeamLineup = TeamLineup
+        self.onto = onto
+
+        self.num_BatterBox = 1
+        self.num_PitchingBatting = 2
+
+    def set(self, relayText, ball_data):
         text = relayText["liveText"]
 
         inn = relayText["inn"]
@@ -63,13 +72,19 @@ class PitchingBatting():
 
         ballcount = relayText["ballcount"]
 
-        batter = ball_data["batterName"]
+        batterName = ball_data["batterName"]
         batorder = relayText["batorder"]
         ilsun = relayText["ilsun"]
+        batter = self.get_batter_with_name(batterName, btop)[0]
 
-        pitcher = ball_data["pitcherName"]
+
+        pitcherName = ball_data["pitcherName"]
+        pitcher = self.get_pitcher_with_name(pitcherName, btop)[0]
         stuff = ball_data["stuff"]
 
+        if(ballcount == 1): #1구 -> create batterbox instance
+
+            self.num_BatterBox = self.num_BatterBox + 1
 
         annotation = ""
         if ("구 스트라이크" in text):
@@ -90,6 +105,7 @@ class PitchingBatting():
         elif ("구 타격" in text):
             annotation = self.Hit(ball_data)
 
+        self.num_PitchingBatting = self.num_PitchingBatting + 1
         print(annotation)
 
 
@@ -227,6 +243,17 @@ class PitchingBatting():
 
         return H + V
 
+    def get_batter_with_name(self, name, btop):
+        if(btop == 1):
+            return [d for d in self.TeamLineup["AwayBatters"] if name == d["name"]]
+        else:
+            return [d for d in self.TeamLineup["HomeBatters"] if name == d["name"]]
+
+    def get_pitcher_with_name(self, name, btop):
+        if(btop == 1):
+            return [d for d in self.TeamLineup["HomePitchers"] if name == d["name"]]
+        else:
+            return [d for d in self.TeamLineup["AwayPitchers"] if name == d["name"]]
 '''
     삼진 아웃, 볼넷, 고의4구, 몸에 맞는 볼
     
@@ -248,9 +275,10 @@ class PitchingBatting():
     
 '''
 class Result():
-    def __init__(self, GameInfo, TeamLineup):
+    def __init__(self, GameInfo, TeamLineup, onto):
         self.GameInfo = GameInfo
         self.TeamLineup = TeamLineup
+        self.onto = onto
 
     def set(self, relayText):
         text = relayText["liveText"]
