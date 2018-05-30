@@ -40,7 +40,6 @@ class Change():
     def change_player(self, relayText):
         btop = relayText["btop"]
         text = relayText["liveText"]
-        print("Asdasdasdas", text)
         text_ = text.split(" ")
 
         player_in = text_[4]
@@ -360,6 +359,7 @@ class Result():
             aScore = str(relayText["awayScore"])
             hScore = str(relayText["homeScore"])
 
+            create_run(self.onto, self.GameInfo, "homein", "home", runner, self.resources.get_batterbox(), self.resources.get_seq())
             return runHome(origin, name, aScore, hScore)
 
         elif("도루" in text):

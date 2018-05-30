@@ -91,8 +91,8 @@ def create_out(onto, GameInfo, out, batterbox, seq):
         out = onto.Out(GameInfo["DateHomeAway"] + "_Out_" + str(seq).zfill(3))
 
     batterbox.result.append(out)
-
     onto.save()
+
 
 def create_hit(onto, GameInfo, hit, batterbox, seq):
     batter = batterbox.toHitter[0]
@@ -127,6 +127,7 @@ def create_hit(onto, GameInfo, hit, batterbox, seq):
 
     elif(hit == "homerun"):
         hit = onto.HomeRun(GameInfo["DateHomeAway"] + "_HomeRun_" + str(seq).zfill(3))
+        batterbox.passedToHomeBase.append(batter)
 
     batterbox.result.append(hit)
 
@@ -147,6 +148,9 @@ def create_run(onto, GameInfo, run, dest, runner, batterbox, seq):
             run.arrivedTo3rdBase.append(runner)
 
         batterbox.stealed.append(run)
+
+    elif(run == "homein"):
+        batterbox.passedToHomeBase.append(runner)
 
     elif(run == "runBase"):
         if (dest == "1"):
