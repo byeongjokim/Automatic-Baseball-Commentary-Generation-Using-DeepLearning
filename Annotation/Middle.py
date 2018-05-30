@@ -1,6 +1,7 @@
 import time
 import random
 import numpy as np
+import owlready2
 from Annotation.Rule_Annotation import RuleData
 from Annotation.Scene_Annotation import SceneData
 
@@ -14,8 +15,12 @@ class Middle():
         print("init annotation")
         self.Resources = Resources
 
-        self.ruleData = RuleData(gameName)
-        self.sceneData = SceneData(Resources)
+        owlready2.onto_path.append("_data/_owl/")
+        self.onto = owlready2.get_ontology("180515SKOB.owl")
+        self.onto.load()
+
+        self.ruleData = RuleData(gameName, Resources, self.onto)
+        self.sceneData = SceneData(Resources, self.onto)
 
     def generate_Annotation_with_Rule(self, count_delta, fps, o_start):
         self.ruleData.set_Start(count_delta, fps, o_start)

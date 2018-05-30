@@ -5,6 +5,7 @@ import operator
 import requests
 import time
 from Annotation.EventData import *
+from Annotation.Ontology_data import *
 '''
 relayText
         "inn":1,
@@ -62,7 +63,10 @@ ballData
 
 class RuleData():
 
-    def __init__(self, gameName):
+    def __init__(self, gameName, Resources, onto):
+
+        self.resources = Resources
+        self.onto = onto
 
         fileName = "_data/"+gameName+"/"+gameName + ".txt"
         data_file = open(fileName, "rt", encoding="UTF8")
@@ -75,11 +79,7 @@ class RuleData():
         ball_data_file.close()
 
         self.set_game_info(data["gameInfo"])
-
-        awayTeamPitchers, awayTeamBatters = self.set_TeamLineUp(data["awayTeamLineUp"])
-        homeTeamPitchers, homeTeamBatters = self.set_TeamLineUp(data["homeTeamLineUp"])
-
-        self.LineUp = {"AwayPitchers" : awayTeamPitchers, "AwayBatters" : awayTeamBatters, "HomePitchers" : homeTeamPitchers, "HomeBatters" : homeTeamBatters}
+        self.set_TeamLineUp(home=data["homeTeamLineUp"], away=data["awayTeamLineUp"])
 
         self.relayTexts = self.set_relayTexts(data["relayTexts"])
 
@@ -111,8 +111,6 @@ class RuleData():
         homeTeam = game_info["hName"]
         awayTeam = game_info["aName"]
 
-
-
         homeCode = game_info["hCode"]
         awayCode = game_info["aCode"]
 
@@ -120,19 +118,31 @@ class RuleData():
 
         stadium = game_info["stadium"]
 
-        self.GameInfo = {"homeTeam": homeTeam, "awayTeam": awayTeam, "stadium": stadium, "data" : date, "DateHomeAway" : str(date)+str(homeCode)+str(awayCode)}
+        self.GameInfo = {"homeTeam": homeTeam, "awayTeam": awayTeam, "stadium": stadium, "date" : date, "homeCode": homeCode, "awayCode": awayCode, "DateHomeAway" : str(date)+str(homeCode)+str(awayCode)}
 
         #input of ontology (game)
 
+        create_game(self.onto, self.GameInfo)
+
         return 1
 
-    def set_TeamLineUp(self, TeamLineUp):
-        pitchers = TeamLineUp["pitcher"]
-        batters = TeamLineUp["batter"]
+    def set_TeamLineUp(self, home, away):
 
-        batters.sort(key=operator.itemgetter("batOrder"))
+        homeTeamPitchers = home["pitcher"]
+        homeTeamBatters = home["batter"]
+        homeTeamBatters.sort(key=operator.itemgetter("batOrder"))
 
-        return pitchers, batters
+        create_player(self.onto, self.GameInfo, homeTeamPitchers, isaway=0, isbatter=0)
+        create_player(self.onto, self.GameInfo, homeTeamBatters, isaway=0, isbatter=1)
+
+        awayTeamPitchers = away["pitcher"]
+        awayTeamBatters = away["batter"]
+        awayTeamBatters.sort(key=operator.itemgetter("batOrder"))
+
+        create_player(self.onto, self.GameInfo, awayTeamPitchers, isaway=1, isbatter=0)
+        create_player(self.onto, self.GameInfo, awayTeamBatters, isaway=1, isbatter=1)
+
+        self.LineUp = {"AwayPitchers": awayTeamPitchers, "AwayBatters": awayTeamBatters, "HomePitchers": homeTeamPitchers, "HomeBatters": homeTeamBatters}
 
     def set_relayTexts(self, relayTexts):
         newlist = []
@@ -206,13 +216,9 @@ class RuleData():
         return None
 
     def get_Annotation(self):
-        owlready2.onto_path.append("_data/_owl/")
-        onto = owlready2.get_ontology("180515SKOB.owl")
-        onto.load()
-
-        PB = PitchingBatting(self.GameInfo, self.LineUp, onto)
-        C = Change(self.GameInfo, self.LineUp, onto)
-        R = Result(self.GameInfo, self.LineUp, onto)
+        PB = PitchingBatting(self.GameInfo, self.LineUp, self.onto, self.resources)
+        C = Change(self.GameInfo, self.LineUp, self.onto, self.resources)
+        R = Result(self.GameInfo, self.LineUp, self.onto, self.resources)
 
         pre_pitchId = "000000_"+str(self.start_pitchId)
         print(pre_pitchId)

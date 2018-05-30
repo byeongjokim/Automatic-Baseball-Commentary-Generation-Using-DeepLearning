@@ -1,12 +1,14 @@
 import json
 import random
 from Annotation.RuleString import *
+from Annotation.Ontology_data import *
 
 class Change():
-    def __init__(self, GameInfo, TeamLineup, onto):
+    def __init__(self, GameInfo, TeamLineup, onto, resources):
         self.GameInfo = GameInfo
         self.TeamLineup = TeamLineup
         self.onto = onto
+        self.resources = resources
 
     def set(self, relayText):
         text = relayText["liveText"]
@@ -34,7 +36,30 @@ class Change():
 
         return batter_Start(batter)
 
+#########################이쪽 수정
     def change_player(self, relayText):
+        btop = relayText["btop"]
+        text = relayText["liveText"]
+        print("Asdasdasdas", text)
+        text_ = text.split(" ")
+
+        player_in = text_[4]
+        player_out = text_[1]
+
+        if("투수" in text):
+            player_in = self.get_pitcher_with_name(player_in, btop)[0]
+            player_out = self.get_pitcher_with_name(player_out, btop)[0]
+        else:
+            if(self.get_batter_with_name(player_in, 0) != [] and  self.get_batter_with_name(player_out, 0) !=[]):
+                player_in = self.get_batter_with_name(player_in, 0)[0]
+                player_out = self.get_batter_with_name(player_out, 0)[0]
+            else:
+                player_in = self.get_batter_with_name(player_in, 1)[0]
+                player_out = self.get_batter_with_name(player_out, 1)[0]
+
+        create_change(self.onto, self.GameInfo, player_in, player_out, self.resources.get_seq())
+        self.resources.add_seq()
+
         return relayText["liveText"]
 
     def change_position(self, relayText):
@@ -53,15 +78,26 @@ class Change():
         else:
             return [d for d in self.TeamLineup["HomeBatters"] if batorder == d["batOrder"]]
 
+    def get_batter_with_name(self, name, btop):
+        if(btop == 1):
+            return [d for d in self.TeamLineup["AwayBatters"] if name == d["name"]]
+        else:
+            return [d for d in self.TeamLineup["HomeBatters"] if name == d["name"]]
+
+    def get_pitcher_with_name(self, name, btop):
+        if(btop == 0):
+            return [d for d in self.TeamLineup["AwayPitchers"] if name == d["name"]]
+        else:
+            return [d for d in self.TeamLineup["HomePitchers"] if name == d["name"]]
 
 class PitchingBatting():
-    def __init__(self, GameInfo, TeamLineup, onto):
+    def __init__(self, GameInfo, TeamLineup, onto, resources):
         self.GameInfo = GameInfo
         self.TeamLineup = TeamLineup
         self.onto = onto
+        self.resources = resources
 
         self.num_BatterBox = 1
-        self.num_PitchingBatting = 2
 
     def set(self, relayText, ball_data):
         text = relayText["liveText"]
@@ -77,35 +113,43 @@ class PitchingBatting():
         ilsun = relayText["ilsun"]
         batter = self.get_batter_with_name(batterName, btop)[0]
 
-
         pitcherName = ball_data["pitcherName"]
         pitcher = self.get_pitcher_with_name(pitcherName, btop)[0]
         stuff = ball_data["stuff"]
 
         if(ballcount == 1): #1구 -> create batterbox instance
-
+            self.resources.set_batterbox(create_batterbox(self.onto, self.GameInfo, self.num_BatterBox, batter, pitcher, batorder, btop))
             self.num_BatterBox = self.num_BatterBox + 1
 
         annotation = ""
         if ("구 스트라이크" in text):
             annotation = self.Strike(ball_data)
+            create_pitchingbatting(self.onto, self.GameInfo, "strike", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
 
         elif("구 헛스윙" in text):
             annotation = self.Swing(ball_data)
+            create_pitchingbatting(self.onto, self.GameInfo, "strike", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
 
         elif ("구 볼" in text):
             annotation = self.Ball(ball_data)
+            create_pitchingbatting(self.onto, self.GameInfo, "ball", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
 
         elif ("구 파울" in text):
             annotation = self.Foul(ball_data)
+            create_pitchingbatting(self.onto, self.GameInfo, "foul", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
 
         elif ("구 번트파울" in text):
             annotation = self.BntFoul(ball_data)
+            create_pitchingbatting(self.onto, self.GameInfo, "foul", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
 
         elif ("구 타격" in text):
             annotation = self.Hit(ball_data)
 
-        self.num_PitchingBatting = self.num_PitchingBatting + 1
         print(annotation)
 
 
@@ -254,6 +298,7 @@ class PitchingBatting():
             return [d for d in self.TeamLineup["HomePitchers"] if name == d["name"]]
         else:
             return [d for d in self.TeamLineup["AwayPitchers"] if name == d["name"]]
+
 '''
     삼진 아웃, 볼넷, 고의4구, 몸에 맞는 볼
     
@@ -275,10 +320,11 @@ class PitchingBatting():
     
 '''
 class Result():
-    def __init__(self, GameInfo, TeamLineup, onto):
+    def __init__(self, GameInfo, TeamLineup, onto, resources):
         self.GameInfo = GameInfo
         self.TeamLineup = TeamLineup
         self.onto = onto
+        self.resources = resources
 
     def set(self, relayText):
         text = relayText["liveText"]
@@ -302,26 +348,33 @@ class Result():
     def run(self, relayText):
         text = relayText["liveText"]
 
-        origin = "?"
-        destination = "?"
-        name = "?"
+        btop = relayText["btop"]
 
         text_ = text.split(" ")
 
         name = text_[1]
+        runner = self.get_batter_with_name(name, btop)[0]
         origin = [i for i in text_ if ("주자" in i)][0][:2]
 
         if("홈인" in text):
             aScore = str(relayText["awayScore"])
             hScore = str(relayText["homeScore"])
+
             return runHome(origin, name, aScore, hScore)
 
         elif("도루" in text):
             destination = [i for i in text_ if ("까지" in i)][0][:2]
+
+            create_run(self.onto, self.GameInfo, "steal", destination[0], runner, self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
+
             return thiefBase(origin, destination, name)
 
         elif("진루" in text):
             destination = [i for i in text_ if ("까지" in i)][0][:2]
+
+            create_run(self.onto, self.GameInfo, "runBase", destination[0], runner, self.resources.get_batterbox(), self.resources.get_seq())
+
             if("실책" in text):
                 return runError(origin, destination, name)
             else:
@@ -337,12 +390,18 @@ class Result():
         name = str(batter["name"])
 
         if("볼넷" in text):
+            create_hit(self.onto, self.GameInfo, "fourball", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
             return fourBall(name)
 
         elif("고의" in text):
+            create_hit(self.onto, self.GameInfo, "fourball", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
             return intentionalBaseOnBalls(name)
 
         elif("몸에 맞는" in text):
+            create_hit(self.onto, self.GameInfo, "hitbypitch", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
             return hitByPitch(name)
 
         pos = "?"
@@ -352,23 +411,37 @@ class Result():
 
         if("출루" in text):
             if("실책" in text):
+                create_hit(self.onto, self.GameInfo, "errorwalk", self.resources.get_batterbox(), self.resources.get_seq())
+                self.resources.add_seq()
                 return errorWalk(name, pos)
             else:
+                create_hit(self.onto, self.GameInfo, "groundballwalk", self.resources.get_batterbox(), self.resources.get_seq())
+                self.resources.add_seq()
                 return groundballWalk(name, pos)
 
         elif ("내야안타" in text):
+            create_hit(self.onto, self.GameInfo, "singlehit", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
             return inFieldHit(name, pos)
 
         elif("1루타" in text):
+            create_hit(self.onto, self.GameInfo, "singlehit", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
             return outFieldHit(name, pos)
 
         elif ("2루타" in text):
+            create_hit(self.onto, self.GameInfo, "doublehit", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
             return outFieldDoubleHit(name, pos)
 
         elif ("3루타" in text):
+            create_hit(self.onto, self.GameInfo, "triplehit", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
             return outFieldTripleHit(name, pos)
 
         elif("홈런" in text):
+            create_hit(self.onto, self.GameInfo, "homerun", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
             return HomeRun(name, pos)
 
 
@@ -393,9 +466,14 @@ class Result():
         batter = self.get_batter(batorder, btop)[0]
 
         if ("삼진" in text):
+            create_out(self.onto, self.GameInfo, "strikeout", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
             return strikeOut(batter)
 
         elif ("플라이" in text):
+            create_out(self.onto, self.GameInfo, "fly", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
+
             pos = "?"
             text_ = text.split(" ")
             if (text_[1] == ":"):
@@ -404,6 +482,9 @@ class Result():
             return flyOut(batter, pos)
 
         elif ("땅볼" in text):
+            create_out(self.onto, self.GameInfo, "outinbase", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
+
             pos = "?"
             text_ = text.split(" ")
             if (text_[1] == ":"):
@@ -412,6 +493,9 @@ class Result():
             return groundBallOut(batter, pos)
 
         elif ("라인드라이브" in text):
+            create_out(self.onto, self.GameInfo, "fly", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
+
             pos = "?"
             text_ = text.split(" ")
             if (text_[1] == ":"):
@@ -420,6 +504,9 @@ class Result():
             return lineDriveOut(batter, pos)
 
         elif ("병살" in text):
+            create_out(self.onto, self.GameInfo, "double play", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
+
             pos = "?"
             text_ = text.split(" ")
             if (text_[1] == ":"):
@@ -428,6 +515,9 @@ class Result():
             return doublePlayedOut(batter, pos)
 
         elif ("낫 아웃" in text):
+            create_out(self.onto, self.GameInfo, "strikeout", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
+
             pos = "?"
             text_ = text.split(" ")
             if (text_[1] == ":"):
@@ -436,6 +526,9 @@ class Result():
             return strikeNotOut(batter, pos)
 
         elif ("희생번트" in text):
+            create_out(self.onto, self.GameInfo, "outinbase", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
+
             pos = "?"
             text_ = text.split(" ")
             if (text_[1] == ":"):
@@ -445,6 +538,9 @@ class Result():
 
         else:
             name = text.split(" ")[1]
+            create_out(self.onto, self.GameInfo, "tagNforceOut", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.add_seq()
+
             return tagNforceOut(name)
 
     def get_batter(self, batorder, btop):
@@ -453,4 +549,8 @@ class Result():
         else:
             return [d for d in self.TeamLineup["HomeBatters"] if batorder == d["batOrder"]]
 
-
+    def get_batter_with_name(self, name, btop):
+        if(btop == 1):
+            return [d for d in self.TeamLineup["AwayBatters"] if name == d["name"]]
+        else:
+            return [d for d in self.TeamLineup["HomeBatters"] if name == d["name"]]

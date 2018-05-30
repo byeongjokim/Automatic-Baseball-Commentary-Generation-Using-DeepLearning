@@ -12,6 +12,8 @@ class Resources():
 
     annotation = ""
 
+    seq = 1
+
     def set_frameNo(self, frame_no):
         self.frame_no = frame_no
 
@@ -29,3 +31,15 @@ class Resources():
 
     def set_annotation(self, annotation):
         self.annotation = annotation
+
+    def add_seq(self):
+        self.seq = self.seq + 1
+
+    def get_seq(self):
+        return self.seq
+
+    def set_batterbox(self, batterbox):
+        self.batterbox = batterbox
+
+    def get_batterbox(self):
+        return self.batterbox
