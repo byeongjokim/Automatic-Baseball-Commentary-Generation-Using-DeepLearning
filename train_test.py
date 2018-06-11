@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
 '''
 
-#train_scene(1)
-test_scene()
+train_scene(1)
+#test_scene()
 
 #make_scene_data()

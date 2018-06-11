@@ -280,28 +280,51 @@ def batter_sesan_Stat(batter):
 '''
 
 #######################################################################################################inn
-def inn_start():
-    return 1
-
-def inn_end(GameInfo, inn, btop, score, innscore):
+def inn_start(GameInfo, inn, btop, score):
     if(btop == 1):
+        inn = inn + 1
         teamName = GameInfo["awayTeam"]
         flag = "초"
         s = score["awayScore"]
-        ins = innscore["awayInningScore"]
+
     else:
+        teamName = GameInfo["homeTeam"]
+        flag = "말"
+        s = score["homeScore"]
+
+    annotation = [
+        str(inn) + "회" + flag + " " + teamName + "의 공격이 시작 됩니다.",
+        str(inn) + "회" + flag + " " + teamName + "의 공격이 "+ str(s) +"점을 가진채 시작 됩니다.",
+    ]
+
+    return random.choice(annotation)
+
+def inn_end(GameInfo, inn, btop, score, innscore):
+    if(btop == 1):
         teamName = GameInfo["homeTeam"]
         flag = "말"
         s = score["homeScore"]
         ins = innscore["homeInningScore"]
 
-    annotation = [
-        str(inn) + "회" + flag + " " + teamName + "의 공격이 마무리 됩니다.",
-        str(inn) + "회" + flag + " " + teamName + "의 공격이 "+ str(s) +"점으로 마무리 됩니다.",
-        str(inn) + "회" + flag + " " + teamName + " 이번 이닝 " + str(ins) + "점을 추가 획득 하였습니다.",
-    ]
-    
-    return random.choice(annotation)
+        inn = inn - 1
+
+    else:
+        teamName = GameInfo["awayTeam"]
+        flag = "초"
+        s = score["awayScore"]
+        ins = innscore["awayInningScore"]
+
+    ann1 = ""
+    if inn != 0:
+        annotation = [
+            str(inn) + "회" + flag + " " + teamName + "의 공격이 마무리 됩니다.",
+            str(inn) + "회" + flag + " " + teamName + "의 공격이 "+ str(s) +"점으로 마무리 됩니다.",
+            str(inn) + "회" + flag + " " + teamName + " 이번 이닝 " + str(ins) + "점을 추가 획득 하였습니다.",
+        ]
+        ann1 = random.choice(annotation)
+
+
+    return ann1 + "\n" + inn_start(GameInfo, inn, btop, score)
 
 #######################################################################################################out
 def strikeOut(batter):

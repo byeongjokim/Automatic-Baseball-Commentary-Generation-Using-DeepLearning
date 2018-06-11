@@ -201,7 +201,8 @@ class Scene_Model():
 
         if (total_batch == 0):
             total_batch = 1
-
+        validation_acc = self.sess.run(self.accuracy, feed_dict={self.scene_X: self.valid_x, self.scene_Y: self.valid_y, self.scene_keep_prob: 1}) * 100
+        print("Validation Set Accuracy : ", validation_acc)
         for e in range(self.epoch):
             total_cost = 0
 

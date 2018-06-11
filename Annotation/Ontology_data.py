@@ -1,13 +1,18 @@
+import owlready2
+import re
+import rdflib
+
 def create_game(onto, GameInfo):
+
     game = onto.Game(GameInfo["DateHomeAway"])
     game.homeTeam = [onto[GameInfo["homeCode"]]]
     game.awayTeam = [onto[GameInfo["awayCode"]]]
 
     when = str(GameInfo["date"])
 
-    year = when[:4]
-    month = when[4:6]
-    day = when[6:]
+    year = int(when[:4])
+    month = int(when[4:6])
+    day = int(when[6:])
 
     if not (onto[year]):
         year = onto.Year(year)
@@ -46,8 +51,21 @@ def create_player(onto, GameInfo, players, isaway, isbatter):
 
         onto.save()
 
+def create_inn(onto, GameInfo, inn, btop):
+    print("adasdas"+str(btop))
 
-def create_batterbox(onto, GameInfo, num_BatterBox, batter, pitcher, batorder, btop):
+
+    if(btop == 1):
+        inning = onto.Inning(GameInfo["DateHomeAway"] + "_" + str(inn).zfill(2)+"초")
+    else:
+        inning = onto.Inning(GameInfo["DateHomeAway"] + "_" + str(inn).zfill(2)+"말")
+
+    inning.hasInning = [inn]
+    onto.save()
+
+    return inning
+
+def create_batterbox(onto, GameInfo, num_BatterBox, batter, pitcher, batorder, stay, inn_instance, btop):
     batterbox = onto.BatterBox(GameInfo["DateHomeAway"] + "_BatterBox_" + str(num_BatterBox).zfill(3))
 
     batter_pCode = batter["name"] + batter["pCode"]
@@ -57,7 +75,23 @@ def create_batterbox(onto, GameInfo, num_BatterBox, batter, pitcher, batorder, b
     batterbox.fromPitcher = [onto[pitcher_pCode]]
 
     batterbox.inGame = [onto[GameInfo["DateHomeAway"]]]
+    batterbox.inInning = [inn_instance]
     batterbox.hasOrder = [batorder]
+
+    if(stay[0] != []):
+        player = stay[0][0]
+        player_pCode = player["name"] + player["pCode"]
+        batterbox.stayIn1stBase = [onto[player_pCode]]
+
+    if(stay[1] != []):
+        player = stay[1][0]
+        player_pCode = player["name"] + player["pCode"]
+        batterbox.stayIn2ndBase = [onto[player_pCode]]
+
+    if(stay[2] != []):
+        player = stay[2][0]
+        player_pCode = player["name"] + player["pCode"]
+        batterbox.stayIn3rdBase = [onto[player_pCode]]
 
     onto.save()
 
@@ -175,8 +209,28 @@ def create_change(onto, GameInfo, player_in, player_out, seq):
 
     onto.save()
 
+def search_player(onto, player):
+    graph = onto.as_rdflib_graph()
+    query = "SELECT ?s ?p ?o WHERE { ?s ?p ?o }"
+    resultsList = graph.query(query)
 
-class OntologyData():
-    def test(self):
-        return 1
+    print(resultsList)
 
+"""
+g = rdflib.Graph()
+g.load('../_data/_owl/180515SKOB.owl')
+q = "select ?s where {?s ?p ?o}"
+q = "select ?s ?o1 where {?s ?toHitter ?hitter . ?s ?result ?o1}"
+uri = "http://ailab.hanyang.ac.kr/ontology/baseball"
+
+batterbox = rdflib.URIRef(uri + "#BatterBox")
+result = rdflib.URIRef(uri + "#result")
+toHitter = rdflib.URIRef(uri + "#toHitter")
+hitter = rdflib.URIRef(uri + "#정의윤75151")
+
+r = g.query(q, initBindings={"result":result, "toHitter":toHitter, "hitter":hitter})
+for row in r:
+    print(row)
+
+# select ?o1 where { ?s toHitter ?o (정의윤75151) . ?s result ?o1 }
+"""

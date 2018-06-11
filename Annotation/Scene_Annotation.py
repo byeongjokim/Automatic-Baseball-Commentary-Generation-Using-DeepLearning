@@ -2,15 +2,16 @@
 import cv2
 from NN.scene_model import Scene_Model
 from Annotation.SceneString import *
-
+from Annotation.Ontology_data import *
 
 class SceneData():
 
     prev = -1
 
-    def __init__(self, Resources, shape=(320, 180)):
+    def __init__(self, Resources, onto, shape=(320, 180)):
         print("init_sceneData")
         self.Resources = Resources
+        self.onto = onto
 
         self.width = shape[0]
         self.height = shape[1]

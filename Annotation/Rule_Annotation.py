@@ -118,7 +118,7 @@ class RuleData():
 
         stadium = game_info["stadium"]
 
-        self.GameInfo = {"homeTeam": homeTeam, "awayTeam": awayTeam, "stadium": stadium, "date" : date, "homeCode": homeCode, "awayCode": awayCode, "DateHomeAway" : str(date)+str(homeCode)+str(awayCode)}
+        self.GameInfo = {"FhomeTeam": FhomeTeam, "FawayTeam":FawayTeam, "homeTeam": homeTeam, "awayTeam": awayTeam, "stadium": stadium, "date" : date, "homeCode": homeCode, "awayCode": awayCode, "DateHomeAway" : str(date)+str(homeCode)+str(awayCode)}
 
         #input of ontology (game)
 
@@ -200,11 +200,26 @@ class RuleData():
         self.start_pitchId = start
         no = 0
 
-        for i in self.relayTexts:
-            if (int(i["pitchId"].split("_")[-1]) > int(start)):
-                no = i["seqno"]
+        self.PB = PitchingBatting(self.GameInfo, self.LineUp, self.onto, self.resources)
+        self.C = Change(self.GameInfo, self.LineUp, self.onto, self.resources)
+        self.R = Result(self.GameInfo, self.LineUp, self.onto, self.resources)
+
+        for relayText in self.relayTexts:
+            if (int(relayText["pitchId"].split("_")[-1]) > int(start)):
+                no = relayText["seqno"]
                 break
-            print(i["liveText"])
+            pitchId = relayText["pitchId"]
+            ball_data = self.find_ball_data_with_pitchId(pitchId)
+
+            if (ball_data is None):
+                if (relayText["ballcount"] == 0):  # 모든 교체(수비위치, 타석, 주자, 팀공격)
+                    self.C.set(relayText)
+                else:
+                    self.R.set(relayText)
+
+            else:  # pitching and batting
+                self.PB.set(relayText, ball_data)
+                pre_pitchId = pitchId
 
         self.relayTexts = self.relayTexts[no:]
 
@@ -216,12 +231,7 @@ class RuleData():
         return None
 
     def get_Annotation(self):
-        PB = PitchingBatting(self.GameInfo, self.LineUp, self.onto, self.resources)
-        C = Change(self.GameInfo, self.LineUp, self.onto, self.resources)
-        R = Result(self.GameInfo, self.LineUp, self.onto, self.resources)
-
         pre_pitchId = "000000_"+str(self.start_pitchId)
-        print(pre_pitchId)
         #pre_pitchId = self.relayTexts[0]["pitchId"]
 
         for relayText in self.relayTexts:
@@ -230,15 +240,15 @@ class RuleData():
 
             if (ball_data is None):
                 if(relayText["ballcount"] == 0): #모든 교체(수비위치, 타석, 주자, 팀공격)
-                    C.set(relayText)
+                    self.C.set(relayText)
                 else:
-                    R.set(relayText)
+                    self.R.set(relayText)
 
             else:  # pitching and batting
                 interval = self.get_time_delta_between_two_pichId(pre_pitchId.split("_")[-1], pitchId.split("_")[-1])
                 #time.sleep(interval)
 
-                PB.set(relayText, ball_data)
+                self.PB.set(relayText, ball_data)
                 pre_pitchId = pitchId
 
             #print(relayText["liveText"]+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")

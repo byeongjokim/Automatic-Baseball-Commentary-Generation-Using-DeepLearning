@@ -69,6 +69,8 @@ class Change():
         btop = relayText["btop"]
         score = {"homeScore" : relayText["homeScore"], "awayScore" : relayText["awayScore"]}
         innscore = {"homeInningScore" : relayText["homeInningScore"], "awayInningScore" : relayText["awayInningScore"]}
+
+        self.resources.set_inn(create_inn(self.onto, self.GameInfo, inn, btop))
         return inn_end(self.GameInfo, inn, btop, score, innscore)
 
     def get_batter(self, batorder, btop):
@@ -116,8 +118,13 @@ class PitchingBatting():
         pitcher = self.get_pitcher_with_name(pitcherName, btop)[0]
         stuff = ball_data["stuff"]
 
+        inn_instance = self.resources.get_inn()
+        stay = [self.get_batter_with_order(relayText["base1"], btop),
+                self.get_batter_with_order(relayText["base2"], btop),
+                self.get_batter_with_order(relayText["base3"], btop)]
+
         if(ballcount == 1): #1구 -> create batterbox instance
-            self.resources.set_batterbox(create_batterbox(self.onto, self.GameInfo, self.num_BatterBox, batter, pitcher, batorder, btop))
+            self.resources.set_batterbox(create_batterbox(self.onto, self.GameInfo, self.num_BatterBox, batter, pitcher, batorder, stay, inn_instance, btop))
             self.num_BatterBox = self.num_BatterBox + 1
 
         annotation = ""
@@ -298,6 +305,11 @@ class PitchingBatting():
         else:
             return [d for d in self.TeamLineup["AwayPitchers"] if name == d["name"]]
 
+    def get_batter_with_order(self, no, btop):
+        if(btop == 1):
+            return [d for d in self.TeamLineup["AwayBatters"] if no == d["batOrder"]]
+        else:
+            return [d for d in self.TeamLineup["HomeBatters"] if no == d["batOrder"]]
 '''
     삼진 아웃, 볼넷, 고의4구, 몸에 맞는 볼
     
