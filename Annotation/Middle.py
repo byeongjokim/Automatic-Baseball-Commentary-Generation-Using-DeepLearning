@@ -38,11 +38,10 @@ class Middle():
             if(ssim(self.Resources.frame, frame, multichannel=True) < 0.6):
                 isPitcher = 0
                 frame = self.Resources.frame
-                label = self.sceneData.get_Annotation(self.Resources.frame)
+                self.sceneData.get_Annotation(self.Resources.frame)
             else:
                 if(isPitcher == 15 and label == 2):
                     print("이 투수는 ~~~")
+                    self.sceneData.pitcher()
                 isPitcher = isPitcher + 1
-
-
         return 1

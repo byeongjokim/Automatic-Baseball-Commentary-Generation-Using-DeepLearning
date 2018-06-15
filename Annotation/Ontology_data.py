@@ -52,9 +52,6 @@ def create_player(onto, GameInfo, players, isaway, isbatter):
         onto.save()
 
 def create_inn(onto, GameInfo, inn, btop):
-    print("adasdas"+str(btop))
-
-
     if(btop == 1):
         inning = onto.Inning(GameInfo["DateHomeAway"] + "_" + str(inn).zfill(2)+"초")
     else:
@@ -71,8 +68,12 @@ def create_batterbox(onto, GameInfo, num_BatterBox, batter, pitcher, batorder, s
     batter_pCode = batter["name"] + batter["pCode"]
     pitcher_pCode = pitcher["name"] + pitcher["pCode"]
 
-    batterbox.toHitter = [onto[batter_pCode]]
-    batterbox.fromPitcher = [onto[pitcher_pCode]]
+    toHitter = onto[batter_pCode]
+    fromPitcher = onto[pitcher_pCode]
+
+    batterbox.toHitter = [toHitter]
+    batterbox.fromPitcher = [fromPitcher]
+
 
     batterbox.inGame = [onto[GameInfo["DateHomeAway"]]]
     batterbox.inInning = [inn_instance]
@@ -95,7 +96,7 @@ def create_batterbox(onto, GameInfo, num_BatterBox, batter, pitcher, batorder, s
 
     onto.save()
 
-    return batterbox
+    return batterbox, pitcher_pCode, batter_pCode
 
 def create_pitchingbatting(onto, GameInfo, ball, batterbox, seq):
     if(ball == "strike"):
@@ -204,33 +205,86 @@ def create_change(onto, GameInfo, player_in, player_out, seq):
     player_out = onto[player_out]
 
     change = onto.Change(GameInfo["DateHomeAway"] + "_Change_" + str(seq).zfill(3))
-    change.playerIn = [player_in]
-    change.playerOut = [player_out]
+    change.playIn = [player_in]
+    change.playOut = [player_out]
 
     onto.save()
 
-def search_player(onto, player):
-    graph = onto.as_rdflib_graph()
-    query = "SELECT ?s ?p ?o WHERE { ?s ?p ?o }"
-    resultsList = graph.query(query)
+def test():
+    g = rdflib.Graph()
+    g.load('../_data/_owl/180515SKOB.owl')
 
-    print(resultsList)
+    uri = "http://ailab.hanyang.ac.kr/ontology/baseball#"
 
-"""
+    batterbox = rdflib.URIRef(uri + "BatterBox")
+    result = rdflib.URIRef(uri + "result")
+    toHitter = rdflib.URIRef(uri + "toHitter")
+    hitter = rdflib.URIRef(uri + "정의윤75151")
+    fly = rdflib.URIRef(uri + "Fly")
+
+    q = "select ?s ?o where {?s ?result ?o . ?s ?toHitter ?hitter . filter contains(str(?o), 'Fly')}"
+    r = g.query(q, initBindings={"result":result, "toHitter":toHitter, "hitter":hitter, "type":fly})
+
+
+    #q = "select ?s ?o1 where {?s ?toHitter ?hitter . ?s ?result ?o1}"
+    #r = g.query(q, initBindings={"result": result, "toHitter": toHitter, "hitter": hitter})
+
+    for row in r:
+        print(row)
+
+def search_batterbox(g, query):
+    uri = "http://ailab.hanyang.ac.kr/ontology/baseball#"
+
+    inGame = rdflib.URIRef(uri + "inGame")
+    inInning = rdflib.URIRef(uri + "inInning")
+
+    batterbox = rdflib.URIRef(uri + "BatterBox")
+    fromPitcher = rdflib.URIRef(uri + "fromPitcher")
+    toHitter = rdflib.URIRef(uri + "toHitter")
+    result = rdflib.URIRef(uri + "result")
+
+    return 1
+
+def search_stat_of_player(g):
+    uri = "http://ailab.hanyang.ac.kr/ontology/baseball#"
+
+    b = "오재원77248"
+    p = "켈리65856"
+    gamecode = "20180515OBSK"
+
+    thisAVG = rdflib.URIRef(uri + "thisAVG")
+    toHitter = rdflib.URIRef(uri + "toHitter")
+    fromPitcher = rdflib.URIRef(uri + "fromPitcher")
+
+    result = rdflib.URIRef(uri + "result")
+    strikeout = rdflib.URIRef(uri + "Strikeout")
+
+    inGame = rdflib.URIRef(uri + "inGame")
+    thisGame = rdflib.URIRef(uri + gamecode)
+
+    batter = rdflib.URIRef(uri + b)
+    pitcher = rdflib.URIRef(uri + p)
+
+    query = "SELECT ?o where {?s ?toHitter ?batter . ?s ?inGame ?thisGame . ?s ?result ?o}"
+    r = g.query(query, initBindings={"toHitter":toHitter, "batter":batter,
+                                     "inGame":inGame,"thisGame":thisGame,
+                                     "result":result})
+    this_game_count = len(r)
+    batter_history = []
+    for row in r:
+        batter_history.append(row[0].split("#")[1].split("_")[1])
+
+    print(b + " 타자 오늘 " + str(this_game_count) +" 번째 타석, " + ", ".join(_ for _ in batter_history) + "을 기록하고 있습니다.")
+
 g = rdflib.Graph()
 g.load('../_data/_owl/180515SKOB.owl')
-q = "select ?s where {?s ?p ?o}"
-q = "select ?s ?o1 where {?s ?toHitter ?hitter . ?s ?result ?o1}"
-uri = "http://ailab.hanyang.ac.kr/ontology/baseball"
 
-batterbox = rdflib.URIRef(uri + "#BatterBox")
-result = rdflib.URIRef(uri + "#result")
-toHitter = rdflib.URIRef(uri + "#toHitter")
-hitter = rdflib.URIRef(uri + "#정의윤75151")
+search_stat_of_player(g)
+#search_batterbox(g, "정의윤75151")
 
-r = g.query(q, initBindings={"result":result, "toHitter":toHitter, "hitter":hitter})
-for row in r:
-    print(row)
 
-# select ?o1 where { ?s toHitter ?o (정의윤75151) . ?s result ?o1 }
-"""
+
+
+
+
+

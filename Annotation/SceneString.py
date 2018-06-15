@@ -1,14 +1,72 @@
 import random
+import rdflib
 
 #######################################################################################################BatterBox
-def BatterBox():
+def BatterBox(gamecode, b, p):
+    g = rdflib.Graph()
+    g.load('_data/_owl/180515SKOB.owl')
+    uri = "http://ailab.hanyang.ac.kr/ontology/baseball#"
+
+    thisAVG = rdflib.URIRef(uri + "thisAVG")
+    thisERA = rdflib.URIRef(uri + "thisERA")
+
+    toHitter = rdflib.URIRef(uri + "toHitter")
+    fromPitcher = rdflib.URIRef(uri + "fromPitcher")
+    inGame = rdflib.URIRef(uri + "inGame")
+    thisGame = rdflib.URIRef(uri + gamecode)
+    result = rdflib.URIRef(uri + "result")
+
+
+    batter = rdflib.URIRef(uri + b)
+    pitcher = rdflib.URIRef(uri + p)
+
+    query = "SELECT ?o where {?s ?p ?o}"
+    r = g.query(query, initBindings={"s":batter, "p": thisAVG})
+    for row in r:
+        avg = row[0]
+
+    r = g.query(query, initBindings={"s": pitcher, "p": thisERA})
+    for row in r:
+        era = row[0]
+
+    query = "SELECT ?s ?o where {?s ?toHitter ?Hitter . ?s ?inGame ?thisGame . ?s ?result ?o}"
+    r = g.query(query, initBindings={"toHitter":toHitter, "Hitter":batter, "inGame":inGame, "thisGame":thisGame})
+    this_game_count = len(r)
+
+    batter_history = []
+    for row in r:
+        batter_history.append(row[0].split("#")[1].split("_")[1])
+
+
+
+    query = "SELECT ?o where {?s ?fromPitcher ?pitcher . ?s ?inGame ?thisGame . ?s ?result ?o}"
+    r = g.query(query, initBindings={"fromPitcher": fromPitcher, "pitcher": pitcher,
+                                     "inGame": inGame, "thisGame": thisGame,
+                                     "result": result})
+    total_out = len(r)
+    strikeout = 0
+    fourball = 0
+    for row in r:
+        if ("Strikeout" in row[0]):
+            strikeout = strikeout + 1
+        if ("BaseOnBalls" in row[0]):
+            fourball = fourball + 1
+
     annotation = [
-        "지난 경기에 A 투수는 B 타자에게 3개의 안타를 허용했습니다.",
-        "지난 경기에 B 타자는 A 투수에게 2번의 삼진아웃과, 1번의 안타를 쳤네요",
-        "투수와 타자의 신경전 속에 투수는 어떤 공을 선택 할까요?",
+        b + " 타자와 " + p + " 투수의 신경전 속에 " + b + " 타자는 이번시즌 " + str(avg) + "의 평균 타율을 기록하고 있습니다.",
+        b + " 타자와 " + p + " 투수의 신경전 속에 " + p + " 투수는 이번시즌 " + str(era) + "의 평균 자책점을 기록하고 있습니다.",
+
+        b + " 타자의 오늘 " + str(this_game_count) + " 번째 타석입니다.",
+        b + " 타자 오늘 " + str(this_game_count) +" 번째 타석, " + ", ".join(_ for _ in batter_history) + "을 기록하고 있습니다.",
+        b + " 타자는 이번시즌 " + str(avg) + "의 평균 타율을 기록하고 있습니다.",
+
+        p + " 투수 오늘 경기 " + str(total_out) + " 개의 아웃을 잡아내고 있습니다.",
+        p + " 투수 오늘 경기 " + str(strikeout) + " 개의 삼진을 잡아내고 있습니다.",
+        p + " 투수 오늘 경기 " + str(fourball) + " 개의 포볼로 타자를 진루 시켰습니다.",
     ]
     return random.choice(annotation)
 
+'''
 def coach():
     annotation = [
         "코치 모습이 보이네요. 지고있는 상황에 어떤 전술을 쓸까요?",
@@ -63,3 +121,4 @@ def etc():
         "기타장면 입니다."
     ]
     return random.choice(annotation)
+'''

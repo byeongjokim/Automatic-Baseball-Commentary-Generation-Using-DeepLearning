@@ -122,8 +122,9 @@ class RuleData():
 
         #input of ontology (game)
 
-        create_game(self.onto, self.GameInfo)
+        self.resources.set_gameinfo(self.GameInfo)
 
+        create_game(self.onto, self.GameInfo)
         return 1
 
     def set_TeamLineUp(self, home, away):
@@ -143,6 +144,7 @@ class RuleData():
         create_player(self.onto, self.GameInfo, awayTeamBatters, isaway=1, isbatter=1)
 
         self.LineUp = {"AwayPitchers": awayTeamPitchers, "AwayBatters": awayTeamBatters, "HomePitchers": homeTeamPitchers, "HomeBatters": homeTeamBatters}
+        self.resources.set_LineUp(self.LineUp)
 
     def set_relayTexts(self, relayTexts):
         newlist = []
@@ -246,7 +248,7 @@ class RuleData():
 
             else:  # pitching and batting
                 interval = self.get_time_delta_between_two_pichId(pre_pitchId.split("_")[-1], pitchId.split("_")[-1])
-                #time.sleep(interval)
+                time.sleep(interval)
 
                 self.PB.set(relayText, ball_data)
                 pre_pitchId = pitchId

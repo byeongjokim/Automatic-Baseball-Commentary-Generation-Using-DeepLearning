@@ -33,6 +33,7 @@ class Change():
         btop = relayText["btop"]
 
         batter = self.get_batter(batorder, btop)[0]
+        self.resources.set_batter(batter["name"] + batter["pCode"])
 
         return batter_Start(batter)
 
@@ -55,6 +56,7 @@ class Change():
             else:
                 player_in = self.get_batter_with_name(player_in, 1)[0]
                 player_out = self.get_batter_with_name(player_out, 1)[0]
+                self.resources.change_LineUp(player_in, player_out)
 
         create_change(self.onto, self.GameInfo, player_in, player_out, self.resources.get_seq())
         self.resources.add_seq()
@@ -124,7 +126,9 @@ class PitchingBatting():
                 self.get_batter_with_order(relayText["base3"], btop)]
 
         if(ballcount == 1): #1구 -> create batterbox instance
-            self.resources.set_batterbox(create_batterbox(self.onto, self.GameInfo, self.num_BatterBox, batter, pitcher, batorder, stay, inn_instance, btop))
+
+            batter_box, p, b = create_batterbox(self.onto, self.GameInfo, self.num_BatterBox, batter, pitcher, batorder, stay, inn_instance, btop)
+            self.resources.set_batterbox(batter_box, p, b)
             self.num_BatterBox = self.num_BatterBox + 1
 
         annotation = ""

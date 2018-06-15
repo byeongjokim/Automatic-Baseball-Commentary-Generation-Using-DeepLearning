@@ -10,7 +10,7 @@ class SceneData():
 
     def __init__(self, Resources, onto, shape=(320, 180)):
         print("init_sceneData")
-        self.Resources = Resources
+        self.resources = Resources
         self.onto = onto
 
         self.width = shape[0]
@@ -19,7 +19,10 @@ class SceneData():
         self.scene = Scene_Model()
         self.scene.make_model()
 
+        self.timer = 0
+
     def get_Annotation(self, frame, t=0.7):
+        self.timer = self.timer + 1
         #print("\t\t\t\t대기시간이 길어 영상처리로 텍스트 생성")
 
         label, score = self.scene.predict(frame)
@@ -29,7 +32,7 @@ class SceneData():
                 annotation = ""
                 if (label == 0):
                     annotation = self.batterBox()
-
+                """
                 elif(label == 1):
                     annotation = self.player("batter")
 
@@ -64,16 +67,19 @@ class SceneData():
                     annotation = self.leftOutField()
 
                 elif (label == 12):
-                    annotation = self.sS()
-
+                    annotation = self.ss()
+                """
                 self.prev = label
-                print("\t\t\t"+annotation)
+                print("\t\t"+annotation)
 
         return label
 
 
     def batterBox(self):
-        return BatterBox()
+        return BatterBox(self.resources.get_gamecode(), self.resources.get_batter(), self.resources.get_pitcher())
+"""
+    def pitcher(self):
+        print("pitcher")
 
     def coach(self):
         return coach()
@@ -103,7 +109,7 @@ class SceneData():
     def thirdBase(self):
         return Base("3")
 
-    def sS(self):
+    def ss(self):
         return Player("ss")
 
     def player(self, player):
@@ -115,9 +121,7 @@ class SceneData():
         return etc()
 
 
-
-
-
+"""
 
 
 
