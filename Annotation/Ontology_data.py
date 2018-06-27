@@ -210,81 +210,171 @@ def create_change(onto, GameInfo, player_in, player_out, seq):
 
     onto.save()
 
-def test():
+def search_pitcher(gameCode, p):
     g = rdflib.Graph()
     g.load('../_data/_owl/180515SKOB.owl')
-
     uri = "http://ailab.hanyang.ac.kr/ontology/baseball#"
 
-    batterbox = rdflib.URIRef(uri + "BatterBox")
+    inGame = rdflib.URIRef(uri + "inGame")
+    thisGame = rdflib.URIRef(uri + gameCode)
+
+    fromPitcher = rdflib.URIRef(uri + "fromPitcher")
+    pitcher = rdflib.URIRef(uri + p)
+    thisERA = rdflib.URIRef(uri + "thisERA")
+
     result = rdflib.URIRef(uri + "result")
-    toHitter = rdflib.URIRef(uri + "toHitter")
-    hitter = rdflib.URIRef(uri + "정의윤75151")
-    fly = rdflib.URIRef(uri + "Fly")
 
-    q = "select ?s ?o where {?s ?result ?o . ?s ?toHitter ?hitter . filter contains(str(?o), 'Fly')}"
-    r = g.query(q, initBindings={"result":result, "toHitter":toHitter, "hitter":hitter, "type":fly})
+    query = "SELECT ?o where {?pitcher ?thisERA ?o}"
+    r = g.query(query, initBindings={"pitcher": pitcher, "thisERA": thisERA})
 
+    era = 0
+    for row in r:
+        era = row[0]
 
-    #q = "select ?s ?o1 where {?s ?toHitter ?hitter . ?s ?result ?o1}"
-    #r = g.query(q, initBindings={"result": result, "toHitter": toHitter, "hitter": hitter})
+    query = "SELECT ?o where {?s ?fromPitcher ?pitcher . ?s ?inGame ?thisGame . ?s ?result ?o}"
+    r = g.query(query, initBindings={"fromPitcher": fromPitcher, "pitcher": pitcher,
+                                     "inGame": inGame, "thisGame": thisGame,
+                                     "result": result})
+    strikeout = 0
+    baseonballs = 0
 
     for row in r:
-        print(row)
+        if ("Strikeout" in row[0]):
+            strikeout = strikeout + 1
+        if ("BaseOnBalls" in row[0]):
+            baseonballs = baseonballs + 1
 
-def search_batterbox(g, query):
+    annotation = [
+        p + " 투수 오늘 경기 "+str(len(r))+"번째 타석에서 공을 던지고 있습니다.",
+        p + " 투수 오늘 경기 "+str(strikeout)+"개의 삼진을 잡아내고 있습니다.",
+        p + " 투수 오늘 경기 "+str(baseonballs)+"개의 포볼로 타자를 진루 시켰습니다.",
+        p + " 투수 이번 시즌 "+str(era)+"의 평균 자책점을 기록하고 있습니다.",
+        p + " 투수 과연 어떤 공을 던질까요?",
+    ]
+
+    return annotation
+
+def search_batter(gameCode, b):
+    g = rdflib.Graph()
+    g.load('../_data/_owl/180515SKOB.owl')
     uri = "http://ailab.hanyang.ac.kr/ontology/baseball#"
 
     inGame = rdflib.URIRef(uri + "inGame")
-    inInning = rdflib.URIRef(uri + "inInning")
+    thisGame = rdflib.URIRef(uri + gameCode)
 
-    batterbox = rdflib.URIRef(uri + "BatterBox")
-    fromPitcher = rdflib.URIRef(uri + "fromPitcher")
     toHitter = rdflib.URIRef(uri + "toHitter")
-    result = rdflib.URIRef(uri + "result")
-
-    return 1
-
-def search_stat_of_player(g):
-    uri = "http://ailab.hanyang.ac.kr/ontology/baseball#"
-
-    b = "오재원77248"
-    p = "켈리65856"
-    gamecode = "20180515OBSK"
-
-    thisAVG = rdflib.URIRef(uri + "thisAVG")
-    toHitter = rdflib.URIRef(uri + "toHitter")
-    fromPitcher = rdflib.URIRef(uri + "fromPitcher")
-
-    result = rdflib.URIRef(uri + "result")
-    strikeout = rdflib.URIRef(uri + "Strikeout")
-
-    inGame = rdflib.URIRef(uri + "inGame")
-    thisGame = rdflib.URIRef(uri + gamecode)
-
     batter = rdflib.URIRef(uri + b)
-    pitcher = rdflib.URIRef(uri + p)
+    thisAVG = rdflib.URIRef(uri + "thisAVG")
 
-    query = "SELECT ?o where {?s ?toHitter ?batter . ?s ?inGame ?thisGame . ?s ?result ?o}"
-    r = g.query(query, initBindings={"toHitter":toHitter, "batter":batter,
-                                     "inGame":inGame,"thisGame":thisGame,
-                                     "result":result})
+    result = rdflib.URIRef(uri + "result")
+    stayIn1stBase = rdflib.URIRef(uri + "stayIn1stBase")
+
+    query = "SELECT ?o where {?batter ?thisAVG ?o}"
+    r = g.query(query, initBindings={"batter": batter, "thisAVG": thisAVG})
+
+    avg = 0
+    for row in r:
+        avg = row[0]
+
+    query = "SELECT ?o where {?s ?toHitter ?hitter . ?s ?inGame ?thisGame . ?s ?result ?o } order by ?s"
+    r = g.query(query, initBindings={"toHitter": toHitter, "hitter": batter, "inGame": inGame, "thisGame": thisGame, "result": result})
     this_game_count = len(r)
     batter_history = []
     for row in r:
         batter_history.append(row[0].split("#")[1].split("_")[1])
 
-    print(b + " 타자 오늘 " + str(this_game_count) +" 번째 타석, " + ", ".join(_ for _ in batter_history) + "을 기록하고 있습니다.")
+    query = "SELECT ?o where {?s ?toHitter ?hitter . ?s ?inGame ?thisGame . ?s ?result ?o . ?s ?stayIn1stBase ?o1} order by ?s"
+    r = g.query(query, initBindings={"toHitter": toHitter, "hitter": batter,
+                                     "inGame": inGame, "thisGame": thisGame,
+                                     "result": result, "stayIn1stBase": stayIn1stBase})
+    batter_history_when1st = []
+    for row in r:
+        batter_history_when1st.append(row[0].split("#")[1].split("_")[1])
 
-g = rdflib.Graph()
-g.load('../_data/_owl/180515SKOB.owl')
+    annotation = [
+        b + " 타자의 오늘 " + str(this_game_count) + "번째 타석입니다.",
+        b + " 타자 오늘 " + str(this_game_count) + "번째 타석, " + ", ".join(_ for _ in batter_history) + "을 기록하고 있습니다.",
+        b + " 타자 저번 타석, " + str(batter_history[-1]) + "을 기록하였습니다.",
+        b + " 타자는 이번 시즌 " + str(avg) + "의 평균 타율을 기록하고 있습니다.",
+        b + " 타자 오늘 경기 1루 주자가 있는 상황에서 " + ", ".join(_ for _ in batter_history_when1st) + "을 기록하고 있습니다.",
+        "오늘 1루 주자가 있는 타석에서 " + b + " 타자 최근, " + str(batter_history_when1st[-1]) + "을 기록하였습니다.",
+        b + " 타자 이번 타석 안타를 기록 할 수 있을까요?",
+    ]
 
-search_stat_of_player(g)
-#search_batterbox(g, "정의윤75151")
+    return annotation
 
+def search_pitcherbatter(gameCode, p, b):
+    g = rdflib.Graph()
+    g.load('../_data/_owl/180515SKOB.owl')
+    uri = "http://ailab.hanyang.ac.kr/ontology/baseball#"
 
+    inGame = rdflib.URIRef(uri + "inGame")
+    thisGame = rdflib.URIRef(uri + gameCode)
 
+    toHitter = rdflib.URIRef(uri + "toHitter")
+    batter = rdflib.URIRef(uri + b)
+    thisAVG = rdflib.URIRef(uri + "thisAVG")
 
+    fromPitcher = rdflib.URIRef(uri + "fromPitcher")
+    pitcher = rdflib.URIRef(uri + p)
+    thisERA = rdflib.URIRef(uri + "thisERA")
 
+    result = rdflib.URIRef(uri + "result")
 
+    avg = 0
+    era = 0
+    query = "SELECT ?o where {?s ?p ?o}"
+    r = g.query(query, initBindings={"s":batter, "p": thisAVG})
+    for row in r:
+        avg = row[0]
 
+    r = g.query(query, initBindings={"s": pitcher, "p": thisERA})
+    for row in r:
+        era = row[0]
+
+    query = "SELECT ?o where {?s ?inGame ?thisGame . ?s ?toHitter ?hitter . ?s ?fromPitcher ?pitcher . ?s ?result ?o} order by desc(?s)"
+    r = g.query(query, initBindings={
+        "inGame": inGame, "thisGame": thisGame,
+        "toHitter": toHitter, "hitter": batter,
+        "fromPitcher": fromPitcher, "pitcher": pitcher,
+        "result": result
+    })
+
+    result_history = []
+    strikeout = 0
+    getonbase = 0
+    for row in r:
+        result_history.append(row[0].split("#")[1].split("_")[1])
+
+        if ("Strikeout" in row[0]):
+            strikeout = strikeout + 1
+        if ("BaseOnBalls" in row[0]):
+            getonbase = getonbase + 1
+        if ("HitByPitch" in row[0]):
+            getonbase = getonbase + 1
+        if ("Double" in row[0]):
+            getonbase = getonbase + 1
+        if ("HomeRun" in row[0]):
+            getonbase = getonbase + 1
+        if ("Triple" in row[0]):
+            getonbase = getonbase + 1
+        if ("SingleHit" in row[0]):
+            getonbase = getonbase + 1
+
+    annotation = [
+        b + " 타자 " + p + " 투수의 신경전 속에 " + b + " 타자는 이번시즌 " + str(avg) + "의 펑균 타율을 기록하고 있습니다.",
+        b + " 타자 " + p + " 투수의 신경전 속에 " + p + " 투수는 이번시즌 " + str(era) + "의 평균 자책점을 기록하고 있습니다.",
+        b + " 타자 " + p + " 투수를 상대로 오늘 " + ", ".join(_ for _ in result_history) + "을 기록 하였습니다.",
+        b + " 타자 " + p + " 투수를 상대로 오늘 " + str(getonbase) + "개의 안타 기록 하였습니다.",
+        p + " 투수 " + b + " 타자를 상대로 오늘 경기 " + str(getonbase) + "개의 안타를 허용 하였습니다.",
+        p + " 투수 " + b + " 타자를 상대로 오늘 경기 " + str(strikeout) + "개의 스트라이크 아웃을 잡아냈습니다.",
+        "투수와 타자 사이에 팽팽한 긴장감이 감지됩니다.",
+    ]
+    return annotation
+
+def search_runner(gameCode):
+
+    return 1
+search_pitcher("20180515OBSK", "후랭코프68240")
+search_batter("20180515OBSK", "한동민62895")
+search_pitcherbatter("20180515OBSK", "후랭코프68240", "한동민62895")

@@ -24,7 +24,7 @@ count = 123180
 rule = threading.Thread(target=annotation.generate_Annotation_with_Rule, args=(count-o_count, fps, o_start, ))
 rule.start()
 
-scene = threading.Thread(target=annotation.generate_Annotation_with_Scene)
-scene.start()
+#scene = threading.Thread(target=annotation.generate_Annotation_with_Scene)
+#scene.start()
 
 video.play(v="./_data/"+v+"/"+v+".mp4", count=count)

@@ -1,70 +1,17 @@
 import random
 import rdflib
+from Annotation.Ontology_data import *
 
 #######################################################################################################BatterBox
-def BatterBox(gamecode, b, p):
-    g = rdflib.Graph()
-    g.load('_data/_owl/180515SKOB.owl')
-    uri = "http://ailab.hanyang.ac.kr/ontology/baseball#"
+def BatterBox(gameCode, p, b):
+    annotation = []
+    annotation = annotation + search_batter(gameCode, b)
+    annotation = annotation + search_pitcher(gameCode, p)
+    annotation = annotation + search_pitcherbatter(gameCode, p, b)
 
-    thisAVG = rdflib.URIRef(uri + "thisAVG")
-    thisERA = rdflib.URIRef(uri + "thisERA")
-
-    toHitter = rdflib.URIRef(uri + "toHitter")
-    fromPitcher = rdflib.URIRef(uri + "fromPitcher")
-    inGame = rdflib.URIRef(uri + "inGame")
-    thisGame = rdflib.URIRef(uri + gamecode)
-    result = rdflib.URIRef(uri + "result")
-
-
-    batter = rdflib.URIRef(uri + b)
-    pitcher = rdflib.URIRef(uri + p)
-
-    query = "SELECT ?o where {?s ?p ?o}"
-    r = g.query(query, initBindings={"s":batter, "p": thisAVG})
-    for row in r:
-        avg = row[0]
-
-    r = g.query(query, initBindings={"s": pitcher, "p": thisERA})
-    for row in r:
-        era = row[0]
-
-    query = "SELECT ?s ?o where {?s ?toHitter ?Hitter . ?s ?inGame ?thisGame . ?s ?result ?o}"
-    r = g.query(query, initBindings={"toHitter":toHitter, "Hitter":batter, "inGame":inGame, "thisGame":thisGame})
-    this_game_count = len(r)
-
-    batter_history = []
-    for row in r:
-        batter_history.append(row[0].split("#")[1].split("_")[1])
-
-
-
-    query = "SELECT ?o where {?s ?fromPitcher ?pitcher . ?s ?inGame ?thisGame . ?s ?result ?o}"
-    r = g.query(query, initBindings={"fromPitcher": fromPitcher, "pitcher": pitcher,
-                                     "inGame": inGame, "thisGame": thisGame,
-                                     "result": result})
-    total_out = len(r)
-    strikeout = 0
-    fourball = 0
-    for row in r:
-        if ("Strikeout" in row[0]):
-            strikeout = strikeout + 1
-        if ("BaseOnBalls" in row[0]):
-            fourball = fourball + 1
-
-    annotation = [
-        b + " 타자와 " + p + " 투수의 신경전 속에 " + b + " 타자는 이번시즌 " + str(avg) + "의 평균 타율을 기록하고 있습니다.",
-        b + " 타자와 " + p + " 투수의 신경전 속에 " + p + " 투수는 이번시즌 " + str(era) + "의 평균 자책점을 기록하고 있습니다.",
-
-        b + " 타자의 오늘 " + str(this_game_count) + " 번째 타석입니다.",
-        b + " 타자 오늘 " + str(this_game_count) +" 번째 타석, " + ", ".join(_ for _ in batter_history) + "을 기록하고 있습니다.",
-        b + " 타자는 이번시즌 " + str(avg) + "의 평균 타율을 기록하고 있습니다.",
-
-        p + " 투수 오늘 경기 " + str(total_out) + " 개의 아웃을 잡아내고 있습니다.",
-        p + " 투수 오늘 경기 " + str(strikeout) + " 개의 삼진을 잡아내고 있습니다.",
-        p + " 투수 오늘 경기 " + str(fourball) + " 개의 포볼로 타자를 진루 시켰습니다.",
-    ]
     return random.choice(annotation)
+
+print(BatterBox("20180515OBSK", "후랭코프68240", "한동민62895"))
 
 '''
 def coach():

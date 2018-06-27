@@ -2,7 +2,7 @@
 import cv2
 from NN.scene_model import Scene_Model
 from Annotation.SceneString import *
-from Annotation.Ontology_data import *
+
 
 class SceneData():
 
