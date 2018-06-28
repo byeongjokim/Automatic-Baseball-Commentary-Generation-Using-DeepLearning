@@ -24,6 +24,16 @@ class Resources():
         self.date = game_info["date"]
         self.DateHomeAway = game_info["DateHomeAway"]
 
+    def get_gameinfo(self):
+        return [self.stadium, self.date]
+
+    def set_gamescore(self, homescore, awayscore):
+        self.homescore = homescore
+        self.awayscore = awayscore
+
+    def get_gamescore(self):
+        return [self.homescore, self.awayscore]
+
     def get_date(self):
         return self.date
 

@@ -212,7 +212,7 @@ class RuleData():
                 break
             pitchId = relayText["pitchId"]
             ball_data = self.find_ball_data_with_pitchId(pitchId)
-
+            self.resources.set_gamescore(relayText["homeScore"], relayText["awayScore"])
             if (ball_data is None):
                 if (relayText["ballcount"] == 0):  # 모든 교체(수비위치, 타석, 주자, 팀공격)
                     self.C.set(relayText)
@@ -239,6 +239,8 @@ class RuleData():
         for relayText in self.relayTexts:
             pitchId = relayText["pitchId"]
             ball_data = self.find_ball_data_with_pitchId(pitchId)
+
+            self.resources.set_gamescore(relayText["homeScore"], relayText["awayScore"])
 
             if (ball_data is None):
                 if(relayText["ballcount"] == 0): #모든 교체(수비위치, 타석, 주자, 팀공격)

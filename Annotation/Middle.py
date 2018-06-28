@@ -4,7 +4,7 @@ import numpy as np
 import owlready2
 from Annotation.Rule_Annotation import RuleData
 from Annotation.Scene_Annotation import SceneData
-
+from Annotation.Ontology_String import *
 from skimage.measure import compare_ssim as ssim
 
 class Middle():
@@ -13,7 +13,7 @@ class Middle():
 
     def __init__(self, gameName, Resources):
         print("init annotation")
-        self.Resources = Resources
+        self.resources = Resources
 
         owlready2.onto_path.append("_data/_owl/")
         self.onto = owlready2.get_ontology("180515SKOB.owl")
@@ -34,14 +34,26 @@ class Middle():
         time.sleep(3)
         print("Scene model 시작")
         label = -1
-        while( not self.Resources.exit):
-            if(ssim(self.Resources.frame, frame, multichannel=True) < 0.6):
+        annotation = ""
+        while( not self.resources.exit):
+            if(ssim(self.resources.frame, frame, multichannel=True) < 0.6):
                 isPitcher = 0
-                frame = self.Resources.frame
-                self.sceneData.get_Annotation(self.Resources.frame)
+                frame = self.resources.frame
+                label, annotation = self.sceneData.get_Annotation(self.resources.frame)
+
+
             else:
-                if(isPitcher == 15 and label == 2):
-                    print("이 투수는 ~~~")
-                    self.sceneData.pitcher()
+                #print(isPitcher, label)
+                if(isPitcher == 3):
+                    print("\t\t" + annotation)
+
+                if(isPitcher > 10 and label == 2):
+                    isPitcher = 0
+                    print("\t\t" + self.sceneData.pitcher())
+
+                if(isPitcher > 17 and label != 0):
+                    isPitcher = 0
+                    print("\t\t" + self.sceneData.gameinfo())
+
                 isPitcher = isPitcher + 1
         return 1
