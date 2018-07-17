@@ -51,7 +51,7 @@ def search_pitcher(gameCode, p):
 			baseonballs = baseonballs + 1
 
 	annotation = [
-		p + " 투수 오늘 경기 "+str(len(r))+"번째 타석에서 공을 던지고 있습니다.",
+		p + " 투수 오늘 경기 "+str(len(r)+1)+"번째 타석에서 공을 던지고 있습니다.",
 		p + " 투수 오늘 경기 "+str(strikeout)+"개의 삼진을 잡아내고 있습니다.",
 		p + " 투수 오늘 경기 "+str(baseonballs)+"개의 포볼로 타자를 진루 시켰습니다.",
 		p + " 투수 이번 시즌 "+str(era)+"의 평균 자책점을 기록하고 있습니다.",

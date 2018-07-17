@@ -11,7 +11,7 @@ class SceneData():
     num_prev_annotation = 5
     prev_annotaion = []
 
-    def __init__(self, Resources, onto, shape=(320, 180)):
+    def __init__(self, Resources, onto, sess, shape=(320, 180)):
         print("init_sceneData")
         self.resources = Resources
         self.onto = onto
@@ -19,7 +19,7 @@ class SceneData():
         self.width = shape[0]
         self.height = shape[1]
 
-        self.scene = Scene_Model()
+        self.scene = Scene_Model(sess)
         self.scene.make_model()
 
         self.timer = 0
@@ -105,9 +105,12 @@ class SceneData():
     def get_random_annotation(self, annotation):
         output = random.choice(annotation)
 
+        count = 0
         while(output in self.prev_annotaion):
+            if(count > self.num_prev_annotation):
+                break
             output = random.choice(annotation)
-
+            count = count + 1
 
         self.prev_annotaion.pop()
         self.prev_annotaion.insert(0, output)

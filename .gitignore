@@ -2,5 +2,7 @@
 **/_model
 **/__pycache__
 **/.idea
+**/ckpt
+*.weights
 *.jpg
 *.mp4

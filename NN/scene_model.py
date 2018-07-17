@@ -27,8 +27,9 @@ class Scene_Model():
     num_label = 13
     rgb = 1
 
-    def __init__(self):
+    def __init__(self, sess):
         print("init scene_model")
+        self.sess = sess
 
 
     def crop_img(self, img, scale=1.0):
@@ -175,7 +176,7 @@ class Scene_Model():
         self.cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=self.scene_model, labels=self.scene_Y))
         self.optimizer = tf.train.AdamOptimizer(0.0005).minimize(self.cost)
 
-        self.sess = tf.Session()
+        #self.sess = tf.Session()
         self.saver = tf.train.Saver()
 
         self.sotfmax = tf.nn.softmax(self.scene_model)
