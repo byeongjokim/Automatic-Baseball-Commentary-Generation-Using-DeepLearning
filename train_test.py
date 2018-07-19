@@ -3,9 +3,13 @@ import os
 import argparse
 #from NN.Make_data import Make_SceneData
 from NN.scene_model import Scene_Model
+from NN.motion_model import Motion
+import tensorflow as tf
+from NN.tinyYOLOv2.test import ObjectDetect
 
 def train_scene(play):
-    s = Scene_Model()
+    sess =tf.Session()
+    s = Scene_Model(sess)
     play = ["180401HTLG", "180401NCLT", "180401OBKT", "180401SKHH", "180401WOSS",
             "180403HTSK", "180403KTWO", "180403LGOB", "180403LTHH", "180403SSNC",
             "180404HTSK", "180404KTWO", "180404LGOB", "180404LTHH", "180404SSNC",
@@ -26,7 +30,8 @@ def train_scene(play):
     s.test()
 
 def test_scene(image_name, t):
-    s = Scene_Model()
+    sess = tf.Session()
+    s = Scene_Model(sess)
 
     image = cv2.imread(image_name)
     s.make_model()
@@ -57,7 +62,37 @@ if __name__ == "__main__":
 
 '''
 
-train_scene(1)
-#test_scene()
+#train_scene(1)
+#test_scene("_data/180401NCLT/186.jpg", 0)
 
 #make_scene_data()
+
+sess = tf.Session()
+
+o = ObjectDetect(sess)
+scene = Scene_Model(sess)
+scene.make_model()
+
+m = Motion(sess)
+m.model()
+#m.train()
+
+img = cv2.imread("_data/180406WOHT/625.jpg")
+cv2.imshow("aa", img)
+cv2.waitKey(0)
+label, score = scene.predict(img)
+print(label)
+
+h, w, c = img.shape
+ratio_h = h / 416
+ratio_w = w / 416
+
+bboxes = o.predict(img)
+
+for bbox in bboxes:
+    if(bbox[2] == 'person'):
+        b = img[int(bbox[0][1] * ratio_h): int(bbox[0][3] * ratio_h),
+            int(bbox[0][0] * ratio_w): int(bbox[0][2] * ratio_w)]
+        m.test(b)
+        cv2.imshow("a", b)
+        cv2.waitKey(0)

@@ -28,10 +28,12 @@ class SceneData():
 
     def get_Annotation(self, frame, t=0.7):
         self.timer = self.timer + 1
-        #print("\t\t\t\t대기시간이 길어 영상처리로 텍스트 생성")
+
         annotation = ''
         label, score = self.scene.predict(frame)
-        #print("점수 : " + str(score * 100) + "%")
+
+        print(label)
+
         if(score > t):
             if(self.prev != label):
                 annotation = ""
@@ -54,7 +56,7 @@ class SceneData():
                     annotation = ""
 
                 self.prev = label
-                #print("\t\t"+annotation)
+
 
         return label, annotation
 

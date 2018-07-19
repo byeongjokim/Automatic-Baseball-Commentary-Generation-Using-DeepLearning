@@ -10,6 +10,9 @@ class Resources():
     def set_frame(self, frame):
         self.frame = frame
 
+    def get_frame(self):
+        return self.frame
+
     def set_exit(self, exit):
         self.exit = exit
 

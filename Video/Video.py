@@ -20,10 +20,10 @@ class Video():
 
             #output = cv2.resize(frame, (960,1080))
 
-            cv2.imshow('play', frame)
 
             #self.Resources.set_frameNo(count)
             self.Resources.set_frame(frame)
+            cv2.imshow('play', self.Resources.frame)
 
             if cv2.waitKey(1) == ord('q'):
                 self.Resources.set_exit(True)

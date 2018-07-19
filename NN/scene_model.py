@@ -14,7 +14,7 @@ class Scene_Model():
     ckpt = tf.train.get_checkpoint_state(("./_model/scene"))
 
     batch_size = 30
-    epoch = 500
+    epoch = 1
 
     width = 224
     height = 224
@@ -126,6 +126,7 @@ class Scene_Model():
         self.scene_Y = tf.placeholder(tf.float32, [None, self.num_label])
         self.scene_keep_prob = tf.placeholder(tf.float32)
 
+
         C1 = conv_layer(filter_size=3, fin=self.rgb, fout=64, din=self.scene_X, name='scene_C1')
         C1_2 = conv_layer(filter_size=3, fin=64, fout=64, din=C1, name='scene_C1_2')
         P1 = pool(C1_2, option="maxpool")
@@ -177,18 +178,21 @@ class Scene_Model():
         self.optimizer = tf.train.AdamOptimizer(0.0005).minimize(self.cost)
 
         #self.sess = tf.Session()
-        self.saver = tf.train.Saver()
+
+        all_vars = tf.global_variables()
+        scene = [k for k in all_vars if not (k.name.startswith("object") or k.name.startswith("motion"))]
+        print(scene)
+        self.saver = tf.train.Saver(scene)
 
         self.sotfmax = tf.nn.softmax(self.scene_model)
 
         is_correct = tf.equal(tf.argmax(self.scene_model, 1), tf.argmax(self.scene_Y, 1))
         self.accuracy = tf.reduce_mean(tf.cast(is_correct, tf.float32))
 
-        if self.ckpt and tf.train.checkpoint_exists(self.ckpt.model_checkpoint_path):
-            print("rstore the sess!!")
-            self.saver.restore(self.sess, self.chk_scene)
-        else:
-            self.sess.run(tf.global_variables_initializer())
+
+        self.saver.restore(self.sess, self.chk_scene)
+
+
 
 
     def train(self):
@@ -197,6 +201,7 @@ class Scene_Model():
         ys = []
         yv = []
 
+        self.sess.run(tf.global_variables_initializer())
 
         total_batch = int(len(self.train_x) / self.batch_size)
 

@@ -10,23 +10,25 @@ class ObjectDetect():
         self.sess = sess
         self.weights_path = 'NN/tinyYOLOv2/tiny-yolo-voc.weights'
 
-        # If you do not have the checkpoint yet keep it like this! When you will run test.py for the first time it will be created automatically
-        self.ckpt_folder_path = '.NN/tinyYOLOv2/ckpt/'
+        self.ckpt_folder_path = 'NN/tinyYOLOv2/ckpt/'
 
         # Definition of the parameters
         self.input_height = 416
         self.input_width = 416
         self.score_threshold = 0.1
-        self.iou_threshold = 0.3
-
-        # Definition of the session
-        #self.sess = tf.Session()
-        #self.sess.run(tf.global_variables_initializer())
+        self.iou_threshold = 0.2
 
         # Check for an existing checkpoint and load the weights (if it exists) or do it from binary file
-        print('Looking for a checkpoint...')
-        self.saver = tf.train.Saver()
+
+        #self.o9, self.x = net.model()
+        all_vars = tf.global_variables()
+        object = [k for k in all_vars if k.name.startswith("object")]
+
+        self.saver = tf.train.Saver(object)
         _ = weights_loader.load(self.sess, self.weights_path, self.ckpt_folder_path, self.saver)
+
+        self.o9 = net.o9
+        self.x = net.x
 
     def sigmoid(self, x):
       return 1. / (1. + np.exp(-x))
@@ -68,29 +70,32 @@ class ObjectDetect():
       nms_predictions = []
 
       # Add the best B-Box because it will never be deleted
-      nms_predictions.append(thresholded_predictions[0])
+      if(thresholded_predictions):
+          nms_predictions.append(thresholded_predictions[0])
 
-      # For each B-Box (starting from the 2nd) check its iou with the higher score B-Boxes
-      # thresholded_predictions[i][0] = [x1,y1,x2,y2]
-      i = 1
-      while i < len(thresholded_predictions):
-        n_boxes_to_check = len(nms_predictions)
-        #print('N boxes to check = {}'.format(n_boxes_to_check))
-        to_delete = False
+          # For each B-Box (starting from the 2nd) check its iou with the higher score B-Boxes
+          # thresholded_predictions[i][0] = [x1,y1,x2,y2]
+          i = 1
+          while i < len(thresholded_predictions):
+            n_boxes_to_check = len(nms_predictions)
 
-        j = 0
-        while j < n_boxes_to_check:
-            curr_iou = self.iou(thresholded_predictions[i][0],nms_predictions[j][0])
-            if(curr_iou > iou_threshold ):
-                to_delete = True
-            #print('Checking box {} vs {}: IOU = {} , To delete = {}'.format(thresholded_predictions[i][0],nms_predictions[j][0],curr_iou,to_delete))
-            j = j+1
+            to_delete = False
 
-        if to_delete == False:
-            nms_predictions.append(thresholded_predictions[i])
-        i = i+1
+            j = 0
+            while j < n_boxes_to_check:
+                curr_iou = self.iou(thresholded_predictions[i][0],nms_predictions[j][0])
+                if(curr_iou > iou_threshold ):
+                    to_delete = True
 
-      return nms_predictions
+                j = j+1
+
+            if to_delete == False:
+                nms_predictions.append(thresholded_predictions[i])
+            i = i+1
+
+          return nms_predictions
+      else:
+          return None
 
 
 
@@ -141,7 +146,7 @@ class ObjectDetect():
       anchors = [1.08,1.19,  3.42,4.41,  6.63,11.38,  9.42,5.11,  16.62,10.52]
 
       thresholded_predictions = []
-      print('Thresholding on (Objectness score)*(Best class score) with threshold = {}'.format(score_threshold))
+
 
       # IMPORTANT: reshape to have shape = [ 13 x 13 x (5 B-Boxes) x (4 Coords + 1 Obj score + 20 Class scores ) ]
       # From now on the predictions are ORDERED and can be extracted in a simple way!
@@ -187,29 +192,12 @@ class ObjectDetect():
       # Sort the B-boxes by their final score
       thresholded_predictions.sort(key=lambda tup: tup[1],reverse=True)
 
-      print('Printing {} B-boxes survived after score thresholding:'.format(len(thresholded_predictions)))
-      for i in range(len(thresholded_predictions)):
-        print('B-Box {} : {}'.format(i+1,thresholded_predictions[i]))
 
       # Non maximal suppression
-      print('Non maximal suppression with iou threshold = {}'.format(iou_threshold))
+
       nms_predictions = self.non_maximal_suppression(thresholded_predictions,iou_threshold)
 
-      # Print survived b-boxes
-      print('Printing the {} B-Boxes survived after non maximal suppression:'.format(len(nms_predictions)))
 
-      print(nms_predictions)
-      """
-      # Draw final B-Boxes and label on input image
-      for i in range(len(nms_predictions)):
-
-          color = colors[classes.index(nms_predictions[i][2])]
-          best_class_name = nms_predictions[i][2]
-
-          # Put a class rectangle with B-Box coordinates and a class label on the image
-          input_image = cv2.rectangle(input_image,(nms_predictions[i][0][0],nms_predictions[i][0][1]),(nms_predictions[i][0][2],nms_predictions[i][0][3]),color)
-          cv2.putText(input_image,best_class_name,(int((nms_predictions[i][0][0]+nms_predictions[i][0][2])/2),int((nms_predictions[i][0][1]+nms_predictions[i][0][3])/2)),cv2.FONT_HERSHEY_SIMPLEX,1,color,3)
-      """
       return nms_predictions
 
 
@@ -217,23 +205,21 @@ class ObjectDetect():
     def inference(self, sess,preprocessed_image):
 
       # Forward pass of the preprocessed image into the network defined in the net.py file
-      predictions = sess.run(net.o9,feed_dict={net.x:preprocessed_image})
+      predictions = sess.run(self.o9,feed_dict={self.x:preprocessed_image})
 
       return predictions
 
 
     def predict(self, image):
-
-        # Preprocess the input image
-        print('Preprocessing...')
         preprocessed_image = self.preprocessing(image, self.input_height, self.input_width)
 
         # Compute the predictions on the input image
-        print('Computing predictions...')
+
         predictions = self.inference(self.sess,preprocessed_image)
 
         # Postprocess the predictions and save the output image
-        print('Postprocessing...')
+
         result = self.postprocessing(predictions,image, self.score_threshold, self.iou_threshold, self.input_height, self.input_width)
+
 
         return result

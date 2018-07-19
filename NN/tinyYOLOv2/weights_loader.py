@@ -83,15 +83,15 @@ def load_conv_layer(name,loaded_weights,shape,offset):
 
 
 def load(sess,weights_path,ckpt_folder_path,saver):
-    """
+
     if(os.path.exists(ckpt_folder_path)):
         print('Found a checkpoint!')
         checkpoint_files_path = os.path.join(ckpt_folder_path,"model.ckpt")
         saver.restore(sess,checkpoint_files_path)
         print('Loaded weights from checkpoint!')
         return True
-    """
-    print('No checkpoint found!')
+
+
     print('Loading weights from file and creating new checkpoint...')
 
     # Get the size in bytes of the binary
@@ -165,5 +165,3 @@ def load(sess,weights_path,ckpt_folder_path,saver):
         os.makedirs(ckpt_folder_path)
         checkpoint_files_path = os.path.join(ckpt_folder_path, "model.ckpt")
         saver.save(sess,checkpoint_files_path)
-
-#######################################################################################################################################
