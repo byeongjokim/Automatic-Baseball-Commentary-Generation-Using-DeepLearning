@@ -129,7 +129,6 @@ with tf.name_scope("object"):
     o9 = h9
     n_params = n_params + 1*1*1024*125 + 125 # There is not batch norm, so n_params is: kernel_size + n_biases
 
-    print('Total number of params = {}'.format(n_params))
 
 
 

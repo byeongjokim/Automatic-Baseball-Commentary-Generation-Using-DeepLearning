@@ -9,8 +9,7 @@ from Annotation.Scene_Annotation import SceneData
 from Annotation.Ontology_String import *
 from skimage.measure import compare_ssim as ssim
 from NN.tinyYOLOv2.test import ObjectDetect
-
-import NN.tinyYOLOv2.net as net
+from NN.motion_model import Motion
 
 class Middle():
     frame_no = 0
@@ -30,6 +29,9 @@ class Middle():
         self.ruleData = RuleData(gameName, Resources, self.onto)
         self.sceneData = SceneData(Resources, self.onto, self.sess)
 
+        self.motion = Motion(self.sess)
+        self.motion.model()
+
     def generate_Annotation_with_Rule(self, count_delta, fps, o_start):
         self.ruleData.set_Start(count_delta, fps, o_start)
         self.ruleData.get_Annotation()
@@ -48,8 +50,21 @@ class Middle():
                 isPitcher = 0
                 frame = self.resources.frame
                 label, annotation = self.sceneData.get_Annotation(self.resources.frame)
-                objectresult = self.objectdetect.predict(frame)
-                print(objectresult)
+                bboxes = self.objectdetect.predict(frame)
+
+                if(bboxes):
+                    for bbox in bboxes:
+                        if (bbox[2] == 'person' and bbox[0][0] > 0 and bbox[0][1] > 0 and bbox[0][2] > 0 and bbox[0][3] > 0 ):
+                            h, w, c = frame.shape
+                            ratio_h = h / 416
+                            ratio_w = w / 416
+                            b = frame[int(bbox[0][1] * ratio_h): int(bbox[0][3] * ratio_h),
+                                int(bbox[0][0] * ratio_w): int(bbox[0][2] * ratio_w)]
+                            print(bbox)
+                            motion = self.motion.test(b)
+                            print(motion)
+
+
             else:
                 if(isPitcher == 3):
                     print("\t\t" + annotation)

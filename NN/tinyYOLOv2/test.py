@@ -15,12 +15,11 @@ class ObjectDetect():
         # Definition of the parameters
         self.input_height = 416
         self.input_width = 416
-        self.score_threshold = 0.1
-        self.iou_threshold = 0.2
+        self.score_threshold = 0.3
+        self.iou_threshold = 0.3
 
         # Check for an existing checkpoint and load the weights (if it exists) or do it from binary file
 
-        #self.o9, self.x = net.model()
         all_vars = tf.global_variables()
         object = [k for k in all_vars if k.name.startswith("object")]
 
@@ -59,9 +58,13 @@ class ObjectDetect():
       boxB_area = (boxB[2] - boxB[0] + 1) * (boxB[3] - boxB[1] + 1)
 
       # Compute the IOU
-      iou = intersection_area / float(boxA_area + boxB_area - intersection_area)
+      if (boxA_area + boxB_area - intersection_area == 0):
+          return 100
 
-      return iou
+      else:
+        iou = intersection_area / float(boxA_area + boxB_area - intersection_area)
+
+        return iou
 
 
 
