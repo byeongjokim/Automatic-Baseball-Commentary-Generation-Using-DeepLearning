@@ -4,7 +4,7 @@ import argparse
 #from NN.Make_data import Make_SceneData
 from NN.scene_model import Scene_Model
 #from NN.motion_model import Motion
-from NN.motion_model2 import Motion2
+from NN.motion_model2 import CAE, Classifier
 import tensorflow as tf
 from NN.tinyYOLOv2.test import ObjectDetect
 
@@ -104,7 +104,13 @@ videos = ["180401HTLG", "180401NCLT", "180401OBKT", "180401SKHH", "180401WOSS",
 
 
 sess = tf.Session()
-m= Motion2(sess)
+#m= CAE(sess)
+#m.train()
+#m.test()
+
+m = Classifier(sess)
+#m.load_data()
+m.model()
 #m.train()
 m.test()
 
