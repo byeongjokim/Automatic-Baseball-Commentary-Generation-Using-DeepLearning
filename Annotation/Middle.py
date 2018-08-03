@@ -9,7 +9,6 @@ from Annotation.Scene_Annotation import SceneData
 from Annotation.Ontology_String import *
 from skimage.measure import compare_ssim as ssim
 from NN.tinyYOLOv2.test import ObjectDetect
-from NN.motion_model import Motion
 
 class Middle():
     frame_no = 0
@@ -29,8 +28,8 @@ class Middle():
         self.ruleData = RuleData(gameName, Resources, self.onto)
         self.sceneData = SceneData(Resources, self.onto, self.sess)
 
-        self.motion = Motion(self.sess)
-        self.motion.model()
+        #self.motion = Motion(self.sess)
+        #self.motion.model()
 
     def generate_Annotation_with_Rule(self, count_delta, fps, o_start):
         self.ruleData.set_Start(count_delta, fps, o_start)
@@ -61,8 +60,8 @@ class Middle():
                             b = frame[int(bbox[0][1] * ratio_h): int(bbox[0][3] * ratio_h),
                                 int(bbox[0][0] * ratio_w): int(bbox[0][2] * ratio_w)]
                             print(bbox)
-                            motion = self.motion.test(b)
-                            print(motion)
+                            #motion = self.motion.test(b)
+                            #print(motion)
 
 
             else:

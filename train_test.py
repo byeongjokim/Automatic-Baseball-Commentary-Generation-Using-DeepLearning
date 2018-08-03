@@ -3,8 +3,7 @@ import os
 import argparse
 #from NN.Make_data import Make_SceneData
 from NN.scene_model import Scene_Model
-#from NN.motion_model import Motion
-from NN.motion_model2 import CAE, Classifier
+from NN.motion_model import CAE, Classifier
 import tensorflow as tf
 from NN.tinyYOLOv2.test import ObjectDetect
 
@@ -109,7 +108,6 @@ sess = tf.Session()
 #m.test()
 
 m = Classifier(sess)
-#m.load_data()
 m.model()
 #m.train()
 m.test()
