@@ -96,21 +96,109 @@ videos = ["180401HTLG", "180401NCLT", "180401OBKT", "180401SKHH", "180401WOSS",
             "180413KTLG", "180413LTHT", "180413NCSK", "180413OBWO", "180413SSHH"
 """
 
+def motion_classify(v):
+    person = {"A": [], "B": [], "C": [], "D": [], "E": [], "A_": None, "B_": None, "C_": None, "D_": None, "E_": None}
+
+    sess = tf.Session()
+    m = Classifier(sess)
+    o = ObjectDetect(sess)
+    s = Scene_Model(sess)
+    s.make_model()
+
+    video = cv2.VideoCapture(v)
+    #video.set(cv2.CAP_PROP_FPS, 100)
+
+    success, frame = video.read()
+    h, w, c = frame.shape
+    ratio_h = h / 416
+    ratio_w = w / 416
+
+    pre_label = -1
+    while True:
+        success, frame = video.read()
+        if not success:
+            break
+
+        label, score = s.predict(frame)
+
+        if(label != pre_label): #scene changed
+            person = {"A": [], "B": [], "C": [], "D": [], "E": [], "A_":None, "B_":None, "C_":None, "D_":None, "E_":None}
+            print(label)
+
+        bboxes = o.predict(frame)
+        if (bboxes):
+            for bbox in bboxes:
+                if (bbox[2] == 'person' and bbox[0][0] > 0 and bbox[0][1] > 0 and bbox[0][2] > 0 and bbox[0][3] > 0):
+                    # person.append([int(((bbox[0][0] + bbox[0][2])*ratio_w)/2), int(((bbox[0][1] + bbox[0][3])*ratio_h)/2)])
+
+                    person = insert_person(m, person, [bbox[0][0] * ratio_w, bbox[0][1] * ratio_h, bbox[0][2] * ratio_w, bbox[0][3] * ratio_h])
+
+                    b = frame[int(bbox[0][1] * ratio_h): int(bbox[0][3] * ratio_h), int(bbox[0][0] * ratio_w): int(bbox[0][2] * ratio_w)]
+
+                    frame = cv2.rectangle(frame, (int(bbox[0][0] * ratio_w), int(bbox[0][1] * ratio_h)), (int(bbox[0][2] * ratio_w), int(bbox[0][3] * ratio_h)), (255, 0, 0), 2)
+                    # img = cv2.putText(img, motion, (int(bbox[0][0] * ratio_w), int(bbox[0][1] * ratio_h)),
+                    #                  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255))
+
+        print(person)
+
+        cv2.imshow("a", frame)
+        pre_label = label
+
+        if cv2.waitKey(1) == ord('q'):
+            break
+        #cv2.waitKey(0)
+
+def insert_person(m, person, bbox):
+    index = ["A", "B", "C", "D", "E"]
+
+    for i in index:
+        if not (person[i]):
+            person[i].append(bbox)
+            break
+
+        else:
+            iou = cal_mean_iou(bbox, [person[i][-1]])
+            if( 0.5  < iou ):
+                person[i].append(bbox)
+                if(len(person[i]) >= 3):
+                    person[i+"_"] = m.test(person[i][-3:])
+                break
+            else:
+                pass
+
+    return person
+
+def cal_mean_iou(bbox1, bboxes2):
+    s = 0.0
+    for bbox2 in bboxes2:
+        min_x = max(bbox1[0], bbox2[0])
+        max_x = min(bbox1[2], bbox2[2])
+        min_y = max(bbox1[1], bbox2[1])
+        max_y = min(bbox1[3], bbox2[3])
+
+        if(max_x < min_x or max_y < min_y):
+            s = s + 0.0
+        else:
+            inter = (max_x - min_x) * (max_y - min_y)
+            bb1 = (bbox1[2] - bbox1[0]) * (bbox1[3] - bbox1[1])
+            bb2 = (bbox2[2] - bbox2[0]) * (bbox2[3] - bbox2[1])
+
+            iou = inter / (bb1 + bb2 - inter)
+            if(iou >= 0.0 and iou <= 1.0):
+                s = s + iou
+            else:
+                s = s + 0.0
+    return s/len(bboxes2)
+
+
+#print(cal_mean_iou([744.6153846153846, 252.6923076923077, 947.6923076923077, 503.6538461538462], [[747.6923076923077, 289.03846153846155, 960.0, 515.7692307692308]]))
+motion_classify("_data/motion_test.mp4")
+
 #count = 0
 #for v in videos:
 #    print(count)
 #    count = get_motion_data(v, count, start=1000, interval=5)
 
-
-sess = tf.Session()
-#m= CAE(sess)
-#m.train()
-#m.test()
-
-m = Classifier(sess)
-m.model()
-#m.train()
-m.test()
 
 """
 sess = tf.Session()

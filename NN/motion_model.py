@@ -235,6 +235,13 @@ class Classifier(Motion):
         self.epoch = 200
         self.lr = 0.0005
 
+        self.model()
+        all_vars = tf.global_variables()
+        motion = [k for k in all_vars if k.name.startswith("motion") or k.name.startswith("lstm")]
+        self.saver = tf.train.Saver(motion)
+        self.saver.restore(self.sess, './_model/motion2/cls/motion.ckpt')
+        print(motion)
+
     def load_data(self):
         folder_name = "_data/motion/"
 
@@ -326,7 +333,6 @@ class Classifier(Motion):
         print(self.model)
 
         self.cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=self.model, labels=self.Y))
-        self.optimizer = tf.train.AdamOptimizer(self.lr).minimize(self.cost)
 
         self.softmax = tf.nn.softmax(self.model)
 
@@ -344,6 +350,8 @@ class Classifier(Motion):
     def train(self):
         dataset = self.load_data()
         shuffle(dataset)
+
+        optimizer = tf.train.AdamOptimizer(self.lr).minimize(self.cost)
 
         train_x = np.array([i["X"] for i in dataset])
         _y = np.array([i["Y"] for i in dataset])
@@ -389,7 +397,7 @@ class Classifier(Motion):
                 #batch_x = batch_x.reshape(-1, self.length, self.width, self.height, 3)
                 #batch_y = batch_y.reshape(-1, len(self.motions))
 
-                _, cost_val = self.sess.run([self.optimizer, self.cost],
+                _, cost_val = self.sess.run([optimizer, self.cost],
                                             feed_dict={self.input: batch_x, self.Y: batch_y,
                                                        self.keep_prob: 0.8})
 
@@ -408,14 +416,8 @@ class Classifier(Motion):
         plt.plot(xs, ys, 'b')
         plt.show()
 
-    def test(self):
-
-        img1 = "9161.jpg"
-        img2 = "9164.jpg"
-        img3 = "9168.jpg"
-
-
-
+    def test(self, dataset):
+        """
         img1 = "6683.jpg"
         img2 = "6684.jpg"
         img3 = "6685.jpg"
@@ -424,17 +426,17 @@ class Classifier(Motion):
         img2 = "7764.jpg"
         img3 = "7767.jpg"
 
-        img1 = "8973.jpg"
-        img2 = "8974.jpg"
-        img3 = "8975.jpg"
-
         img1 = "8536.jpg"
         img2 = "8540.jpg"
         img3 = "8542.jpg"
 
-        img1 = "6209.jpg"
-        img2 = "6211.jpg"
-        img3 = "6215.jpg"
+        img1 = "8973.jpg"
+        img2 = "8974.jpg"
+        img3 = "8975.jpg"
+
+        img1 = "9161.jpg"
+        img2 = "9164.jpg"
+        img3 = "9168.jpg"
 
         images = [img1, img2, img3]
 
@@ -443,17 +445,11 @@ class Classifier(Motion):
             image = "_data/_motion/" + img
             image = cv2.resize(cv2.imread(image), (self.width, self.height))
             dataset.append(image)
+        """
 
         dataset = np.resize(np.array(dataset), (1, self.length, self.width, self.height, 3))
-
-        all_vars = tf.global_variables()
-        print(all_vars)
-        motion = [k for k in all_vars if k.name.startswith("motion") or k.name.startswith("lstm")]
-        print(motion)
-        self.saver = tf.train.Saver(motion)
-        self.saver.restore(self.sess, './_model/motion2/cls/motion.ckpt')
-
         output = self.sess.run(tf.argmax(self.softmax, 1),
                                     feed_dict={self.input: dataset,
                                                self.keep_prob: 1})
-        print(self.motions[output[0]])
+
+        return self.motions[output[0]]
