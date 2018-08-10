@@ -8,13 +8,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 from NN.cnn import conv_layer, pool
 import math
-
+import csv
 
 class Motion():
     width = 48
     height = 48
     #motions = ["batting", "catching", "running", "standing", "throwing", "walking"]
-    motions = ["batting", "catching", "running", "throwing", "walking"]
+    #motions = ["batting", "catching", "running", "throwing", "walking"]
+    motions = ["t", "b", "w", "r", "c", "n"]
+    motions_full = ["throwing", "batting", "walking", "running", "catching", "nope"]
 
     def conv2d(self, input, name, kshape, strides=[1, 1, 1, 1]):
         with tf.variable_scope(name):
@@ -162,7 +164,8 @@ class CAE(Motion):
         motion = [k for k in all_vars if k.name.startswith("motion")]
         print(motion)
         self.saver = tf.train.Saver(motion)
-        self.saver.restore(self.sess, './_model/motion2/motion.ckpt')
+
+        #self.saver.restore(self.sess, './_model/motion/motion.ckpt')
 
         x = np.array([i["X"] for i in dataset])
 
@@ -202,7 +205,7 @@ class CAE(Motion):
             ys.append(total_cost / total_batch)
 
         print("complete")
-        self.saver.save(self.sess, './_model/motion2/motion.ckpt')
+        self.saver.save(self.sess, './_model/motion/motion.ckpt')
         plt.plot(xs, ys, 'b')
         plt.show()
 
@@ -218,14 +221,14 @@ class CAE(Motion):
         motion = [k for k in all_vars if k.name.startswith("motion")]
         print(motion)
         self.saver = tf.train.Saver(motion)
-        self.saver.restore(self.sess, './_model/motion2/motion.ckpt')
+        self.saver.restore(self.sess, './_model/motion/motion.ckpt')
         o = self.sess.run(ae["output"], feed_dict={ae["input"]: image})
         o = np.resize(o, [self.width, self.height, 3])
         print(self.sess.run(tf.reduce_sum(o)))
         cv2.imwrite(img, o)
 
 class Classifier(Motion):
-    def __init__(self, sess):
+    def __init__(self, sess, istest=1):
         print("motion")
         self.sess = sess
         self.length = 3
@@ -236,64 +239,51 @@ class Classifier(Motion):
         self.lr = 0.0005
 
         self.model()
-        all_vars = tf.global_variables()
-        motion = [k for k in all_vars if k.name.startswith("motion") or k.name.startswith("lstm")]
-        self.saver = tf.train.Saver(motion)
-        self.saver.restore(self.sess, './_model/motion2/cls/motion.ckpt')
-        print(motion)
+        if(istest == 1):
+            all_vars = tf.global_variables()
+            cls = [k for k in all_vars if k.name.startswith("motion") or k.name.startswith("lstm")]
+            self.saver = tf.train.Saver(cls)
+            self.saver.restore(self.sess, './_model/motion/cls/motion.ckpt')
+            print(cls)
 
     def load_data(self):
-        folder_name = "_data/motion/"
+        folder_name = "_data/_motion/"
+        csv_path = folder_name + "motion.csv"
+
+        f = open(csv_path, "r")
+        reader = csv.reader(f)
+        pad = np.zeros((self.width, self.height, 3))
 
         dataset = []
-        sett = {"X":None}
-        for m in self.motions:
-            folder_name = "_data/motion/" + m
-            filenames = os.listdir(folder_name)
+        for line in reader:
+            sett = {"X": None, "Y": None}
 
-            images = []
-            for filename in filenames:
-                ext = os.path.splitext(filename)[-1]
-                if ext == '.jpg':
-                    images.append(filename.split(".")[0])
+            if(int(line[0]) < int(line[1])):
+                sett = {"start": line[0], "end":line[1], "label":line[2]}
+                l = int(line[1]) - int(line[0]) + 1
 
-            images = sorted(images, key=lambda x: int(os.path.splitext(x)[0]))
-
-            pre = 0
-            X = []
-
-            for img in images:
-                full_name = os.path.join(folder_name, img + ".jpg")
-                im = cv2.resize(cv2.imread(full_name), (self.width, self.height))
-
-                if ((int(img) - pre) < 13):
-                    X.append(im)
-                    pre = int(img)
-
-                else:
-                    if(len(X) >= self.length):
-                        for i in range(len(X)):
-                            if (i == len(X) - self.length):
-                                break
-                            else:
-                                tmp = X[i:i + self.length]
-                                dataset.append({"X": np.array(tmp), "Y": self.motions.index(m)})
+                for i in range(int(line[0]), int(line[1])):
                     X = []
-                    pre = int(img)
-                    X.append(im)
+                    for j in range(i, i+self.length):
+                        if(j > int(line[1])):
+                            break
+                        img = cv2.resize(
+                                    cv2.imread(folder_name + str(i) + ".jpg"),
+                                    (self.width, self.height)
+                                )
+                        X.append(img)
 
-            if (len(X) >= self.length):
-                for i in range(len(X)):
-                    if (i == len(X) - self.length):
-                        break
-                    else:
-                        tmp = X[i:i + self.length]
-                        dataset.append({"X": np.array(tmp), "Y": self.motions.index(m)})
+                    if (len(X) < self.length):
+                        num_pad = self.length - len(X)
+                        for i in range(num_pad):
+                            X.append(pad)
+                    dataset.append({"X" : X, "Y" : self.motions.index(line[2])})
 
         return dataset
 
+
     def model(self):
-        self.input = tf.placeholder(tf.float32, [None, self.length, 48, 48, 3])
+        self.input = tf.placeholder(tf.float32, [None, self.length, self.width, self.height, 3])
         self.Y = tf.placeholder(tf.float32, [None, len(self.motions)])
         self.keep_prob = tf.placeholder(tf.float32)
 
@@ -336,17 +326,6 @@ class Classifier(Motion):
 
         self.softmax = tf.nn.softmax(self.model)
 
-        """
-        self.sess.run(tf.global_variables_initializer())
-
-        all_vars = tf.global_variables()
-        print(all_vars)
-        motion = [k for k in all_vars if k.name.startswith("motion")]
-        print(motion)
-        self.saver = tf.train.Saver(motion)
-        self.saver.restore(self.sess, './_model/motion2/motion.ckpt')
-        """
-
     def train(self):
         dataset = self.load_data()
         shuffle(dataset)
@@ -366,12 +345,12 @@ class Classifier(Motion):
         motion = [k for k in all_vars if k.name.startswith("motion")]
         print(motion)
         saver = tf.train.Saver(motion)
-        saver.restore(self.sess, './_model/motion2/motion.ckpt')
+        saver.restore(self.sess, './_model/motion/motion.ckpt')
 
-        motion = [k for k in all_vars if k.name.startswith("motion") or k.name.startswith("lstm")]
-        print(motion)
+        cls = [k for k in all_vars if k.name.startswith("motion") or k.name.startswith("lstm")]
+        print(cls)
 
-        self.saver2 = tf.train.Saver(motion)
+        self.saver2 = tf.train.Saver(cls)
 
         xs = []
         ys = []
@@ -405,51 +384,93 @@ class Classifier(Motion):
 
             print('Epoch:', '%d' % (e + 1), 'Average cost =', '{:.3f}'.format(total_cost / total_batch))
 
-            if (total_cost / total_batch < 0.01):
+            if (total_cost / total_batch < 0.05):
                 break
 
             xs.append(e + 1)
             ys.append(total_cost / total_batch)
 
         print("complete")
-        self.saver2.save(self.sess, './_model/motion2/cls/motion.ckpt')
+        self.saver2.save(self.sess, './_model/motion/cls/motion.ckpt')
         plt.plot(xs, ys, 'b')
         plt.show()
 
-    def test(self, dataset):
-        """
-        img1 = "6683.jpg"
-        img2 = "6684.jpg"
-        img3 = "6685.jpg"
-
-        img1 = "7761.jpg"
-        img2 = "7764.jpg"
-        img3 = "7767.jpg"
-
-        img1 = "8536.jpg"
-        img2 = "8540.jpg"
-        img3 = "8542.jpg"
-
-        img1 = "8973.jpg"
-        img2 = "8974.jpg"
-        img3 = "8975.jpg"
-
-        img1 = "9161.jpg"
-        img2 = "9164.jpg"
-        img3 = "9168.jpg"
-
-        images = [img1, img2, img3]
+    def test(self, person):
+        person = person[-self.length:]
 
         dataset = []
-        for img in images:
-            image = "_data/_motion/" + img
-            image = cv2.resize(cv2.imread(image), (self.width, self.height))
-            dataset.append(image)
-        """
+        for d in person:
+            d = cv2.resize(d, (self.width, self.height))
+            #cv2.imshow("test", d)
+            #cv2.waitKey(0)
+            dataset.append(d)
 
-        dataset = np.resize(np.array(dataset), (1, self.length, self.width, self.height, 3))
+        pad = np.zeros((self.width, self.height, 3))
+        if (len(dataset) < self.length):
+            num_pad = self.length - len(dataset)
+            for _ in range(num_pad):
+                dataset.append(pad)
+
+        dataset = np.array([dataset])
         output = self.sess.run(tf.argmax(self.softmax, 1),
                                     feed_dict={self.input: dataset,
                                                self.keep_prob: 1})
+        #print(self.motions_full[output[0]])
+        return self.motions_full[output[0]]
 
-        return self.motions[output[0]]
+    def draw_box(self, frame, person_bbox):
+        index = ["A", "B", "C", "D", "E"]
+
+        for i in index:
+            if person_bbox[i]:
+                bbox = person_bbox[i][-1]
+                frame = cv2.rectangle(frame, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])), (255, 0, 0), 2)
+                frame = cv2.putText(frame, person_bbox[i + "_"], (int(bbox[0]), int(bbox[1])), cv2.FONT_HERSHEY_SIMPLEX,
+                                    1, (0, 0, 255), 2)
+
+        return frame
+
+    def insert_person(self, frame, person_bbox, person_image, bbox):
+        index = ["A", "B", "C", "D", "E"]
+
+        for i in index:
+            p = frame[int(bbox[1]): int(bbox[3]), int(bbox[0]): int(bbox[2])]
+            if not (person_bbox[i]):
+                person_bbox[i].append(bbox)
+                person_image[i].append(p)
+                break
+
+            else:
+                iou = self.cal_mean_iou(bbox, [person_bbox[i][-1]])
+                if (0.5 < iou):
+                    person_bbox[i].append(bbox)
+                    person_image[i].append(p)
+
+                    person_bbox[i + "_"] = self.test(person_image[i])
+                    break
+                else:
+                    pass
+
+        return person_bbox, person_image
+
+    def cal_mean_iou(self, bbox1, bboxes2):
+        s = 0.0
+        for bbox2 in bboxes2:
+            min_x = max(bbox1[0], bbox2[0])
+            max_x = min(bbox1[2], bbox2[2])
+            min_y = max(bbox1[1], bbox2[1])
+            max_y = min(bbox1[3], bbox2[3])
+
+            if (max_x < min_x or max_y < min_y):
+                s = s + 0.0
+            else:
+                inter = (max_x - min_x) * (max_y - min_y)
+                bb1 = (bbox1[2] - bbox1[0]) * (bbox1[3] - bbox1[1])
+                bb2 = (bbox2[2] - bbox2[0]) * (bbox2[3] - bbox2[1])
+
+                iou = inter / (bb1 + bb2 - inter)
+                if (iou >= 0.0 and iou <= 1.0):
+                    s = s + iou
+                else:
+                    s = s + 0.0
+        return s / len(bboxes2)

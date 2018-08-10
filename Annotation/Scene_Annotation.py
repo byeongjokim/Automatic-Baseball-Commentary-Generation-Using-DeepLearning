@@ -32,8 +32,6 @@ class SceneData():
         annotation = ''
         label, score = self.scene.predict(frame)
 
-        print(label)
-
         if(score > t):
             if(self.prev != label):
                 annotation = ""
