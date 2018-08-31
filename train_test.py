@@ -79,7 +79,7 @@ def get_motion_data(o, s, v, count, start=1000, interval=5):
             for i in index:
                 if person_bbox[i]:
                     for p in person_image[i]:
-                        cv2.imwrite("_data/_motion/" + str(count) + ".jpg", p)
+                        cv2.imwrite("_data/_motion_/" + str(count) + ".jpg", p)
                         count = count + 1
             person_bbox = {"A": [], "B": [], "C": [], "D": [], "E": [], "A_": None, "B_": None, "C_": None, "D_": None, "E_": None}
             person_image = {"A": [], "B": [], "C": [], "D": [], "E": []}
@@ -116,8 +116,16 @@ def train_motion():
 
 
 def motion_classify(v):
-    person_bbox = {"A": [], "B": [], "C": [], "D": [], "E": [], "A_": None, "B_": None, "C_": None, "D_": None, "E_": None}
-    person_image = {"A": [], "B": [], "C": [], "D": [], "E": []}
+    index = ["1st", "2nd", "3rd", "ss", "ro", "lo", "co", "p", "c", "b", "1st_runner", "2nd_runner", "3rd_runner"]
+    person_bbox = {}
+    person_image = {}
+
+    for i in index:
+        person_bbox[i] = []
+        person_bbox[i + "_"] = None
+        person_image[i] = []
+
+    print(person_bbox)
     sess = tf.Session()
     m = Classifier(sess)
     o = ObjectDetect(sess)
@@ -125,7 +133,6 @@ def motion_classify(v):
     s.make_model()
 
     video = cv2.VideoCapture(v)
-    #video.set(cv2.CAP_PROP_FPS, 100)
 
     count = 1000
 
@@ -145,14 +152,19 @@ def motion_classify(v):
         label, score = s.predict(frame)
 
         if(label != pre_label): #scene changed
-            person_bbox = {"A": [], "B": [], "C": [], "D": [], "E": [], "A_":None, "B_":None, "C_":None, "D_":None, "E_":None}
-            person_image = {"A": [], "B": [], "C": [], "D": [], "E": []}
+            person_bbox = {}
+            person_image = {}
+
+            for i in index:
+                person_bbox[i] = []
+                person_bbox[i + "_"] = None
+                person_image[i] = []
 
         bboxes = o.predict(frame)
         if (bboxes):
             for bbox in bboxes:
                 if (bbox[2] == 'person' and bbox[0][0] > 0 and bbox[0][1] > 0 and bbox[0][2] > 0 and bbox[0][3] > 0):
-                    person_bbox, person_image = insert_person(m, frame, person_bbox, person_image, [bbox[0][0] * ratio_w, bbox[0][1] * ratio_h, bbox[0][2] * ratio_w, bbox[0][3] * ratio_h])
+                    person_bbox, person_image = insert_person(m, frame, person_bbox, person_image, [bbox[0][0] * ratio_w, bbox[0][1] * ratio_h, bbox[0][2] * ratio_w, bbox[0][3] * ratio_h], label)
 
 
         frame = draw_box(frame, person_bbox)
@@ -161,10 +173,10 @@ def motion_classify(v):
 
         if cv2.waitKey(1) == ord('q'):
             break
-        count = count + 3
+        count = count + 1
 
 def draw_box(frame, person_bbox):
-    index = ["A", "B", "C", "D", "E"]
+    index = ["1st", "2nd", "3rd", "ss", "ro", "lo", "co", "p", "c", "b", "1st_runner", "2nd_runner", "3rd_runner"]
 
     for i in index:
         if person_bbox[i]:
@@ -174,8 +186,8 @@ def draw_box(frame, person_bbox):
 
     return frame
 
-def insert_person(m, frame, person_bbox, person_image, bbox):
-    index = ["A", "B", "C", "D", "E"]
+def insert_person(m, frame, person_bbox, person_image, bbox, label):
+    index = ["1st", "2nd", "3rd", "ss", "ro", "lo", "co", "p", "c", "b", "1st_runner", "2nd_runner", "3rd_runner"]
 
     for i in index:
         p = frame[int(bbox[1]): int(bbox[3]), int(bbox[0]): int(bbox[2])]
@@ -196,6 +208,8 @@ def insert_person(m, frame, person_bbox, person_image, bbox):
                 pass
 
     return person_bbox, person_image
+
+
 
 def cal_mean_iou(bbox1, bboxes2):
     s = 0.0
@@ -230,7 +244,6 @@ videos = [
             "180404HTSK", "180404KTWO", "180404LGOB", "180404LTHH", "180404SSNC",
             "180405KTWO", "180405SSNC",
             "180406LGLT", "180406WOHT",
-
             "180407HHKT", "180407LGLT", "180407NCOB", "180407SSSK", "180407WOHT",
             "180408HHKT", "180408LGLT", "180408NCOB", "180408SSSK", "180408WOHT",
             "180410HTHH", "180410KTNC", "180410OBSS", "180410SKLG", "180410WOLT",
@@ -240,11 +253,16 @@ videos = [
         ]
 
 sess = tf.Session()
+videos = ["180401HTLG", "180401NCLT", "180401OBKT", "180401SKHH", "180401WOSS",
+            "180403HTSK", "180403KTWO", "180403LGOB", "180403LTHH", "180403SSNC",
 
+            "180404HTSK", "180404KTWO", "180404LGOB"7569, "180404LTHH", "180404SSNC",
+            "180405KTWO", "180405SSNC",
+            "180406LGLT", "180406WOHT"]
 o = ObjectDetect(sess)
 s = Scene_Model(sess)
 s.make_model()
-count = 1848
+count = 0
 for v in videos:
     print(count)
     count = get_motion_data(o, s, v, count, start=1000, interval=1)

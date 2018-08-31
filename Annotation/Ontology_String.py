@@ -184,8 +184,3 @@ def search_pitcherbatter(gameCode, p, b):
 
 def search_runner(gameCode):
 	return 1
-"""
-search_pitcher("20180515OBSK", "후랭코프68240")
-search_batter("20180515OBSK", "한동민62895")
-search_pitcherbatter("20180515OBSK", "후랭코프68240", "한동민62895")
-"""
