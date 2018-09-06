@@ -19,7 +19,7 @@ o_start = "183112"
 o_count = 20800
 fps = 29.97
 
-count = 31659
+count = 33059
 
 rule = threading.Thread(target=annotation.generate_Annotation_with_Rule, args=(count-o_count, fps, o_start, ))
 rule.start()
@@ -27,4 +27,4 @@ rule.start()
 scene = threading.Thread(target=annotation.generate_Annotation_with_Scene)
 scene.start()
 
-video.play(v="./_data/"+v+"/"+v+".mp4", count=count)
+video.play(v="./_data/"+v+"/"+v+".mp4", count=count, fps=fps)

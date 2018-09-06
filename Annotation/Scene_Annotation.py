@@ -41,17 +41,8 @@ class SceneData():
                 elif (label == 1):
                     annotation = self.batter()
 
-                elif (label == 3): #coach
-                    annotation = self.coach()
-
-                elif (label == 4): #gallery
-                    annotation = self.gallery()
-
-                elif (label == 5):
-                    annotation = self.first()
-
                 else:
-                    annotation = ""
+                    annotation = None
 
                 self.prev = label
 
@@ -86,15 +77,6 @@ class SceneData():
         annotation = search_batter(gameCode, b)
 
         return self.get_random_annotation(annotation)
-
-    def gallery(self):
-        return "관개ㅐ애애애애애애애애애애액"
-
-    def coach(self):
-        return "코치이이이이이이이이이ㅣㅇ"
-    
-    def first(self):
-        return "1루우우우우우우우우ㅜ우우웅"
 
     def gameinfo(self):
         annotation = search_gameInfo(self.resources.get_gamecode(), self.resources.get_inn(), self.resources.get_gamescore(),

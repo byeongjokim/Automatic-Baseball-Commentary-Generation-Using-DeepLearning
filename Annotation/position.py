@@ -1,3 +1,4 @@
+import random
 import math
 
 class Position(object):
@@ -39,6 +40,9 @@ class Position(object):
             self.person_image[i] = []
 
     def insert_person(self, frame, bboxes, label):
+
+        self.pre_motions = [self.person_bbox[i+"_"] for i in self.field]
+
         if(label == 0): #pitching batting
             for bbox in bboxes:
                 for i in ["pitcher", "catcher", "batter"]:
@@ -73,73 +77,105 @@ class Position(object):
             self.to_pos(frame, self.find_center_box(bboxes), "ss")
 
         else:  # coach and gallery and etc
+            self.new_motions = [self.person_bbox[i+"_"] for i in self.field]
+            return 1
+
+        self.new_motions = [self.person_bbox[i+"_"] for i in self.field]
+
+    def is_motion_changed(self, i):
+        index = self.field.index(i)
+        if(self.new_motions[index] == self.pre_motions[index]):
+            return 0
+        else:
             return 1
 
     def annotation(self, label, person_bbox):
         if (label == 0):
-            if (person_bbox["pitcher_"] == "pitching"):
-                print("투수 공을 던졌습니다.")
-            if (person_bbox["batter_"] == "batting"):
-                print("타자 휘둘었습니다.")
+            if (person_bbox["pitcher_"] == "pitching" and self.is_motion_changed("pitcher")):
+                print(self.pitcher_when_pitching())
+            if (person_bbox["batter_"] == "batting" and self.is_motion_changed("batter")):
+                print(self.batter_when_batting())
 
         elif (label == 2):
-            if (person_bbox["close_up_"]):
+            if (person_bbox["close_up_"]  and self.is_motion_changed("close_up")):
                 m = person_bbox["close_up_"]
+                """
                 if (m == "run"):
                     print("클로즈업 된 선수 뛰고 있습니다.")
                 if (m == "walking"):
                     print("클로즈업 된 선수 걷고 있습니다.")
+                """
 
         elif (label == 5):  # first base
-            if (person_bbox["1st_"]):
+            if (person_bbox["1st_"] and self.is_motion_changed("1st")):
                 m = person_bbox["1st_"]
                 if (m == "catch_field"):
                     print("1루수 공을 잡았습니다.")
-            return 1
-
-        elif (label == 6):  # center outfield
-            if (person_bbox["center fielder_"]):
-                m = person_bbox["center fielder_"]
-                print("중견수 " + m + " 하고있습니다.")
-            return 1
-
-        elif (label == 7):  # right outfield
-            if (person_bbox["right fielder_"]):
-                m = person_bbox["right fielder_"]
-                print("우익수 " + m + " 하고있습니다.")
-            return 1
 
         elif (label == 8):  # second base
-            if (person_bbox["2nd_"]):
+            if (person_bbox["2nd_"] and self.is_motion_changed("2nd")):
                 m = person_bbox["2nd_"]
                 if (m == "catch_field"):
                     print("2루수 공을 잡았습니다.")
-            return 1
 
         elif (label == 10):  # third base
-            if (person_bbox["3rd_"]):
+            if (person_bbox["3rd_"] and self.is_motion_changed("3rd")):
                 m = person_bbox["3rd_"]
                 if (m == "catch_field"):
                     print("3루수 공을 잡았습니다.")
-            return 1
+
+        elif (label == 6):  # center outfield
+            if (person_bbox["center fielder_"] and self.is_motion_changed("center fielder")):
+                m = person_bbox["center fielder_"]
+                print(self.field_motion("중견수", m))
+
+        elif (label == 7):  # right outfield
+            if (person_bbox["right fielder_"] and self.is_motion_changed("right fielder")):
+                m = person_bbox["right fielder_"]
+                print(self.field_motion("우익수", m))
 
         elif (label == 11):  # left outfield
-            if (person_bbox["left fielder_"]):
+            if (person_bbox["left fielder_"] and self.is_motion_changed("left fielder")):
                 m = person_bbox["left fielder_"]
-                print("좌익수 " + m + " 하고있습니다.")
-            return 1
+                print(self.field_motion("좌익수", m))
 
         elif (label == 12):  # ss
-            if (person_bbox["ss_"]):
+            if (person_bbox["ss_"] and self.is_motion_changed("ss")):
                 m = person_bbox["ss_"]
-                print("유격수 " + m + " 하고있습니다.")
-            return 1
+                print(self.field_motion("유격수", m))
 
-        else:  # coach and gallery and etc batter
-            return 1
+    @staticmethod
+    def pitcher_when_pitching():
+        annotation = [
+            "투수 공을 던졌습니다.",
+            "공을 던졌습니다.",
+            "투수 타자를 향해 힘껏 공을 던졌습니다.",
+        ]
 
-        return 1
+        return random.choice(annotation)
 
+    @staticmethod
+    def batter_when_batting():
+        annotation = [
+            "타자 배트를 휘둘렀습니다.",
+            "타자 힘차게 배트를 휘둘렀습니다.",
+            "배트를 휘둘렀습니다.",
+            "스윙!",
+        ]
+
+        return random.choice(annotation)
+
+    @staticmethod
+    def field_motion(position, motion):
+        annotation = None
+        if(motion  == "throwing"):
+            annotation = position + " 송구 하였습니다."
+        elif(motion == "catch_field"):
+            annotation = position + " 타석에서 나온 공 잡았습니다."
+        elif(motion == "run"):
+            annotation = position + " 공을 향해 뛰어가고 있습니다."
+
+        return annotation
 
     @staticmethod
     def cal_mean_iou(bbox1, bboxes2):

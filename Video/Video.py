@@ -6,7 +6,7 @@ class Video():
         self.Resources = Resources
 
 
-    def play(self, v, count):
+    def play(self, v, count, fps):
         video = cv2.VideoCapture(v)
 
         video.set(1, count)

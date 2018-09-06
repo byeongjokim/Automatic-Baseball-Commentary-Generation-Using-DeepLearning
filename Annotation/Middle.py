@@ -38,39 +38,41 @@ class Middle():
 
     def generate_Annotation_with_Scene(self):
         frame = np.zeros((720, 1280, 3), dtype=np.uint8)
-        isPitcher = 0
+        counter = 0
 
         time.sleep(3)
 
-        label = -1
-        annotation = ""
+        pre_label = -1
         h, w, c = self.resources.frame.shape
         position = Position(motion=self.motion, frame_shape=(h, w))
 
         while( not self.resources.exit):
-            if(ssim(self.resources.frame, frame, multichannel=True) < 0.6): #scene changed
-                isPitcher = 0
+            label, annotation = self.sceneData.get_Annotation(self.resources.frame)
+            print(label, counter)
+
+            if(label != pre_label and ssim(self.resources.frame, frame, multichannel=True) < 0.6): #scene changed
+                counter = 0
                 frame = self.resources.frame
-                label, annotation = self.sceneData.get_Annotation(self.resources.frame)
                 position.clear()
 
-            else:
-                if(isPitcher == 3):
-                    print("\t\t" + annotation)
+            if(counter == 3 and annotation):
+                counter = 0
+                print("\t\t" + annotation)
 
-                if(isPitcher > 10 and label == 2):
-                    isPitcher = 0
-                    print("\t\t" + self.sceneData.pitcher())
+            if(counter > 10 and label == 2):
+                counter = 0
+                print("\t\t" + self.sceneData.pitcher())
 
-                if(isPitcher > 17 and label != 0):
-                    isPitcher = 0
-                    print("\t\t" + self.sceneData.gameinfo())
+            if(counter > 17 and label != 0):
+                counter = 0
+                print("\t\t" + self.sceneData.gameinfo())
 
-                bboxes = self.detect.predict(self.resources.frame)
-                if (bboxes):
-                    position.insert_person(frame, bboxes, label)
+            bboxes = self.detect.predict(self.resources.frame)
+            if (bboxes):
+                position.insert_person(self.resources.frame, bboxes, label)
 
-                position.annotation(label, position.get_bbox())
+            position.annotation(label, position.get_bbox())
 
-                isPitcher = isPitcher + 1
+            pre_label = label
+            counter = counter + 1
         return 1
