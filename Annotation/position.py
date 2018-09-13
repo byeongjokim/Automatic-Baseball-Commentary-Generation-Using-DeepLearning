@@ -24,6 +24,10 @@ class Position(object):
             self.person_bbox[i + "_"] = None
             self.person_image[i] = []
 
+    def print_bbox__(self):
+        _ = [i+":"+str(self.person_bbox[i+"_"]) for i in self.field if(self.person_bbox[i+"_"])]
+        print(_)
+
     def get_bbox(self):
         return self.person_bbox
 

@@ -7,7 +7,7 @@ from Video.Video import Video
 from Annotation.Middle import Middle
 from resources import Resources
 
-v = "180515SKOB_FULL"
+v = "180906LGNC_FULL"
 
 #fps = cv2.VideoCapture("./_data/"+v+"/"+v+".mp4").get(cv2.CAP_PROP_FPS)
 #print(fps)
@@ -15,11 +15,12 @@ resources = Resources()
 annotation = Middle(v, resources)
 video = Video(resources)
 
-o_start = "183112"
-o_count = 20800
+o_start = "183013"
+o_count = 9600
 fps = 29.97
 
-count = 33059
+count = 45000
+#count = 136000
 
 rule = threading.Thread(target=annotation.generate_Annotation_with_Rule, args=(count-o_count, fps, o_start, ))
 rule.start()

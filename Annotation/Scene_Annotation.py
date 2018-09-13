@@ -7,7 +7,6 @@ from Annotation.Ontology_String import *
 
 class SceneData():
 
-    prev = -1
     num_prev_annotation = 5
     prev_annotaion = []
 
@@ -33,19 +32,15 @@ class SceneData():
         label, score = self.scene.predict(frame)
 
         if(score > t):
-            if(self.prev != label):
-                annotation = ""
-                if (label == 0): #pitchingbatting
-                    annotation = self.batterBox()
 
-                elif (label == 1):
-                    annotation = self.batter()
+            if (label == 0): #pitchingbatting
+                annotation = self.batterBox()
 
-                else:
-                    annotation = None
+            elif (label == 1):
+                annotation = self.batter()
 
-                self.prev = label
-
+            else:
+                annotation = None
 
         return label, annotation
 

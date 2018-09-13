@@ -10,7 +10,7 @@ from Annotation.position import Position
 from Annotation.Ontology_String import *
 from skimage.measure import compare_ssim as ssim
 from NN.detect_model import Detect_Model
-from NN.motion_model import Classifier
+from NN.motion_model import Classifier, TRN
 
 class Middle():
     frame_no = 0
@@ -27,7 +27,7 @@ class Middle():
 
         self.ruleData = RuleData(gameName, Resources, self.onto)
 
-        self.motion = Classifier(self.sess, istest=1)
+        self.motion = TRN(self.sess, istest=1)
         self.sceneData = SceneData(Resources, self.onto, self.sess)
         self.detect = Detect_Model(self.sess, istest=1)
 
@@ -37,33 +37,33 @@ class Middle():
         return 1
 
     def generate_Annotation_with_Scene(self):
-        frame = np.zeros((720, 1280, 3), dtype=np.uint8)
         counter = 0
 
         time.sleep(3)
 
         pre_label = -1
         h, w, c = self.resources.frame.shape
+        frame = np.zeros((h, w, c), dtype=np.uint8)
         position = Position(motion=self.motion, frame_shape=(h, w))
 
-        while( not self.resources.exit):
+        while( not self.resources.exit ):
             label, annotation = self.sceneData.get_Annotation(self.resources.frame)
-            print(label, counter)
+            #print(label, counter)
 
             if(label != pre_label and ssim(self.resources.frame, frame, multichannel=True) < 0.6): #scene changed
                 counter = 0
                 frame = self.resources.frame
                 position.clear()
 
-            if(counter == 3 and annotation):
+            if(counter == 10 and annotation):
                 counter = 0
                 print("\t\t" + annotation)
 
-            if(counter > 10 and label == 2):
+            if(counter > 15 and label == 2):
                 counter = 0
                 print("\t\t" + self.sceneData.pitcher())
 
-            if(counter > 17 and label != 0):
+            if(counter > 20 and label != 0):
                 counter = 0
                 print("\t\t" + self.sceneData.gameinfo())
 
@@ -71,6 +71,7 @@ class Middle():
             if (bboxes):
                 position.insert_person(self.resources.frame, bboxes, label)
 
+            position.print_bbox__()
             position.annotation(label, position.get_bbox())
 
             pre_label = label

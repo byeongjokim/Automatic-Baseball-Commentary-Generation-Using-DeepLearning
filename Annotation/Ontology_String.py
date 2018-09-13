@@ -57,7 +57,7 @@ def search_pitcher(gameCode, p):
 		p + " 투수 이번 시즌 "+str(era)+"의 평균 자책점을 기록하고 있습니다.",
 		p + " 투수 과연 어떤 공을 던질까요?",
 	]
-
+	g.close()
 	return annotation
 
 def search_batter(gameCode, b):
@@ -111,6 +111,7 @@ def search_batter(gameCode, b):
 		annotation.append(b + " 타자 1루 주자가 있는 상황에서 " + ", ".join(_ for _ in batter_history_when1st) + "을 기록하고 있습니다.")
 		annotation.append("오늘 1루 주자가 있는 타석에서 " + b + " 타자 최근, " + str(batter_history_when1st[-1]) + "을 기록하였습니다.")
 
+	g.close()
 	return annotation
 
 def search_pitcherbatter(gameCode, p, b):
@@ -180,7 +181,6 @@ def search_pitcherbatter(gameCode, p, b):
 		p + " 투수 " + b + " 타자를 상대로 오늘 경기 " + str(strikeout) + "개의 스트라이크 아웃을 잡아냈습니다.",
 		"투수와 타자 사이에 팽팽한 긴장감이 감지됩니다.",
 	]
-	return annotation
 
-def search_runner(gameCode):
-	return 1
+	g.close()
+	return annotation

@@ -180,7 +180,7 @@ class Scene_Model():
         #self.sess = tf.Session()
 
         all_vars = tf.global_variables()
-        scene = [k for k in all_vars if not (k.name.startswith("object") or k.name.startswith("CAE") or k.name.startswith("cls"))]
+        scene = [k for k in all_vars if not (k.name.startswith("object") or k.name.startswith("CAE") or k.name.startswith("g_w_and_b") or k.name.startswith("h_w_and_b") or k.name.startswith("cls"))]
         print(scene)
         self.saver = tf.train.Saver(scene)
 
