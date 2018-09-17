@@ -5,7 +5,7 @@ import argparse
 from NN.scene_model import Scene_Model
 from NN.motion_model import CAE, Classifier
 import tensorflow as tf
-from NN.tinyYOLOv2.test import ObjectDetect
+
 import numpy as np
 
 
@@ -35,14 +35,19 @@ def test_scene(image_name, t):
     sess = tf.Session()
     s = Scene_Model(sess)
 
+    s.make_model()
+    s.get_accuracy("180414KTLG")
+    """
     image = cv2.imread(image_name)
     s.make_model()
     print(s.predict(image))
+    """
 
 #train_scene(1)
-#test_scene("_data/180401NCLT/186.jpg", 0)
+test_scene("_data/180401NCLT/186.jpg", 0)
 
 #make_scene_data()
+
 
 def get_motion_data(o, s, v, count, start=1000, interval=5):
     s_count = count
@@ -233,9 +238,10 @@ def cal_mean_iou(bbox1, bboxes2):
                 s = s + 0.0
     return s/len(bboxes2)
 
+#================
 
 #print(cal_mean_iou([744.6153846153846, 252.6923076923077, 947.6923076923077, 503.6538461538462], [[747.6923076923077, 289.03846153846155, 960.0, 515.7692307692308]]))
-motion_classify("_data/180401HTLG/180401HTLG.mp4")
+#motion_classify("_data/180401HTLG/180401HTLG.mp4")
 #motion_classify("_data/motion_test.mp4")
 """
 videos = [

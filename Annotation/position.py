@@ -96,9 +96,9 @@ class Position(object):
     def annotation(self, label, person_bbox):
         if (label == 0):
             if (person_bbox["pitcher_"] == "pitching" and self.is_motion_changed("pitcher")):
-                print(self.pitcher_when_pitching())
+                print("\t\t"+self.pitcher_when_pitching())
             if (person_bbox["batter_"] == "batting" and self.is_motion_changed("batter")):
-                print(self.batter_when_batting())
+                print("\t\t"+self.batter_when_batting())
 
         elif (label == 2):
             if (person_bbox["close_up_"]  and self.is_motion_changed("close_up")):
@@ -114,39 +114,39 @@ class Position(object):
             if (person_bbox["1st_"] and self.is_motion_changed("1st")):
                 m = person_bbox["1st_"]
                 if (m == "catch_field"):
-                    print("1루수 공을 잡았습니다.")
+                    print("\t\t"+"1루수 공을 잡았습니다.")
 
         elif (label == 8):  # second base
             if (person_bbox["2nd_"] and self.is_motion_changed("2nd")):
                 m = person_bbox["2nd_"]
                 if (m == "catch_field"):
-                    print("2루수 공을 잡았습니다.")
+                    print("\t\t"+"2루수 공을 잡았습니다.")
 
         elif (label == 10):  # third base
             if (person_bbox["3rd_"] and self.is_motion_changed("3rd")):
                 m = person_bbox["3rd_"]
                 if (m == "catch_field"):
-                    print("3루수 공을 잡았습니다.")
+                    print("\t\t"+"3루수 공을 잡았습니다.")
 
         elif (label == 6):  # center outfield
             if (person_bbox["center fielder_"] and self.is_motion_changed("center fielder")):
                 m = person_bbox["center fielder_"]
-                print(self.field_motion("중견수", m))
+                print("\t\t"+self.field_motion("중견수", m))
 
         elif (label == 7):  # right outfield
             if (person_bbox["right fielder_"] and self.is_motion_changed("right fielder")):
                 m = person_bbox["right fielder_"]
-                print(self.field_motion("우익수", m))
+                print("\t\t"+self.field_motion("우익수", m))
 
         elif (label == 11):  # left outfield
             if (person_bbox["left fielder_"] and self.is_motion_changed("left fielder")):
                 m = person_bbox["left fielder_"]
-                print(self.field_motion("좌익수", m))
+                print("\t\t"+self.field_motion("좌익수", m))
 
         elif (label == 12):  # ss
             if (person_bbox["ss_"] and self.is_motion_changed("ss")):
                 m = person_bbox["ss_"]
-                print(self.field_motion("유격수", m))
+                print("\t\t"+self.field_motion("유격수", m))
 
     @staticmethod
     def pitcher_when_pitching():
@@ -171,14 +171,15 @@ class Position(object):
 
     @staticmethod
     def field_motion(position, motion):
-        annotation = None
+        annotation = ""
         if(motion  == "throwing"):
             annotation = position + " 송구 하였습니다."
         elif(motion == "catch_field"):
             annotation = position + " 타석에서 나온 공 잡았습니다."
         elif(motion == "run"):
             annotation = position + " 공을 향해 뛰어가고 있습니다."
-
+        elif (motion == "walking"):
+            annotation = position + " 공을 향해 걸어가고 있습니다."
         return annotation
 
     @staticmethod

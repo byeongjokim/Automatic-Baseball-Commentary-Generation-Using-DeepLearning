@@ -13,7 +13,7 @@ class Video():
         video.set(1, count)
         cv2.namedWindow('play', cv2.WINDOW_NORMAL)
         fps = video.get(cv2.CAP_PROP_FPS)
-        #print(fps)
+        print(fps)
         fps /= 1000
         while True:
 

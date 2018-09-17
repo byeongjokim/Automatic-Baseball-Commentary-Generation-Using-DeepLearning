@@ -22,12 +22,12 @@ class Middle():
         self.resources = Resources
 
         owlready2.onto_path.append("_data/_owl/")
-        self.onto = owlready2.get_ontology("180515SKOB.owl")
+        self.onto = owlready2.get_ontology("baseball.owl")
         self.onto.load()
 
         self.ruleData = RuleData(gameName, Resources, self.onto)
 
-        self.motion = TRN(self.sess, istest=1)
+        self.motion = Classifier(self.sess, istest=1)
         self.sceneData = SceneData(Resources, self.onto, self.sess)
         self.detect = Detect_Model(self.sess, istest=1)
 
@@ -55,15 +55,15 @@ class Middle():
                 frame = self.resources.frame
                 position.clear()
 
-            if(counter == 10 and annotation):
+            if(counter == 2 and annotation):
                 counter = 0
                 print("\t\t" + annotation)
 
-            if(counter > 15 and label == 2):
+            if(counter > 5 and label == 2):
                 counter = 0
                 print("\t\t" + self.sceneData.pitcher())
 
-            if(counter > 20 and label != 0):
+            if(counter > 5 and label != 0):
                 counter = 0
                 print("\t\t" + self.sceneData.gameinfo())
 
@@ -71,7 +71,7 @@ class Middle():
             if (bboxes):
                 position.insert_person(self.resources.frame, bboxes, label)
 
-            position.print_bbox__()
+            #position.print_bbox__()
             position.annotation(label, position.get_bbox())
 
             pre_label = label

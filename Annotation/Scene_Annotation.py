@@ -2,7 +2,7 @@
 import cv2
 import random
 from NN.scene_model import Scene_Model
-from Annotation.Ontology_String import *
+from Annotation.Ontology_String import Ontology_String
 
 
 class SceneData():
@@ -14,12 +14,12 @@ class SceneData():
         print("init_sceneData")
         self.resources = Resources
         self.onto = onto
+        self.Ontology_String = Ontology_String()
 
         self.width = shape[0]
         self.height = shape[1]
 
-        self.scene = Scene_Model(sess)
-        self.scene.make_model()
+        self.scene = Scene_Model(sess, istest=1)
 
         self.timer = 0
         for i in range(self.num_prev_annotation):
@@ -30,6 +30,7 @@ class SceneData():
 
         annotation = ''
         label, score = self.scene.predict(frame)
+        #print(label, score)
 
         if(score > t):
 
@@ -38,6 +39,9 @@ class SceneData():
 
             elif (label == 1):
                 annotation = self.batter()
+
+            elif (label == 4):
+                print("관개애애애애애앵애애애애액")
 
             else:
                 annotation = None
@@ -51,30 +55,29 @@ class SceneData():
         b = self.resources.get_batter()
         p = self.resources.get_pitcher()
         annotation = []
-        annotation = annotation + search_batter(gameCode, b)
-        annotation = annotation + search_pitcher(gameCode, p)
-        annotation = annotation + search_pitcherbatter(gameCode, p, b)
-        annotation = annotation + search_gameInfo(gameCode, self.resources.get_inn(), self.resources.get_gamescore(), self.resources.get_gameinfo())
+        annotation = annotation + self.Ontology_String.search_batter(gameCode, b)
+        annotation = annotation + self.Ontology_String.search_pitcher(gameCode, p)
+        annotation = annotation + self.Ontology_String.search_pitcherbatter(gameCode, p, b)
+        annotation = annotation + self.Ontology_String.search_gameInfo(gameCode, self.resources.get_inn(), self.resources.get_gamescore(), self.resources.get_gameinfo())
 
         return self.get_random_annotation(annotation)
-
 
     def pitcher(self):
         gameCode = self.resources.get_gamecode()
         p = self.resources.get_pitcher()
-        annotation = search_pitcher(gameCode, p)
+        annotation = self.Ontology_String.search_pitcher(gameCode, p)
 
         return self.get_random_annotation(annotation)
 
     def batter(self):
         gameCode = self.resources.get_gamecode()
         b = self.resources.get_batter()
-        annotation = search_batter(gameCode, b)
+        annotation = self.Ontology_String.search_batter(gameCode, b)
 
         return self.get_random_annotation(annotation)
 
     def gameinfo(self):
-        annotation = search_gameInfo(self.resources.get_gamecode(), self.resources.get_inn(), self.resources.get_gamescore(),
+        annotation = self.Ontology_String.search_gameInfo(self.resources.get_gamecode(), self.resources.get_inn(), self.resources.get_gamescore(),
                         self.resources.get_gameinfo())
 
         return self.get_random_annotation(annotation)

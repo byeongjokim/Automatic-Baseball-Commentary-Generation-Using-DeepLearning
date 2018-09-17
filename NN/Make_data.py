@@ -129,10 +129,11 @@ class Make_SceneData():
 
 a = Make_SceneData()
 
+#a.save_image_with_frame_interval("180414KTLG", start=8000)
 """
 videos = ["180412HTHH", "180412KTNC", "180412OBSS", "180412SKLG", "180412WOLT", "180413KTLG", "180413LTHT", "180413NCSK", "180413OBWO", "180413SSHH"]
 for i in videos:
     a.save_image_with_frame_interval(i, start=8000)
 """
 
-a.labeling("")
+a.labeling("180414KTLG")

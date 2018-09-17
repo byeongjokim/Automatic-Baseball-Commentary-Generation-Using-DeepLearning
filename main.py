@@ -19,8 +19,8 @@ o_start = "183013"
 o_count = 9600
 fps = 29.97
 
-count = 45000
-#count = 136000
+#count = 45000
+count = 133000
 
 rule = threading.Thread(target=annotation.generate_Annotation_with_Rule, args=(count-o_count, fps, o_start, ))
 rule.start()

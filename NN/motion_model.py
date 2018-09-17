@@ -366,14 +366,12 @@ class Classifier(Motion):
         dataset = np.array([dataset])
         leng = np.array([leng])
 
-        output = self.sess.run(self.output, feed_dict={self.image: dataset, self.L: leng, self.keep_prob: 1})
-        score = max(output[0])
-        output = self.sess.run(tf.argmax(output, 1))
-
-        if(score > 0.9):
+        score, output = self.sess.run([self.output, tf.argmax(self.output, 1)], feed_dict={self.image: dataset, self.L: leng, self.keep_prob: 1})
+        if (max(score[0]) > 0.9):
             return self.motions[output[0]]
         else:
             return None
+
 
 class TRN(Motion):
     def __init__(self, sess, istest=0):

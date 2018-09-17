@@ -1,38 +1,107 @@
 import cv2
 import tensorflow as tf
 import numpy as np
-import os
 import random
 import matplotlib.pyplot as plt
 import csv
-from NN.cnn import conv_layer, pool
-import pytesseract as tes
 from collections import Counter
 
 class Scene_Model():
-    chk_scene = './_model/scene/scene.ckpt'
-    ckpt = tf.train.get_checkpoint_state(("./_model/scene"))
-
-    batch_size = 30
-    epoch = 1
-
-    width = 224
-    height = 224
-
-    #kind_scene = ['field', 'pitcher', 'gallery', 'batter', 'pitchingbatting', 'beforestart', '1', 'coach', 'closeup', '3']
-    #kind_scene = ["pitchingbatting", "1", "batter", "closeup", "coach", "gallery", "field", "etc", "3"]
-
-    ratio_crop = 1
-
-    num_label = 13
-    rgb = 1
-
-    def __init__(self, sess):
+    def __init__(self, sess, istest=0):
         print("init scene_model")
+        self.scenes = ["pitchingbatting", "batter", "closeup", "coach", "gallery", "frst", "center outfield", "right outfield", "second", "etc", "third", "left outfield", "ss"]
+
+        self.width = 224
+        self.height = 224
+        self.num_label = 13
+        self.ratio_crop = 1
+
         self.sess = sess
+        self.batch_size = 30
+        self.epoch = 200
+        self.lr = 0.0005
+        self.rgb = 3
 
+        self.ckpt = './_model/scene/scene.ckpt'
+        #self.ckpt = './_model/scene/tmp/scene.ckpt'
 
-    def crop_img(self, img, scale=1.0):
+        self.X = tf.placeholder(tf.float32, [None, self.width, self.height, self.rgb])
+        self.Y = tf.placeholder(tf.float32, [None, self.num_label])
+        self.keep_prob = tf.placeholder(tf.float32)
+
+        with tf.variable_scope("scene"):
+            C1 = self.conv_layer(filter_size=3, fin=self.rgb, fout=64, din=self.X, name='C1')
+            C1_2 = self.conv_layer(filter_size=3, fin=64, fout=64, din=C1, name='C1_2')
+            P1 = self.pool(C1_2, option="maxpool")
+            P1 = tf.nn.dropout(P1, keep_prob=self.keep_prob)
+
+            C2 = self.conv_layer(filter_size=3, fin=64, fout=128, din=P1, name='C2')
+            C2_2 = self.conv_layer(filter_size=3, fin=128, fout=128, din=C2, name='C2_2')
+            P2 = self.pool(C2, option="maxpool")
+            P2 = tf.nn.dropout(P2, keep_prob=self.keep_prob)
+
+            C3_1 = self.conv_layer(filter_size=3, fin=128, fout=256, din=P2, name='C3_1')
+            C3_2 = self.conv_layer(filter_size=3, fin=256, fout=256, din=C3_1, name='C3_2')
+            P3 = self.pool(C3_2, option="maxpool")
+            P3 = tf.nn.dropout(P3, keep_prob=self.keep_prob)
+
+            C4_1 = self.conv_layer(filter_size=3, fin=256, fout=512, din=P3, name='C4_1')
+            C4_2 = self.conv_layer(filter_size=3, fin=512, fout=512, din=C4_1, name='C4_2')
+            P4 = self.pool(C4_2, option="maxpool")
+            P4 = tf.nn.dropout(P4, keep_prob=self.keep_prob)
+
+            C5_1 = self.conv_layer(filter_size=3, fin=512, fout=512, din=P4, name='C5_1')
+            C5_2 = self.conv_layer(filter_size=3, fin=512, fout=512, din=C5_1, name='C5_2')
+            P5 = self.pool(C5_2, option="maxpool")
+            P5 = tf.nn.dropout(P5, keep_prob=self.keep_prob)
+
+            fc0 = tf.reshape(P5, [-1, 7 * 7 * 512])
+
+            with tf.device("/cpu:0"):
+                W1 = tf.get_variable("W1", shape=[7 * 7 * 512, 4096], initializer=tf.contrib.layers.xavier_initializer())
+                b1 = tf.get_variable("b1", shape=[4096], initializer=tf.contrib.layers.xavier_initializer())
+                fc1 = tf.nn.relu(tf.matmul(fc0, W1) + b1)
+
+                W2 = tf.get_variable("W2", shape=[4096, 1000], initializer=tf.contrib.layers.xavier_initializer())
+                b2 = tf.get_variable("b2", shape=[1000], initializer=tf.contrib.layers.xavier_initializer())
+                fc2 = tf.nn.relu(tf.matmul(fc1, W2) + b2)
+
+                W3 = tf.get_variable("W3", shape=[1000, self.num_label], initializer=tf.contrib.layers.xavier_initializer())
+                b3 = tf.get_variable("b3", shape=[self.num_label], initializer=tf.contrib.layers.xavier_initializer())
+                self.model = tf.matmul(fc2, W3) + b3
+
+        print(self.model)
+        self.cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=self.model, labels=self.Y))
+        self.output = tf.nn.softmax(self.model)
+
+        if(istest==1):
+            all_vars = tf.global_variables()
+            scene = [k for k in all_vars if k.name.startswith("scene")]
+            saver = tf.train.Saver(scene)
+            saver.restore(self.sess, self.ckpt)
+
+    @staticmethod
+    def conv_layer(filter_size, fin, fout, din, name):
+        with tf.variable_scope(name):
+            W = tf.get_variable(name=name + "_W", shape=[filter_size, filter_size, fin, fout],
+                                initializer=tf.contrib.layers.xavier_initializer())
+            b = tf.get_variable(name=name + "_b", shape=[fout], initializer=tf.contrib.layers.xavier_initializer(0.0))
+            C = tf.nn.conv2d(din, W, strides=[1, 1, 1, 1], padding='SAME')
+            R = tf.nn.relu(tf.nn.bias_add(C, b))
+            return R
+
+    @staticmethod
+    def pool(din, option='maxpool'):
+        if (option == 'maxpool'):
+            pool = tf.nn.max_pool(din, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
+        elif (option == 'avrpool'):
+            pool = tf.nn.avg_pool(din, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
+        else:
+            return din
+        return pool
+
+    @staticmethod
+    def crop_img(img, scale=1.0):
         center_x, center_y = img.shape[1] / 2, img.shape[0] / 2
         width_scaled, height_scaled = img.shape[1] * scale, img.shape[0] * scale
         left_x, right_x = center_x - width_scaled / 2, center_x + width_scaled / 2
@@ -41,11 +110,10 @@ class Scene_Model():
         return img_cropped
 
     def load_data(self, play):
-
         data_set = []
 
         for p in play:
-            folder_path = "./_data/" + p + "/"
+            folder_path = "../kbo/_data/" + p + "/"
             csv_path = folder_path + p + ".csv"
             print(csv_path)
 
@@ -55,14 +123,16 @@ class Scene_Model():
             for line in reader:
                 if(int(line[0]) < int(line[1]) and int(line[1]) - int(line[0]) < 200):
                     sett = {"start":line[0], "end":line[1], "label":line[2]}
+                    """
                     if (int(sett["label"]) != 11 and int(sett["label"]) != 12):
                         dataset.append(sett)
+                    """
+                    dataset.append(sett)
 
             f.close()
 
             interval = 4
             for i in dataset:
-                #print(i["start"])
                 for j in range(int(i["start"]), int(i["end"])+1, interval):
                     if(self.rgb == 1):
                         image = cv2.resize(
@@ -82,7 +152,7 @@ class Scene_Model():
                         )
 
                     data_set.append({"image":image, "label":int(i["label"])})
-
+                    """
                     if (int(i["label"]) == 6):  #first base
                         image = cv2.flip(image, 1)
                         data_set.append({"image":image, "label":11})
@@ -90,12 +160,17 @@ class Scene_Model():
                     if (int(i["label"]) == 8):  #right field
                         image = cv2.flip(image, 1)
                         data_set.append({"image":image, "label":12})
-
+                    """
         random.shuffle(data_set)
 
         X = np.array([i["image"] for i in data_set])
         _y = np.array([i["label"] for i in data_set])
-        print(Counter(_y))
+        third_base = [i for i in data_set if (i["label"] == 11)]
+        left_outfield = [i for i in data_set if (i["label"] == 12)]
+        print("==================================================")
+        print("3rd base : ", str(len(third_base)))
+        print("left_outfield : ", str(len(left_outfield)))
+        print("==================================================")
         Y = np.zeros((len(_y), len(set(_y))))
         Y[np.arange(len(_y)), [i-1 for i in _y]] = 1
 
@@ -110,7 +185,7 @@ class Scene_Model():
         self.train_x = X[:num_validation + num_test]
         self.train_y = Y[:num_validation + num_test]
 
-        self.valid_x = X[num_validation + num_test:num_test].reshape(-1, self.width, self.height, self.rgb)
+        self.valid_x = X[num_validation + num_test:num_test]
         self.valid_y = Y[num_validation + num_test:num_test]
 
         self.test_x = X[num_test:].reshape(-1, self.width, self.height, self.rgb)
@@ -118,97 +193,24 @@ class Scene_Model():
 
         print(str(num_data) + " data, " + str(len(self.train_x)) + " train data " + str(len(self.valid_x)) + " valid data " + str(len(self.test_x)) + " test data ")
 
-
-    #vggnet - A
-    def make_model(self):
-
-        self.scene_X = tf.placeholder(tf.float32, [None, self.width, self.height, self.rgb])
-        self.scene_Y = tf.placeholder(tf.float32, [None, self.num_label])
-        self.scene_keep_prob = tf.placeholder(tf.float32)
-
-
-        C1 = conv_layer(filter_size=3, fin=self.rgb, fout=64, din=self.scene_X, name='scene_C1')
-        C1_2 = conv_layer(filter_size=3, fin=64, fout=64, din=C1, name='scene_C1_2')
-        P1 = pool(C1_2, option="maxpool")
-        P1 = tf.nn.dropout(P1, keep_prob=self.scene_keep_prob)
-
-        C2 = conv_layer(filter_size=3, fin=64, fout=128, din=P1, name='scene_C2')
-        C2_2 = conv_layer(filter_size=3, fin=128, fout=128, din=C2, name='scene_C2_2')
-        P2 = pool(C2, option="maxpool")
-        P2 = tf.nn.dropout(P2, keep_prob=self.scene_keep_prob)
-
-        C3_1 = conv_layer(filter_size=3, fin=128, fout=256, din=P2, name='scene_C3_1')
-        C3_2 = conv_layer(filter_size=3, fin=256, fout=256, din=C3_1, name='scene_C3_2')
-        P3 = pool(C3_2, option="maxpool")
-        P3 = tf.nn.dropout(P3, keep_prob=self.scene_keep_prob)
-
-        C4_1 = conv_layer(filter_size=3, fin=256, fout=512, din=P3, name='scene_C4_1')
-        C4_2 = conv_layer(filter_size=3, fin=512, fout=512, din=C4_1, name='scene_C4_2')
-        P4 = pool(C4_2, option="maxpool")
-        P4 = tf.nn.dropout(P4, keep_prob=self.scene_keep_prob)
-
-        C5_1 = conv_layer(filter_size=3, fin=512, fout=512, din=P4, name='scene_C5_1')
-        C5_2 = conv_layer(filter_size=3, fin=512, fout=512, din=C5_1, name='scene_C5_2')
-        P5 = pool(C5_2, option="maxpool")
-        P5 = tf.nn.dropout(P5, keep_prob=self.scene_keep_prob)
-
-        print(P5)
-
-        fc0 = tf.reshape(P5, [-1, 7 * 7 * 512])
-
-        with tf.device("/cpu:0"):
-            W1 = tf.get_variable("scene_W1", shape=[7 * 7 * 512, 4096],
-                                 initializer=tf.contrib.layers.xavier_initializer())
-            b1 = tf.Variable(tf.random_normal([4096]))
-            fc1 = tf.nn.relu(tf.matmul(fc0, W1) + b1)
-
-            W2 = tf.get_variable("scene_W2", shape=[4096, 1000], initializer=tf.contrib.layers.xavier_initializer())
-            b2 = tf.Variable(tf.random_normal([1000]))
-            fc2 = tf.nn.relu(tf.matmul(fc1, W2) + b2)
-
-            W3 = tf.get_variable("scene_W3", shape=[1000, self.num_label],
-                                 initializer=tf.contrib.layers.xavier_initializer())
-            b3 = tf.Variable(tf.random_normal([self.num_label]))
-            self.scene_model = tf.matmul(fc2, W3) + b3
-
-        #"""
-
-        print(self.scene_model)
-        self.cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=self.scene_model, labels=self.scene_Y))
-        self.optimizer = tf.train.AdamOptimizer(0.0005).minimize(self.cost)
-
-        #self.sess = tf.Session()
-
-        all_vars = tf.global_variables()
-        scene = [k for k in all_vars if not (k.name.startswith("object") or k.name.startswith("CAE") or k.name.startswith("g_w_and_b") or k.name.startswith("h_w_and_b") or k.name.startswith("cls"))]
-        print(scene)
-        self.saver = tf.train.Saver(scene)
-
-        self.sotfmax = tf.nn.softmax(self.scene_model)
-
-        is_correct = tf.equal(tf.argmax(self.scene_model, 1), tf.argmax(self.scene_Y, 1))
-        self.accuracy = tf.reduce_mean(tf.cast(is_correct, tf.float32))
-
-
-        self.saver.restore(self.sess, self.chk_scene)
-
-
-
-
     def train(self):
+        optimizer = tf.train.AdamOptimizer(self.lr).minimize(self.cost)
+
+        self.sess.run(tf.global_variables_initializer())
+        all_vars = tf.global_variables()
+
+        scene = [k for k in all_vars if k.name.startswith("scene")]
+        saver = tf.train.Saver(scene)
+        #saver.restore(self.sess, self.ckpt)
 
         xs = []
         ys = []
         yv = []
 
-        self.sess.run(tf.global_variables_initializer())
-
         total_batch = int(len(self.train_x) / self.batch_size)
 
-        if (total_batch == 0):
-            total_batch = 1
-        validation_acc = self.sess.run(self.accuracy, feed_dict={self.scene_X: self.valid_x, self.scene_Y: self.valid_y, self.scene_keep_prob: 1}) * 100
-        print("Validation Set Accuracy : ", validation_acc)
+        validation_loss = self.sess.run(self.cost, feed_dict={self.X: self.valid_x, self.Y: self.valid_y, self.keep_prob: 1}) * 100
+        print("Validation Set Accuracy : ", validation_loss)
         for e in range(self.epoch):
             total_cost = 0
 
@@ -225,17 +227,17 @@ class Scene_Model():
                 batch_x = batch_x.reshape(-1, self.width, self.height, self.rgb)
                 batch_y = batch_y.reshape(-1, self.num_label)
 
-                _, cost_val = self.sess.run([self.optimizer, self.cost],
-                                            feed_dict={self.scene_X: batch_x, self.scene_Y: batch_y, self.scene_keep_prob: 0.8})
+                _, cost_val = self.sess.run([optimizer, self.cost],
+                                            feed_dict={self.X: batch_x, self.Y: batch_y, self.keep_prob: 0.75})
 
                 total_cost = total_cost + cost_val
 
             print('Epoch:', '%d' % (e + 1), 'Average cost =', '{:.3f}'.format(total_cost / total_batch))
 
-            validation_acc = self.sess.run(self.accuracy, feed_dict={self.scene_X: self.valid_x, self.scene_Y: self.valid_y, self.scene_keep_prob: 1}) * 100
-            print("Validation Set Accuracy : ", validation_acc)
+            validation_loss = self.sess.run(self.cost, feed_dict={self.X: self.valid_x, self.Y: self.valid_y, self.keep_prob: 1})
+            print("Validation Set Accuracy : ", validation_loss)
 
-            if (int(validation_acc) > 93):
+            if (validation_loss < 0.03):
                 break
 
             if (total_cost / total_batch < 0.03):
@@ -245,25 +247,73 @@ class Scene_Model():
             xs.append(e+1)
             ys.append(total_cost / total_batch)
 
-            yv.append(validation_acc)
+            yv.append(validation_loss)
 
         print("complete")
-        self.saver.save(self.sess, self.chk_scene)
+        saver.save(self.sess, self.ckpt)
         plt.plot(xs, ys, 'b')
         plt.plot(xs, yv, 'r')
         plt.show()
 
+    def get_accuracy(self, v):
+        folder_path = "../kbo/_data/" + v + "/"
+        text_path = folder_path + v + ".txt"
 
-    def test(self):
+        dataset = []
+        f = open(text_path, "r")
 
-        is_correct = tf.equal(tf.argmax(self.scene_model, 1), tf.argmax(self.scene_Y, 1))
+        dataset = []
+        while True:
+            line = f.readline()
+            if not line: break
+            line = line.split(", ")
+
+
+            sett = {"label": int(line[0]), "image_num": line[1].rstrip() + ".jpg"}
+            dataset.append(sett)
+
+        data_set = []
+        for d in dataset:
+            image = cv2.resize(
+                self.crop_img(
+                    cv2.imread(folder_path + d["image_num"]),
+                    self.ratio_crop),
+                (self.width, self.height)
+            )
+            data_set.append({"image":image, "label":d["label"]})
+
+        X = np.array([i["image"] for i in data_set if(i["label"] == 12 or i["label"] == 11)])
+        _y = np.array([i["label"] for i in data_set if(i["label"] == 12 or i["label"] == 11)])
+        print(Counter(_y))
+        print(len(set(_y)))
+        Y = np.zeros((len(_y), 13))
+        Y[np.arange(len(_y)), [i-1 for i in _y]] = 1
+
+        is_correct = tf.equal(tf.argmax(self.model, 1), tf.argmax(self.Y, 1))
         accuracy = tf.reduce_mean(tf.cast(is_correct, tf.float32))
+        batch_size = 10
 
-        print('accuracy: ',
-              self.sess.run(accuracy, feed_dict={self.scene_X: self.test_x, self.scene_Y: self.test_y, self.scene_keep_prob: 1}) * 100)
+        total_batch = int(len(X) / batch_size)
 
-        print("Label: ", self.sess.run(tf.argmax(self.test_y, 1)))
-        print("Prediction: ", self.sess.run(tf.argmax(self.scene_model, 1), feed_dict={self.scene_X: self.test_x, self.scene_keep_prob: 1}))
+        acc = 0.0
+
+        j = 0
+        for i in range(total_batch):
+            if (j + batch_size > len(X)):
+                batch_x = X[j:]
+                batch_y = Y[j:]
+            else:
+                batch_x = X[j:j + batch_size]
+                batch_y = Y[j:j + batch_size]
+                j = j + batch_size
+
+            #print('accuracy: ', self.sess.run(accuracy, feed_dict={self.X: batch_x, self.Y: batch_y, self.keep_prob: 1}) * 100)
+            acc = acc + self.sess.run(accuracy, feed_dict={self.X: batch_x, self.Y: batch_y, self.keep_prob: 1}) * 100
+
+        print(acc/total_batch)
+
+        #print('accuracy: ', self.sess.run(accuracy, feed_dict={self.X: X, self.Y: Y, self.keep_prob: 1}) * 100)
+
 
     def predict(self, image):
         image = cv2.resize(image, (self.width, self.height))
@@ -277,15 +327,7 @@ class Scene_Model():
 
         image_X = image.reshape(-1, self.width, self.height, self.rgb)
 
-        '''
-                if(result[0] == 3):
-                    tes.pytesseract.tesseract_cmd = 'C:/Program Files (x86)/Tesseract-OCR/tesseract'
-                    results = tes.image_to_string(image)
-                    if(results):
-                        print(results +" 번 선수가 보이네요.")
-                '''
-        result, softmax = self.sess.run([tf.argmax(self.scene_model, 1), self.sotfmax], feed_dict={self.scene_X: image_X, self.scene_keep_prob: 1})
+        score, output = self.sess.run([self.output, tf.argmax(self.output, 1)],
+                                      feed_dict={self.X: image_X, self.keep_prob: 1})
 
-        score = max(softmax[0])
-
-        return result[0], score
+        return output[0], max(score[0])
