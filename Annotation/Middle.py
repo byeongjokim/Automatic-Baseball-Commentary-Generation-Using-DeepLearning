@@ -44,26 +44,25 @@ class Middle():
         pre_label = -1
         h, w, c = self.resources.frame.shape
         frame = np.zeros((h, w, c), dtype=np.uint8)
-        position = Position(motion=self.motion, frame_shape=(h, w))
+        position = Position(motion=self.motion, frame_shape=(h, w), resource=self.resources)
 
         while( not self.resources.exit ):
             label, annotation = self.sceneData.get_Annotation(self.resources.frame)
-            #print(label, counter)
+            #print(counter)
 
             if(label != pre_label and ssim(self.resources.frame, frame, multichannel=True) < 0.6): #scene changed
                 counter = 0
                 frame = self.resources.frame
                 position.clear()
 
-            if(counter == 2 and annotation):
-                counter = 0
+            if(counter == 5 and annotation):
                 print("\t\t" + annotation)
 
-            if(counter > 5 and label == 2):
+            if(counter > 10 and label == 2):
                 counter = 0
                 print("\t\t" + self.sceneData.pitcher())
 
-            if(counter > 5 and label != 0):
+            if(counter > 10):
                 counter = 0
                 print("\t\t" + self.sceneData.gameinfo())
 

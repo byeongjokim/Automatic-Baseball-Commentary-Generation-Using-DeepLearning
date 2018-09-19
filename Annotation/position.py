@@ -2,9 +2,10 @@ import random
 import math
 
 class Position(object):
-    def __init__(self, motion, frame_shape):
+    def __init__(self, motion, frame_shape, resource):
         self.motion = motion
         self.frame_shape = frame_shape
+        self.resource = resource
 
         self.count = 0
 
@@ -96,9 +97,9 @@ class Position(object):
     def annotation(self, label, person_bbox):
         if (label == 0):
             if (person_bbox["pitcher_"] == "pitching" and self.is_motion_changed("pitcher")):
-                print("\t\t"+self.pitcher_when_pitching())
+                print("\t\t"+self.pitcher_when_pitching(self.resource.get_pitcher()))
             if (person_bbox["batter_"] == "batting" and self.is_motion_changed("batter")):
-                print("\t\t"+self.batter_when_batting())
+                print("\t\t"+self.batter_when_batting(self.resource.get_batter()))
 
         elif (label == 2):
             if (person_bbox["close_up_"]  and self.is_motion_changed("close_up")):
@@ -149,20 +150,20 @@ class Position(object):
                 print("\t\t"+self.field_motion("유격수", m))
 
     @staticmethod
-    def pitcher_when_pitching():
+    def pitcher_when_pitching(pitcher):
         annotation = [
-            "투수 공을 던졌습니다.",
+            str(pitcher) + " 투수 공을 던졌습니다.",
             "공을 던졌습니다.",
-            "투수 타자를 향해 힘껏 공을 던졌습니다.",
+            str(pitcher) + " 투수 타자를 향해 힘껏 공을 던졌습니다.",
         ]
 
         return random.choice(annotation)
 
     @staticmethod
-    def batter_when_batting():
+    def batter_when_batting(batter):
         annotation = [
-            "타자 배트를 휘둘렀습니다.",
-            "타자 힘차게 배트를 휘둘렀습니다.",
+            str(batter) + "타자 배트를 휘둘렀습니다.",
+            str(batter) + "타자 힘차게 배트를 휘둘렀습니다.",
             "배트를 휘둘렀습니다.",
             "스윙!",
         ]

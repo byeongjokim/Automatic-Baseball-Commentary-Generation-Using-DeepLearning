@@ -22,6 +22,8 @@ class Ontology_String():
         self.toHitter = rdflib.URIRef(self.uri + "toHitter")
 
         self.stayIn1stBase = rdflib.URIRef(self.uri + "stayIn1stBase")
+        self.stayIn2ndBase = rdflib.URIRef(self.uri + "stayIn2ndBase")
+        self.stayIn3rdBase = rdflib.URIRef(self.uri + "stayIn3rdBase")
 
         self.result = rdflib.URIRef(self.uri + "result")
 
@@ -177,3 +179,100 @@ class Ontology_String():
         ]
 
         return annotation
+
+    def search_runner(self, batterbox):
+        annotation = []
+        first_runner_annotation, first_runner = self.search_first_runner(batterbox)
+        second_runner_annotation, second_runner = self.search_second_runner(batterbox)
+        third_runner_annotation, third_runner = self.search_third_runner(batterbox)
+
+        annotation = annotation + first_runner_annotation
+        annotation = annotation + second_runner_annotation
+        annotation = annotation + third_runner_annotation
+
+        result = ""
+        if(first_runner):
+            result = result + "1루에는 " + str(first_runner) + " "
+        if (second_runner):
+            result = result + "2루에는 " + str(second_runner) + " "
+        if (third_runner):
+            result = result + "3루에는 " + str(third_runner) + " "
+
+        result = result + "(이)가 나가있습니다."
+
+        annotation.append(result)
+
+        return annotation
+
+
+    def search_first_runner(self, batterbox):
+        bbox = str(batterbox).split(".")[-1]
+        batterbox = rdflib.URIRef(self.uri + bbox)
+
+        query = "select ?o where {?batterbox ?stayIn1stBase ?o}"
+        r = self.g.query(query, initBindings={
+            "batterbox": batterbox,
+            "?stayIn1stBase": self.stayIn1stBase
+        })
+
+        annotation = []
+        runner = None
+
+        for row in r:
+            runner = row[0].split("#")[-1]
+
+        if(runner):
+            annotation = [
+                "1루에 " + str(runner) + "선수가 주자로 나와있습니다.",
+                "1루에 " + str(runner) + "선수가 나가 있습니다.",
+            ]
+
+        return annotation, runner
+
+    def search_second_runner(self, batterbox):
+        bbox = str(batterbox).split(".")[-1]
+        batterbox = rdflib.URIRef(self.uri + bbox)
+
+        query = "select ?o where {?batterbox ?stayIn2ndBase ?o}"
+        r = self.g.query(query, initBindings={
+            "batterbox": batterbox,
+            "?stayIn2ndBase": self.stayIn2ndBase
+        })
+
+        annotation = []
+        runner = None
+
+        for row in r:
+            runner = row[0].split("#")[-1]
+
+        if (runner):
+            annotation = [
+                "2루에 " + str(runner) + "선수가 주자로 나와있습니다.",
+                "2루에 " + str(runner) + "선수가 나가 있습니다.",
+            ]
+
+        return annotation, runner
+
+    def search_third_runner(self, batterbox):
+        bbox = str(batterbox).split(".")[-1]
+        batterbox = rdflib.URIRef(self.uri + bbox)
+
+        query = "select ?o where {?batterbox ?stayIn3rdBase ?o}"
+        r = self.g.query(query, initBindings={
+            "batterbox": batterbox,
+            "?stayIn3rdBase": self.stayIn3rdBase
+        })
+
+        annotation = []
+        runner = None
+
+        for row in r:
+            runner = row[0].split("#")[-1]
+
+        if (runner):
+            annotation = [
+                "3루에 " + str(runner) + "선수가 주자로 나와있습니다.",
+                "3루에 " + str(runner) + "선수가 나가 있습니다.",
+            ]
+
+        return annotation, runner

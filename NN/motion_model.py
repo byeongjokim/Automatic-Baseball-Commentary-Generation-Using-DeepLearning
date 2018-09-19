@@ -367,7 +367,7 @@ class Classifier(Motion):
         leng = np.array([leng])
 
         score, output = self.sess.run([self.output, tf.argmax(self.output, 1)], feed_dict={self.image: dataset, self.L: leng, self.keep_prob: 1})
-        if (max(score[0]) > 0.9):
+        if (max(score[0]) > 0.6):
             return self.motions[output[0]]
         else:
             return None

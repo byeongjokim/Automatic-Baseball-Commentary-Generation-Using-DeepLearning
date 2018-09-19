@@ -48,7 +48,6 @@ class SceneData():
 
         return label, annotation
 
-
     def batterBox(self):
 
         gameCode = self.resources.get_gamecode()
@@ -58,6 +57,7 @@ class SceneData():
         annotation = annotation + self.Ontology_String.search_batter(gameCode, b)
         annotation = annotation + self.Ontology_String.search_pitcher(gameCode, p)
         annotation = annotation + self.Ontology_String.search_pitcherbatter(gameCode, p, b)
+        annotation = annotation + self.Ontology_String.search_runner(self.resources.get_batterbox())
         annotation = annotation + self.Ontology_String.search_gameInfo(gameCode, self.resources.get_inn(), self.resources.get_gamescore(), self.resources.get_gameinfo())
 
         return self.get_random_annotation(annotation)
