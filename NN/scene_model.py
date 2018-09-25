@@ -22,8 +22,8 @@ class Scene_Model():
         self.lr = 0.0005
         self.rgb = 3
 
-        self.ckpt = './_model/scene/scene.ckpt'
-        #self.ckpt = './_model/scene/tmp/scene.ckpt'
+        #self.ckpt = './_model/scene/scene.ckpt'
+        self.ckpt = './_model/scene/normal/scene.ckpt'
 
         self.X = tf.placeholder(tf.float32, [None, self.width, self.height, self.rgb])
         self.Y = tf.placeholder(tf.float32, [None, self.num_label])

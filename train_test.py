@@ -52,8 +52,6 @@ test_scene("_data/180401NCLT/186.jpg", 0)
 def get_motion_data(o, s, v, count, start=1000, interval=5):
     s_count = count
 
-
-
     video = cv2.VideoCapture("_data/"+v+"/"+v+".mp4")
 
     video.set(1, start)

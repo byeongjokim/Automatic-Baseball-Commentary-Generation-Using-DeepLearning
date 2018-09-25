@@ -48,30 +48,37 @@ class Middle():
 
         while( not self.resources.exit ):
             label, annotation = self.sceneData.get_Annotation(self.resources.frame)
-            #print(counter)
+            #print(label, counter)
 
             if(label != pre_label and ssim(self.resources.frame, frame, multichannel=True) < 0.6): #scene changed
                 counter = 0
                 frame = self.resources.frame
                 position.clear()
 
-            if(counter == 5 and annotation):
-                print("\t\t" + annotation)
+            if(counter == 7 and annotation):
+                print("from scene \t\t" + annotation)
+                self.resources.set_annotation(annotation)
 
-            if(counter > 10 and label == 2):
-                counter = 0
-                print("\t\t" + self.sceneData.pitcher())
+            if(counter > 20):
+                if(label == 2):
+                    pitcher_annotation = self.sceneData.pitcher()
+                    print("from pitcher \t\t" + pitcher_annotation)
+                    self.resources.set_annotation(pitcher_annotation)
+                else:
+                    gameinfo_annotation = self.sceneData.gameinfo()
+                    print("from gameinfo " + gameinfo_annotation)
+                    self.resources.set_annotation(gameinfo_annotation)
 
-            if(counter > 10):
                 counter = 0
-                print("\t\t" + self.sceneData.gameinfo())
 
             bboxes = self.detect.predict(self.resources.frame)
             if (bboxes):
                 position.insert_person(self.resources.frame, bboxes, label)
 
             #position.print_bbox__()
-            position.annotation(label, position.get_bbox())
+            motion_annotation = position.annotation(label, position.get_bbox())
+            if(motion_annotation):
+                self.resources.set_annotation(motion_annotation)
 
             pre_label = label
             counter = counter + 1

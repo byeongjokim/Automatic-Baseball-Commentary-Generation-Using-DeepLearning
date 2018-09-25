@@ -25,8 +25,10 @@ class Change():
 
         elif("종료" in text):
             annotation = self.fin_attack(relayText)
+            self.resources.clear_strike_ball_out()
+            #self.resources.break_time = True
 
-        print(annotation)
+        return annotation
 
     def batterbox(self, relayText):
         batorder = relayText["batorder"]
@@ -129,6 +131,7 @@ class PitchingBatting():
 
             batter_box, p, b = create_batterbox(self.onto, self.GameInfo, self.num_BatterBox, batter, pitcher, batorder, stay, inn_instance, btop)
             self.resources.set_batterbox(batter_box, p, b)
+            self.resources.clear_strike_ball_out()
             self.num_BatterBox = self.num_BatterBox + 1
 
         annotation = ""
@@ -136,32 +139,36 @@ class PitchingBatting():
             annotation = self.Strike(ball_data)
             create_pitchingbatting(self.onto, self.GameInfo, "strike", self.resources.get_batterbox(), self.resources.get_seq())
             self.resources.add_seq()
+            self.resources.set_strike_ball_out(strike=True)
 
         elif("구 헛스윙" in text):
             annotation = self.Swing(ball_data)
             create_pitchingbatting(self.onto, self.GameInfo, "strike", self.resources.get_batterbox(), self.resources.get_seq())
             self.resources.add_seq()
+            self.resources.set_strike_ball_out(strike=True)
 
         elif ("구 볼" in text):
             annotation = self.Ball(ball_data)
             create_pitchingbatting(self.onto, self.GameInfo, "ball", self.resources.get_batterbox(), self.resources.get_seq())
+            self.resources.set_strike_ball_out(ball=True)
             self.resources.add_seq()
 
         elif ("구 파울" in text):
             annotation = self.Foul(ball_data)
             create_pitchingbatting(self.onto, self.GameInfo, "foul", self.resources.get_batterbox(), self.resources.get_seq())
             self.resources.add_seq()
+            self.resources.set_strike_ball_out(foul=True)
 
         elif ("구 번트파울" in text):
             annotation = self.BntFoul(ball_data)
             create_pitchingbatting(self.onto, self.GameInfo, "foul", self.resources.get_batterbox(), self.resources.get_seq())
             self.resources.add_seq()
+            self.resources.set_strike_ball_out(foul=True)
 
         elif ("구 타격" in text):
             annotation = self.Hit(ball_data)
 
-        print(annotation)
-
+        return annotation
 
     def Strike(self, ball_data):
         ball_loc = self.calc_ball_location(ball_data)
@@ -351,6 +358,7 @@ class Result():
 
         elif("아웃" in text):
             annotation = self.out(relayText)
+            self.resources.set_strike_ball_out(out=True)
 
         elif("고의" in text or "볼넷" in text or "몸에" in text or "출루" in text or "루타" in text or "내야안타" in text or "홈런" in text): #출루, 안타, 홈런
             annotation = self.hit(relayText)
@@ -358,7 +366,7 @@ class Result():
         elif("진루" in text or "홈인" in text):
             annotation = self.run(relayText)
 
-        print(annotation)
+        return annotation
 
     def run(self, relayText):
         text = relayText["liveText"]

@@ -6,6 +6,8 @@ class Detect_Model():
     def __init__(self, sess, istest=0):
         self.sess = sess
 
+        self.count = 0
+
         self.classes = ["player", "pitcher", "batter", "catcher", "referee"]
 
         self.width = 416
@@ -46,6 +48,10 @@ class Detect_Model():
             self.weights_loader("./_model/detect/baseball.weights", "./_model/detect/detect.ckpt", object)
 
     def predict(self, image):
+
+        cv2.imwrite(str(self.count) + ".jpg", image)
+        self.count = self.count + 1
+
         h, w, c = image.shape
         ratio_h = h / 416
         ratio_w = w / 416

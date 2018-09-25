@@ -6,6 +6,22 @@ class Resources():
 
     seq = 1
 
+    annotation = "중계방송 준비중입니다."
+
+    break_time = False
+
+    strike = 0
+    ball = 0
+    out = 0
+
+    def set_annotation(self, annotation):
+        self.annotation = annotation
+
+    def get_annotation(self):
+        if(self.break_time):
+            return "중계방송 준비중입니다."
+        else:
+            return self.annotation
 
     def set_frame(self, frame):
         self.frame = frame
@@ -27,8 +43,14 @@ class Resources():
         self.date = game_info["date"]
         self.DateHomeAway = game_info["DateHomeAway"]
 
+        self.home_name = game_info["homeTeam"]
+        self.away_name = game_info["awayTeam"]
+
+        self.home_Fname = game_info["FhomeTeam"]
+        self.away_Fname = game_info["FawayTeam"]
+
     def get_gameinfo(self):
-        return [self.stadium, self.date]
+        return [self.stadium, self.date, [self.home_name, self.away_name], [self.home_Fname, self.away_Fname]]
 
     def set_gamescore(self, homescore, awayscore):
         self.homescore = homescore
@@ -41,10 +63,29 @@ class Resources():
         return self.date
 
     def get_stadium(self):
-        return self.self.stadium
+        return self.stadium
 
     def get_gamecode(self):
         return self.DateHomeAway
+
+    def clear_strike_ball_out(self):
+        self.strike = 0
+        self.ball = 0
+        self.out = 0
+
+    def set_strike_ball_out(self, strike=False, ball=False, foul=False, out=False):
+        if(strike):
+            self.strike = self.strike + 1
+        elif(ball):
+            self.ball = self.ball + 1
+        elif(foul):
+            if(self.strike < 2):
+                self.strike = self.strike + 1
+        elif(out):
+            self.out = self.out + 1
+
+    def get_strike_ball_out(self):
+        return [self.strike, self.ball, self.out]
 
     def set_batterbox(self, batterbox, pitcher, batter):
         self.batterbox = batterbox

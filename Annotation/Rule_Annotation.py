@@ -212,7 +212,9 @@ class RuleData():
                 break
             pitchId = relayText["pitchId"]
             ball_data = self.find_ball_data_with_pitchId(pitchId)
+
             self.resources.set_gamescore(relayText["homeScore"], relayText["awayScore"])
+
             if (ball_data is None):
                 if (relayText["ballcount"] == 0):  # 모든 교체(수비위치, 타석, 주자, 팀공격)
                     self.C.set(relayText)
@@ -244,17 +246,18 @@ class RuleData():
 
             if (ball_data is None):
                 if(relayText["ballcount"] == 0): #모든 교체(수비위치, 타석, 주자, 팀공격)
-                    self.C.set(relayText)
+                    annotation = self.C.set(relayText)
                 else:
-                    self.R.set(relayText)
+                    annotation = self.R.set(relayText)
 
             else:  # pitching and batting
                 interval = self.get_time_delta_between_two_pichId(pre_pitchId.split("_")[-1], pitchId.split("_")[-1])
                 time.sleep(interval)
 
-                self.PB.set(relayText, ball_data)
+                annotation = self.PB.set(relayText, ball_data)
                 pre_pitchId = pitchId
 
-            #print(relayText["liveText"]+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+            print(annotation)
+            self.resources.set_annotation(annotation)
 
 
