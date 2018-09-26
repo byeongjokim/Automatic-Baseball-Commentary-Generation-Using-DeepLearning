@@ -1,30 +1,31 @@
-# UnderConstruction
-# Make Annotation in KBO
-Classify the scene in KBO game(video), and make an annotation.
-
-[what is kbo?](https://www.koreabaseball.com "Korea Baseball League")
+# Make Comments in KBO video
+In korea, there is a baseball game called [kbo](https://www.koreabaseball.com "Korea Baseball League"), and text broadcasting service [site](https://sports.news.naver.com/kbaseball/schedule/index.nhn). But the text service has no reality. It just send the sentences like "1 strike".
+<br>
+This is a program which can make comments about the baseball game with a video and web data using deep learning and ontology.
 
 <br>
 
 ## Models
 ![Flow_chart](/PNG/flow_chart.png)
 
-explain about Models
+When video playing, two thread are runned. One is about scene data and the other is about web data. The thread about web data crawls the text broadcasting, and save it to the ontology. And the other thread about scene data classifies the scene using CNN, classifies the person's motion who locates in the center of video using YOLO, CNN and RNN. With all of data which can retrieve from scene and ontology, the comments are created.
 
 <br>
 
 ### Scene Classifier
-![Flow_chart](/PNG/scene_classify.png)
+![Scene](/PNG/scene_annotation.png)
 
-explain about scene classifier
+- Using Vgg16
+- 13 classes (10 classes data)
+- training data : highlights videos of baseball game in 15 days
 
 <br>
 
 #### Labeling
-![Flow_chart](/PNG/labeling.png)
-- 1 : Pitching and Batting Scene
+![Scene](/PNG/scene_labeling.png)
+- 1 : Batter box
 - 2 : Closeup Batter
-- 3 : Closeup Others
+- 3 : Closeup Players
 - 4 : Closeup Coach
 - 5 : Gallery
 - 6 ~ 9 : Center, Right Field
@@ -34,7 +35,8 @@ explain about scene classifier
 <br>
 
 #### About Field
-![Flow_chart](/PNG/field_classify.png)
+![Scene](/PNG/field_classify.png)
+
 - 6 : About 1st Base
 - 7 : About OutField
 - 8 : About Right OutField
@@ -46,7 +48,8 @@ explain about scene classifier
 <br>
 
 #### Zero-Shot Learning
-![Flow_chart](/PNG/zero_shot.png)
+![Scene](/PNG/zero_shot.png)
+
 - using 0 3rd Base data, 0 Left OutField data.
 - In Baseball Game, There are few data of 3rd Base and Right OutField than others. But I can train these two data with others. Almost Baseball Field have symmetrical characters. So I can get these data with flipping other training data.
 - 3rd Base <-> 1st Base
@@ -57,12 +60,15 @@ explain about scene classifier
 ---
 
 ### Motion Classifier
+![Motion](/PNG/motion_labeling.png)
+
 Underconstruct
 
 ---
 
 ### Web Data
 ![Flow_chart](/PNG/TextBroadcasting.png)
+
 - In [N company](http://www.naver.com), there is a KBO Text Broadcasting site. I can get text data in real time, when game is playing. [Text Broadcasting](http://sports.news.naver.com/kbaseball/schedule/indexnhn)
 
 ---
