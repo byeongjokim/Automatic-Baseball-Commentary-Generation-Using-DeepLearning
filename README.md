@@ -57,6 +57,7 @@ When video playing, two thread are runned. One is about scene data and the other
 ### Motion Classifier
 ![Motion](/PNG/motion_classifier.png)
 
+- get player with YOLO-tiny-v2
 - using CNN + RNN
 	- CNN is the encoder part of auto-encoder model
 - make dataset with interval
@@ -98,11 +99,7 @@ When video playing, two thread are runned. One is about scene data and the other
 - Opencv3
 
 
-### Demo:
-- Test
-  ````
-  python main.py -v path/to/video
-  ````
-  - `-v or --video` input video
+## Demo:
+![Demo](/PNG/demo.gif)
 
 
