@@ -3,14 +3,12 @@ In korea, there is a baseball game called [kbo](https://www.koreabaseball.com "K
 <br>
 This is a program which can make comments about the baseball game with a video and web data using deep learning and ontology.
 
-<br>
 
 ## Models
 ![Flow_chart](/PNG/flow_chart.png)
 
 When video playing, two thread are runned. One is about scene data and the other is about web data. The thread about web data crawls the text broadcasting, and save it to the ontology. And the other thread about scene data classifies the scene using CNN, classifies the person's motion who locates in the center of video using YOLO, CNN and RNN. With all of data which can retrieve from scene and ontology, the comments are created.
 
-<br>
 
 ### Scene Classifier
 ![Scene](/PNG/scene_annotation.png)
@@ -19,7 +17,6 @@ When video playing, two thread are runned. One is about scene data and the other
 - 13 classes (10 classes data)
 - training data : highlights videos of baseball game in 15 days
 
-<br>
 
 #### Labeling
 ![Scene](/PNG/scene_labeling.png)
@@ -32,7 +29,6 @@ When video playing, two thread are runned. One is about scene data and the other
 - 10 : etc. (Ad., before playing)
 - 11 ~ 13 : Left Field
 
-<br>
 
 #### About Field
 ![Scene](/PNG/field_classify.png)
@@ -45,7 +41,6 @@ When video playing, two thread are runned. One is about scene data and the other
 - 12 : About Left OutField (with Zero-Shot Laerning)
 - 13 : About SS
 
-<br>
 
 #### Zero-Shot Learning
 ![Scene](/PNG/zero_shot.png)
@@ -55,14 +50,36 @@ When video playing, two thread are runned. One is about scene data and the other
 - 3rd Base <-> 1st Base
 - Left OutField <-> Right OutField
 
-<br>
 
 ---
 
+
 ### Motion Classifier
+![Motion](/PNG/motion_classifier.png)
+
+- using CNN + RNN
+	- CNN is the encoder part of auto-encoder model
+- make dataset with interval
+	- because of other process time, the motion model can get people's images with every some intervals (not real time)
+    - 5 ~ 20 frames intervals
+    - when training the model, apply intervals in train data
+
+
+#### Labeling
 ![Motion](/PNG/motion_labeling.png)
 
-Underconstruct
+- 0 : Batting Waiting
+- 1 : Batting
+- 2 : Throwing
+- 3 : Pitching
+- 4 : Catching - catcher
+- 5 : Catching - fielder
+- 6 : Running
+- 7 : Walking
+
+
+#### Motion dataset
+![Motion](/PNG/motion_dataset.png)
 
 ---
 
@@ -73,55 +90,13 @@ Underconstruct
 
 ---
 
-## Train and Test
+## How to run
 
 ### Requirements
 - Python3
 - Tensorflow
 - Opencv3
 
-### Training Scene Classifier Model:
-- Make DataSet
-  ````
-    python train_test.py -m --videos path/to/video path/to/another/video
-    ````
-    - `-m or --make` Flag, when you want to make train_data images.
-    - `--videos` Videos, which you tend to make dataset.
-    - you can find images in **_data/video_name** folder.
-  - make **video_name.csv** in **_data/video_name**.
-    - in **video_name.csv** you should write start number, end number and label of **_data/video_name** images. [View Scene Label](/PNG/field_classify.png)
-
-![Flow_chart](/PNG/scene_labeling.png)
-
-
-- Train
-  ````
-  python train_test.py -t --videos _data/video_name _data/video_name
-  ````
-  - `-t or --train` Flag, when you want to training.
-  - `--videos` Videos, which you tend to train.
-
-
-- **In my project**
-  - Using n KBO HighLight Videos(2018. 04.01 ~ 2018.04.30) in [YouTube](https://www.youtube.com/playlist?list=PL7MQjbfOyOE19FCi85BcECO-zNYQcDbE0)
-    - Download DataSet in [here](https://github.com/byeongjokim/KBO_annotation) to _data/**
-    - Donwload Trained Model (tensorflow) in [here](https://github.com/byeongjokim/KBO_annotation) to _model/**
-
-### Testing Scene Classifier Model:
-- Test
-  ````
-  python train_test.py -T --image path/to/image --threshold 0.7
-  ````
-  - `-T or --test` Flag, when you want to testing.
-  - `--image` Image, which you tend to test.
-  - `--threshold` Threshold, when you predict label.
-
----
-
-### Training Motion Classifier Model:
-### Testing Motion Classifier Model:
-
----
 
 ### Demo:
 - Test
