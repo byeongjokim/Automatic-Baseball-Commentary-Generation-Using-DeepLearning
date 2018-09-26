@@ -3,6 +3,8 @@ In korea, there is a baseball game called [kbo](https://www.koreabaseball.com "K
 <br>
 This is a program which can make comments about the baseball game with a video and web data using deep learning and ontology.
 
+## Demo
+![Demo](/PNG/demo.gif)
 
 ## Models
 ![Flow_chart](/PNG/flow_chart.png)
@@ -97,9 +99,3 @@ When video playing, two thread are runned. One is about scene data and the other
 - Python3
 - Tensorflow
 - Opencv3
-
-
-## Demo:
-![Demo](/PNG/demo.gif)
-
-
