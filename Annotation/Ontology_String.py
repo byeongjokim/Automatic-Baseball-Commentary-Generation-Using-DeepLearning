@@ -17,25 +17,31 @@ class Ontology_String():
         annotation_atmosphere = []
         if (strike == 2):
             if(p):
+                p = self.get_player_name(p)
                 annotation_atmosphere.append("2 스트라이크 상황 " + p + " 투수 스트라이크 아웃 잡아 낼 수 있을까요?")
                 annotation_atmosphere.append(p + " 투수 삼진아웃 까지 스트라이크 하나 남겨두고 있습니다.")
             if(b):
+                b = self.get_player_name(b)
                 annotation_atmosphere.append(b + " 타자 2스트라이크 위기입니다.")
                 annotation_atmosphere.append(b + " 타자 핀치에 몰렸습니다.")
                 annotation_atmosphere.append(b + " 타자 위기입니다.")
 
         elif(ball == 3):
             if(p):
+                p = self.get_player_name(p)
                 annotation_atmosphere.append("포볼인 상황 " + p + " 투수 좋은 공을 던져야 합니다.")
             if(b):
+                b = self.get_player_name(b)
                 annotation_atmosphere.append(b + " 타자 포볼로 출루 할 수 있는 기회입니다.")
                 annotation_atmosphere.append(b + " 타자 출루까지 볼 하나 남겨두고 있습니다.")
                 annotation_atmosphere.append("포볼인 상황 " + b + " 타자 공을 잘 걸러낼 수 있을까요?")
 
         elif (out == 2):
             if(p):
+                p = self.get_player_name(p)
                 annotation_atmosphere.append(p + " 투수 쓰리아웃까지 아웃 하나 남았습니다.")
             if(b):
+                b = self.get_player_name(b)
                 annotation_atmosphere.append(b + " 타자 아웃 당하면 이번 공격 마무리 됩니다.")
 
         return annotation_atmosphere
@@ -79,8 +85,8 @@ class Ontology_String():
         away_full_name = gameinfo[3][1]
 
         annotation = [
-            str(date) + " " + str(stadium) + "에서 경기 진행중입니다.",
-            str(date) + "에 진행하는 경기 현재 경기 스코어 " + str(homescore) + " 대 " + str(awayscore) + " 입니다.",
+            str(stadium) + "에서 경기 진행중입니다.",
+            "현재 경기 스코어 " + str(homescore) + " 대 " + str(awayscore) + " 입니다.",
             # str(inn).split("_")[-1] + " 경기 스코어 "+str(homescore)+" 대 "+str(awayscore)+" 입니다.",
             str(inn).split("_")[-1] + " 경기 스코어 " + str(homescore) + " 대 " + str(awayscore) + " 진행중입니다.",
             home_full_name + " 대 " + away_full_name + " 현재 " + str(homescore) + " : " + str(awayscore) + " 진행중입니다.",
@@ -116,6 +122,7 @@ class Ontology_String():
 
         annotation_atmosphere = self.get_atmosphere(strike_ball_out, p=p)
 
+        p = self.get_player_name(p)
         annotation = [
             p + " 투수 오늘 경기 " + str(len(r) + 1) + "번째 타석에서 공을 던지고 있습니다.",
             p + " 투수 오늘 경기 " + str(strikeout) + "개의 삼진을 잡아내고 있습니다.",
@@ -156,6 +163,7 @@ class Ontology_String():
 
         annotation_atmosphere = self.get_atmosphere(strike_ball_out, b=b)
 
+        b = self.get_player_name(b)
         annotation = [
             b + " 타자의 오늘 " + str(this_game_count + 1) + "번째 타석입니다.",
             b + " 타자는 이번 시즌 " + str(avg) + "의 평균 타율을 기록하고 있습니다.",
@@ -216,6 +224,8 @@ class Ontology_String():
             if ("SingleHit" in row[0]):
                 getonbase = getonbase + 1
 
+        b = self.get_player_name(b)
+        p = self.get_player_name(p)
         annotation = [
             b + " 타자 " + p + " 투수의 신경전 속에 " + b + " 타자는 이번시즌 " + str(avg) + "의 펑균 타율을 기록하고 있습니다.",
             b + " 타자 " + p + " 투수의 신경전 속에 " + p + " 투수는 이번시즌 " + str(era) + "의 평균 자책점을 기록하고 있습니다.",
@@ -246,9 +256,9 @@ class Ontology_String():
         if (third_runner):
             result = result + "3루에는 " + str(third_runner) + " "
 
-        result = result + "(이)가 나가있습니다."
-
-        annotation.append(result)
+        if not(result == ""):
+            result = result + "(이)가 나가있습니다."
+            annotation.append(result)
 
         return annotation
 
@@ -270,6 +280,7 @@ class Ontology_String():
             runner = row[0].split("#")[-1]
 
         if(runner):
+            runner = self.get_player_name(str(runner))
             annotation = [
                 "1루에 " + str(runner) + "선수가 주자로 나와있습니다.",
                 "1루에 " + str(runner) + "선수가 나가 있습니다.",
@@ -294,6 +305,7 @@ class Ontology_String():
             runner = row[0].split("#")[-1]
 
         if (runner):
+            runner = self.get_player_name(str(runner))
             annotation = [
                 "2루에 " + str(runner) + "선수가 주자로 나와있습니다.",
                 "2루에 " + str(runner) + "선수가 나가 있습니다.",
@@ -318,9 +330,13 @@ class Ontology_String():
             runner = row[0].split("#")[-1]
 
         if (runner):
+            runner = self.get_player_name(str(runner))
             annotation = [
                 "3루에 " + str(runner) + "선수가 주자로 나와있습니다.",
                 "3루에 " + str(runner) + "선수가 나가 있습니다.",
             ]
 
         return annotation, runner
+
+    def get_player_name(self, name):
+        return "".join([s for s in list(name) if not s.isdigit()])

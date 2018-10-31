@@ -18,13 +18,8 @@ class SceneData():
 
         self.scene = Scene_Model(sess, istest=1)
 
-        num_prev_annotation = 5
-        self.prev_annotaion = queue.Queue(num_prev_annotation)
-
     def get_Annotation(self, frame, t=0.8):
         label, score = self.scene.predict(frame)
-        #print(label, score)
-
         if(score > t):
 
             if (label == 0): #pitchingbatting
@@ -40,8 +35,9 @@ class SceneData():
                 annotation = None
         else:
             annotation = None
+            label = -1
 
-        return label, annotation
+        return label, score, annotation
 
     def batterBox(self):
 
@@ -56,7 +52,7 @@ class SceneData():
         annotation = annotation + self.Ontology_String.search_runner(self.resources.get_batterbox())
         #annotation = annotation + self.Ontology_String.search_gameInfo(gameCode, self.resources.get_inn(), self.resources.get_gamescore(), self.resources.get_gameinfo())
 
-        return self.get_random_annotation(annotation)
+        return annotation
 
     def pitcher(self):
         gameCode = self.resources.get_gamecode()
@@ -64,7 +60,7 @@ class SceneData():
         strike_ball_out = self.resources.get_strike_ball_out()
         annotation = self.Ontology_String.search_pitcher(gameCode, p, strike_ball_out)
 
-        return self.get_random_annotation(annotation)
+        return annotation
 
     def batter(self):
         gameCode = self.resources.get_gamecode()
@@ -72,21 +68,10 @@ class SceneData():
         strike_ball_out = self.resources.get_strike_ball_out()
         annotation = self.Ontology_String.search_batter(gameCode, b, strike_ball_out)
 
-        return self.get_random_annotation(annotation)
+        return annotation
 
     def gameinfo(self):
-        annotation = self.Ontology_String.search_gameInfo(self.resources.get_gamecode(), self.resources.get_inn(), self.resources.get_gamescore(),
-                        self.resources.get_gameinfo())
+        annotation = self.Ontology_String.search_gameInfo(self.resources.get_gamecode(), self.resources.get_inn(), self.resources.get_gamescore(), self.resources.get_gameinfo())
 
-        return self.get_random_annotation(annotation)
+        return annotation
 
-    def get_random_annotation(self, annotation):
-        while(1):
-            output = random.choice(annotation)
-            if(output in list(self.prev_annotaion.queue)):
-                continue
-            else:
-                if(self.prev_annotaion.full()):
-                    self.prev_annotaion.get()
-                self.prev_annotaion.put(output)
-                return output

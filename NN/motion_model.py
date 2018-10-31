@@ -284,7 +284,7 @@ class Classifier(Motion):
 
             if(start < end):
                 for i in range(start, end):
-                    X = [cv2.resize(cv2.imread(folder_name + str(i) + ".jpg"), (self.width, self.height)) for j in range(i, i+self.length) if(j <= int(line[1]))]
+                    X = [cv2.resize(cv2.imread(folder_name + str(i) + ".jpg"), (self.width, self.height)) for j in range(i, i+self.length, 2) if(j <= int(line[1]))]
                     leng = len(X)
 
                     if (leng < self.length):
@@ -292,6 +292,26 @@ class Classifier(Motion):
                         X = X + [pad for j in range(num_pad)]
 
                     dataset.append({"X" : X, "Y" : m, "L" : leng})
+
+                    X = [cv2.resize(cv2.imread(folder_name + str(i) + ".jpg"), (self.width, self.height)) for j in range(i, i + self.length, 3) if (j <= int(line[1]))]
+                    leng = len(X)
+
+                    if (leng < self.length):
+                        num_pad = self.length - leng
+                        X = X + [pad for j in range(num_pad)]
+
+                    dataset.append({"X": X, "Y": m, "L": leng})
+
+                    X = [cv2.resize(cv2.imread(folder_name + str(i) + ".jpg"), (self.width, self.height)) for j in range(i, i + self.length, 4) if (j <= int(line[1]))]
+                    leng = len(X)
+
+                    if (leng < self.length):
+                        num_pad = self.length - leng
+                        X = X + [pad for j in range(num_pad)]
+
+                    dataset.append({"X": X, "Y": m, "L": leng})
+
+
         return dataset
 
     def train(self):
@@ -371,7 +391,6 @@ class Classifier(Motion):
             return self.motions[output[0]]
         else:
             return None
-
 
 class TRN(Motion):
     def __init__(self, sess, istest=0):

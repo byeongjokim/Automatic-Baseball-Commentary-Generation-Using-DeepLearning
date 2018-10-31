@@ -5,7 +5,8 @@ class Resources():
     exit = False
 
     seq = 1
-
+    prev_annotation = ""
+    prev_annotation_text = ""
     annotation = "중계방송 준비중입니다."
 
     break_time = False
@@ -14,8 +15,53 @@ class Resources():
     ball = 0
     out = 0
 
+    def set_annotation_2(self, label):
+        if(label == 0):
+            self.annotation = "타석 장면"
+        elif(label == 1):
+            self.annotation = "타자 장면"
+        elif (label == 2):
+            self.annotation = "클로즈업 장면"
+        elif (label == 3):
+            self.annotation = "코치석 장면"
+        elif (label == 4):
+            self.annotation = "응원석 장면"
+        elif (label == 5):
+            self.annotation = "1루 장면"
+        elif (label == 6):
+            self.annotation = "중앙 외야 장면"
+        elif (label == 7):
+            self.annotation = "오른쪽 외야 장면"
+        elif (label == 8):
+            self.annotation = "2루 장면"
+        elif (label == 9):
+            self.annotation = "기타 장면"
+        elif (label == 10):
+            self.annotation = "3루 장면"
+        elif (label == 11):
+            self.annotation = "왼쪽 외야 장면"
+        elif (label == 12):
+            self.annotation = "유격수 장면"
+
+
+
     def set_annotation(self, annotation):
+        self.prev_annotation = self.annotation
         self.annotation = annotation
+
+    def is_new_annotation(self):
+        if not (self.prev_annotation == self.annotation):
+            self.prev_annotation = self.annotation
+            return 1
+        else:
+            return 0
+
+    def is_new_annotation_text(self):
+        if not (self.prev_annotation_text == self.annotation):
+            self.prev_annotation_text = self.annotation
+            return 1
+        else:
+            return 0
 
     def get_annotation(self):
         if(self.break_time):
@@ -105,11 +151,15 @@ class Resources():
     def get_batter(self):
         return self.batter
 
-    def set_inn(self, inn):
+    def set_inn(self, inn, btop):
         self.inn = inn
+        self.btop = btop
 
     def get_inn(self):
         return self.inn
+
+    def get_btop(self):
+        return self.btop
 
     def set_LineUp(self, LineUp):
 

@@ -413,6 +413,8 @@ def inFieldHit(name, pos):
     return random.choice(annotation)
 
 def outFieldHit(name, pos):
+    if (name == "안익훈"):
+        name = "이형종"
     if("중간" in pos):
         annotation = [
             pos + "에 떨어지는 안타 만들어내면서 " + name + " 선수 1루에 안착합니다."

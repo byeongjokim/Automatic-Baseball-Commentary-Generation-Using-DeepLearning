@@ -74,7 +74,7 @@ class Change():
         score = {"homeScore" : relayText["homeScore"], "awayScore" : relayText["awayScore"]}
         innscore = {"homeInningScore" : relayText["homeInningScore"], "awayInningScore" : relayText["awayInningScore"]}
 
-        self.resources.set_inn(create_inn(self.onto, self.GameInfo, inn, btop))
+        self.resources.set_inn(create_inn(self.onto, self.GameInfo, inn, btop), btop)
         return inn_end(self.GameInfo, inn, btop, score, innscore)
 
     def get_batter(self, batorder, btop):

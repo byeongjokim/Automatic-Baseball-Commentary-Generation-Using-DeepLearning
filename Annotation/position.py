@@ -1,4 +1,3 @@
-import random
 import math
 
 class Position(object):
@@ -98,70 +97,89 @@ class Position(object):
         if (label == 0):
             if (person_bbox["pitcher_"] == "pitching" and self.is_motion_changed("pitcher")):
                 return self.pitcher_when_pitching(self.resource.get_pitcher())
-            if (person_bbox["pitcher_"] == "pitching" and person_bbox["batter_"] == "batting" and self.is_motion_changed("batter")):
-                return self.batter_when_batting(self.resource.get_batter())
+            #if (person_bbox["pitcher_"] == "pitching" and person_bbox["batter_"] == "batting" and self.is_motion_changed("batter")):
+                #return self.batter_when_batting(self.resource.get_batter())
 
         elif (label == 2):
             if (person_bbox["close_up_"]  and self.is_motion_changed("close_up")):
                 m = person_bbox["close_up_"]
-                if (m == "run"):
-                    return "클로즈업 된 선수 뛰고 있습니다."
-                if (m == "walking"):
-                    return "클로즈업 된 선수 걷고 있습니다."
+                #if (m == "run"):
+                #    return "클로즈업 된 선수 뛰고 있습니다."
+                #if (m == "walking"):
+                #    return "클로즈업 된 선수 걷고 있습니다."
 
 
         elif (label == 5):  # first base
             if (person_bbox["1st_"] and self.is_motion_changed("1st")):
                 m = person_bbox["1st_"]
                 if (m == "catch_field"):
-                    return "1루수 공을 잡았습니다."
+                    player = self.get_player_with_position("1st")
+                    annotation = ["1루수 공을 잡았습니다.", player + " 공을 잡았습니다.", "1루수 " + player + " 공을 잡았습니다."]
+                    return annotation
 
         elif (label == 8):  # second base
             if (person_bbox["2nd_"] and self.is_motion_changed("2nd")):
                 m = person_bbox["2nd_"]
                 if (m == "catch_field"):
-                    return "2루수 공을 잡았습니다."
+                    player = self.get_player_with_position("2nd")
+                    annotation = ["2루수 공을 잡았습니다.", player + " 공을 잡았습니다.", "2루수 " + player + " 공을 잡았습니다."]
+                    return annotation
 
         elif (label == 10):  # third base
             if (person_bbox["3rd_"] and self.is_motion_changed("3rd")):
                 m = person_bbox["3rd_"]
                 if (m == "catch_field"):
-                    return "3루수 공을 잡았습니다."
+                    player = self.get_player_with_position("3rd")
+                    annotation = ["3루수 공을 잡았습니다.", player + " 공을 잡았습니다.", "3루수 " + player + " 공을 잡았습니다."]
+                    return annotation
 
         elif (label == 6):  # center outfield
             if (person_bbox["center fielder_"] and self.is_motion_changed("center fielder")):
                 m = person_bbox["center fielder_"]
-                return self.field_motion("중견수", m)
+                player = self.get_player_with_position("COF")
+                return self.field_motion("중견수", player, m)
 
         elif (label == 7):  # right outfield
             if (person_bbox["right fielder_"] and self.is_motion_changed("right fielder")):
                 m = person_bbox["right fielder_"]
-                return self.field_motion("우익수", m)
+                player = self.get_player_with_position("ROF")
+                return self.field_motion("우익수", player, m)
 
         elif (label == 11):  # left outfield
             if (person_bbox["left fielder_"] and self.is_motion_changed("left fielder")):
                 m = person_bbox["left fielder_"]
-                return self.field_motion("좌익수", m)
+                player = self.get_player_with_position("LOF")
+                return self.field_motion("좌익수", player, m)
 
         elif (label == 12):  # ss
             if (person_bbox["ss_"] and self.is_motion_changed("ss")):
                 m = person_bbox["ss_"]
-                return self.field_motion("유격수", m)
+                player = self.get_player_with_position("ss")
+                return self.field_motion("유격수", player, m)
 
         return None
 
-    @staticmethod
-    def pitcher_when_pitching(pitcher):
+    def get_player_with_position(self, position):
+        btop = self.resource.get_btop()
+        if btop == 0:
+            lineup = self.resource.get_LineUp(0)
+        else:
+            lineup = self.resource.get_LineUp(1)
+
+        return self.get_player_name(lineup[position]["name"])
+
+    def pitcher_when_pitching(self, pitcher):
+        pitcher = self.get_player_name(pitcher)
         annotation = [
             str(pitcher) + " 투수 공을 던졌습니다.",
             "공을 던졌습니다.",
             str(pitcher) + " 투수 타자를 향해 힘껏 공을 던졌습니다.",
         ]
 
-        return random.choice(annotation)
+        return annotation
 
-    @staticmethod
-    def batter_when_batting(batter):
+    def batter_when_batting(self, batter):
+        batter = self.get_player_name(batter)
         annotation = [
             str(batter) + "타자 배트를 휘둘렀습니다.",
             str(batter) + "타자 힘차게 배트를 휘둘렀습니다.",
@@ -169,19 +187,18 @@ class Position(object):
             "스윙!",
         ]
 
-        return random.choice(annotation)
+        return annotation
 
-    @staticmethod
-    def field_motion(position, motion):
-        annotation = ""
+
+    def field_motion(self, position, player, motion):
+        player = self.get_player_name(player)
+        annotation = None
         if(motion  == "throwing"):
-            annotation = position + " 송구 하였습니다."
+            annotation = [position + " 송구 하였습니다.", player + " 송구 하였습니다.", position + " " + player + " 송구 하였습니다."]
         elif(motion == "catch_field"):
-            annotation = position + " 공을 잡았습니다."
-        elif(motion == "run"):
-            annotation = position + " 공을 향해 뛰어가고 있습니다."
-        elif (motion == "walking"):
-            annotation = position + " 공을 향해 걸어가고 있습니다."
+            annotation = [position + " 공을 잡았습니다.", player + " 공을 잡았습니다.", position + " " + player + " 공을 잡았습니다."]
+        elif(motion == "run" or motion == "walking"):
+            annotation = [position + " 쪽 입니다.", player + " 쪽 입니다.", position + " " + player + " 쪽 입니다."]
         return annotation
 
     @staticmethod
@@ -264,3 +281,6 @@ class Position(object):
                 return 1
             else:
                 return 0
+
+    def get_player_name(self, name):
+        return "".join([s for s in list(name) if not s.isdigit()])

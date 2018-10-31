@@ -49,8 +49,8 @@ class Detect_Model():
 
     def predict(self, image):
 
-        cv2.imwrite(str(self.count) + ".jpg", image)
-        self.count = self.count + 1
+        #cv2.imwrite(str(self.count) + ".jpg", image)
+        #self.count = self.count + 1
 
         h, w, c = image.shape
         ratio_h = h / 416

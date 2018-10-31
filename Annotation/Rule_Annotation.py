@@ -252,12 +252,15 @@ class RuleData():
 
             else:  # pitching and batting
                 interval = self.get_time_delta_between_two_pichId(pre_pitchId.split("_")[-1], pitchId.split("_")[-1])
-                time.sleep(interval)
+                #time.sleep(interval)
 
                 annotation = self.PB.set(relayText, ball_data)
+
                 pre_pitchId = pitchId
 
             print(annotation)
+            next = input("next")
+
             self.resources.set_annotation(annotation)
 
 
