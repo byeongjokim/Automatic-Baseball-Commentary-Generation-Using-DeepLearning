@@ -366,7 +366,12 @@ class Result():
         elif("진루" in text or "홈인" in text):
             annotation = self.run(relayText)
 
-        return annotation
+        try:
+            text = text[:text.index("(")]
+            return text
+
+        except:
+            return text
 
     def run(self, relayText):
         text = relayText["liveText"]

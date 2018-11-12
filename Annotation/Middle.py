@@ -51,9 +51,8 @@ class Middle():
         position = Position(motion=self.motion, frame_shape=(h, w), resource=self.resources)
 
         while( not self.resources.exit ):
-            label, score, annotation = self.sceneData.get_Annotation(self.resources.frame)
-            #print(label, counter)
-
+            label, score = self.sceneData.get_score_label(self.resources.frame)
+            print(label, score, counter)
             """
             if(score > 0.8):
                 self.resources.set_annotation_2(label)
@@ -65,15 +64,17 @@ class Middle():
                 frame = self.resources.frame
                 position.clear()
 
-            if(counter == 7 and annotation):
-                annotation = self.get_random_annotation(annotation)
+            if(counter == 6):
+                annotation = self.sceneData.get_Annotation(label)
+                if(annotation):
+                    annotation = self.get_random_annotation(annotation)
 
-                if("안익훈65115" in annotation):
-                    annotation.replace("안익훈65115", "이형종78135")
-                print("from scene \t\t" + annotation)
-                self.resources.set_annotation(annotation)
+                    if("안익훈" in annotation):
+                        annotation.replace("안익훈", "이형종")
+                    print("from scene \t\t" + annotation)
+                    self.resources.set_annotation(annotation)
 
-            if(counter > 24):
+            if(counter > 14):
                 if(label == 2):
                     pitcher_annotation = self.sceneData.pitcher()
                     pitcher_annotation = self.get_random_annotation(pitcher_annotation)
@@ -108,14 +109,15 @@ class Middle():
         #print(list(self.prev_annotaion.queue))
         counter = 0
         while(1):
-            print(counter)
             output = random.choice(annotation)
+
             if counter > 5:
                 if (self.prev_annotaion.full()):
                     self.prev_annotaion.get_nowait()
                 self.prev_annotaion.put(output)
                 return output
-            if not (output in list(self.prev_annotaion.queue)):
+
+            if not (output in list(self.prev_annotaion.queue) or self.is_same_prefix(output, list(self.prev_annotaion.queue))):
                 if(self.prev_annotaion.full()):
                     self.prev_annotaion.get_nowait()
                 self.prev_annotaion.put(output)
@@ -123,3 +125,9 @@ class Middle():
 
             counter = counter + 1
 
+    def is_same_prefix(self, output, l):
+        for i in l[-2:]:
+            #print(output[:2], i[:2])
+            if(output[:2] == i[:2]):
+                return True
+        return False

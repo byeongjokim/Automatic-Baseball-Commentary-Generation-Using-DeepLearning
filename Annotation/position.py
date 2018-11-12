@@ -114,7 +114,7 @@ class Position(object):
                 m = person_bbox["1st_"]
                 if (m == "catch_field"):
                     player = self.get_player_with_position("1st")
-                    annotation = ["1루수 공을 잡았습니다.", player + " 공을 잡았습니다.", "1루수 " + player + " 공을 잡았습니다."]
+                    annotation = ["1루수 공을 잡았습니다.", player + " 선수 공을 잡았습니다.", "1루수 " + player + " 선수 공을 잡았습니다."]
                     return annotation
 
         elif (label == 8):  # second base
@@ -122,7 +122,7 @@ class Position(object):
                 m = person_bbox["2nd_"]
                 if (m == "catch_field"):
                     player = self.get_player_with_position("2nd")
-                    annotation = ["2루수 공을 잡았습니다.", player + " 공을 잡았습니다.", "2루수 " + player + " 공을 잡았습니다."]
+                    annotation = ["2루수 공을 잡았습니다.", player + " 선수 공을 잡았습니다.", "2루수 " + player + " 선수 공을 잡았습니다."]
                     return annotation
 
         elif (label == 10):  # third base
@@ -130,7 +130,7 @@ class Position(object):
                 m = person_bbox["3rd_"]
                 if (m == "catch_field"):
                     player = self.get_player_with_position("3rd")
-                    annotation = ["3루수 공을 잡았습니다.", player + " 공을 잡았습니다.", "3루수 " + player + " 공을 잡았습니다."]
+                    annotation = ["3루수 공을 잡았습니다.", player + " 선수 공을 잡았습니다.", "3루수 " + player + " 선수 공을 잡았습니다."]
                     return annotation
 
         elif (label == 6):  # center outfield
@@ -194,11 +194,11 @@ class Position(object):
         player = self.get_player_name(player)
         annotation = None
         if(motion  == "throwing"):
-            annotation = [position + " 송구 하였습니다.", player + " 송구 하였습니다.", position + " " + player + " 송구 하였습니다."]
+            annotation = [position + " 송구 하였습니다.", player + " 선수 송구 하였습니다.", position + " " + player + " 선수 송구 하였습니다."]
         elif(motion == "catch_field"):
-            annotation = [position + " 공을 잡았습니다.", player + " 공을 잡았습니다.", position + " " + player + " 공을 잡았습니다."]
+            annotation = [position + " 공을 잡았습니다.", player + " 선수 공을 잡았습니다.", position + " " + player + " 선수 공을 잡았습니다."]
         elif(motion == "run" or motion == "walking"):
-            annotation = [position + " 쪽 입니다.", player + " 쪽 입니다.", position + " " + player + " 쪽 입니다."]
+            annotation = [position + " 쪽 입니다.", player + " 선수 쪽 입니다.", position + " " + player + " 선수 쪽 입니다.", position + " " + player + " 선수"]
         return annotation
 
     @staticmethod

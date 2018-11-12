@@ -18,26 +18,26 @@ class SceneData():
 
         self.scene = Scene_Model(sess, istest=1)
 
-    def get_Annotation(self, frame, t=0.8):
+    def get_score_label(self, frame, t=0.8):
         label, score = self.scene.predict(frame)
-        if(score > t):
+        if not (score > t):
+            label = -1
+        return label, score
 
-            if (label == 0): #pitchingbatting
-                annotation = self.batterBox()
+    def get_Annotation(self, label):
+        if (label == 0): #pitchingbatting
+            annotation = self.batterBox()
 
-            elif (label == 1):
-                annotation = self.batter()
+        elif (label == 1):
+            annotation = self.batter()
 
-            #elif (label == 4):
-            #    print("관개애애애애애앵애애애애액")
+        #elif (label == 4):
+        #    print("관개애애애애애앵애애애애액")
 
-            else:
-                annotation = None
         else:
             annotation = None
-            label = -1
 
-        return label, score, annotation
+        return annotation
 
     def batterBox(self):
 
@@ -71,7 +71,20 @@ class SceneData():
         return annotation
 
     def gameinfo(self):
-        annotation = self.Ontology_String.search_gameInfo(self.resources.get_gamecode(), self.resources.get_inn(), self.resources.get_gamescore(), self.resources.get_gameinfo())
+        gameCode = self.resources.get_gamecode()
+        b = self.resources.get_batter()
+        strike_ball_out = self.resources.get_strike_ball_out()
+
+        annotation = []
+
+        annotation = annotation + self.Ontology_String.search_gameInfo(self.resources.get_gamecode(),
+                                                                       self.resources.get_inn(),
+                                                                       self.resources.get_gamescore(),
+                                                                       self.resources.get_gameinfo())
+
+        annotation = annotation + self.Ontology_String.search_team(self.resources.get_gameinfo(), self.resources.get_btop())
+        annotation = annotation + self.Ontology_String.search_batter(gameCode, b, strike_ball_out)
+        annotation = annotation + self.Ontology_String.search_runner(self.resources.get_batterbox())
 
         return annotation
 

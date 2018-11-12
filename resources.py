@@ -264,4 +264,3 @@ class Resources():
 
         print(self.homeTeam)
         print(self.awayTeam)
-

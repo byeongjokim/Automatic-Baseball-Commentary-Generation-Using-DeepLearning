@@ -68,6 +68,25 @@ class Ontology_String():
         self.thisERA = rdflib.URIRef(self.uri + "thisERA")
         self.thisAVG = rdflib.URIRef(self.uri + "thisAVG")
 
+    def search_team(self, gameinfo, btop):
+        home_Fname = gameinfo[3][0]
+        away_Fname = gameinfo[3][1]
+
+        annotation = []
+        if(btop == 0): #away defense
+            new = [home_Fname + " 팀 공격을 하고 있습니다.",
+                   "홈팀 공격하고 있습니다."
+                   ]
+
+        else:
+
+            new = [away_Fname + " 팀 공격을 하고 있습니다.",
+                   "어웨이팀 공격하고 있습니다."
+                   ]
+
+        annotation = annotation + new
+        return annotation
+
     def search_gameInfo(self, gameCode, inn, score, gameinfo):
         homescore = score[0]
         awayscore = score[1]
@@ -129,6 +148,11 @@ class Ontology_String():
             p + " 투수 오늘 경기 " + str(baseonballs) + "개의 포볼로 타자를 진루 시켰습니다.",
             p + " 투수 이번 시즌 " + str(era) + "의 평균 자책점을 기록하고 있습니다.",
             p + " 투수 과연 어떤 공을 던질까요?",
+            "투수 오늘 경기 " + str(len(r) + 1) + "번째 타석에서 공을 던지고 있습니다.",
+            "투수 오늘 경기 " + str(strikeout) + "개의 삼진을 잡아내고 있습니다.",
+            "투수 오늘 경기 " + str(baseonballs) + "개의 포볼로 타자를 진루 시켰습니다.",
+            "투수 이번 시즌 " + str(era) + "의 평균 자책점을 기록하고 있습니다.",
+            "투수 과연 어떤 공을 던질까요?",
         ]
 
         return annotation + annotation_atmosphere
@@ -150,7 +174,9 @@ class Ontology_String():
         this_game_count = len(r)
         batter_history = []
         for row in r:
-            batter_history.append(row[0].split("#")[1].split("_")[1])
+            batter_history.append(
+                self.change_result_history_to_korean(row[0].split("#")[1].split("_")[1])
+            )
 
         query = "SELECT ?o where {?s ?toHitter ?hitter . ?s ?result ?o . ?s ?stayIn1stBase ?o1} order by ?s"
         r = self.g.query(query, initBindings={"toHitter": self.toHitter, "hitter": batter,
@@ -159,20 +185,27 @@ class Ontology_String():
 
         batter_history_when1st = []
         for row in r:
-            batter_history_when1st.append(row[0].split("#")[1].split("_")[1])
+            batter_history_when1st.append(
+                self.change_result_history_to_korean(row[0].split("#")[1].split("_")[1])
+            )
 
         annotation_atmosphere = self.get_atmosphere(strike_ball_out, b=b)
 
         b = self.get_player_name(b)
         annotation = [
+            b + " 타자",
             b + " 타자의 오늘 " + str(this_game_count + 1) + "번째 타석입니다.",
             b + " 타자는 이번 시즌 " + str(avg) + "의 평균 타율을 기록하고 있습니다.",
-            b + " 타자 이번 타석 안타를 기록 할 수 있을까요?"
+            b + " 타자 이번 타석 안타를 기록 할 수 있을까요?",
+            "타자의 오늘 " + str(this_game_count + 1) + "번째 타석입니다.",
+            "타자는 이번 시즌 " + str(avg) + "의 평균 타율을 기록하고 있습니다.",
+            "타자 이번 타석 안타를 기록 할 수 있을까요?"
         ]
 
         if (batter_history):
             annotation.append(b + " 타자 오늘 " + str(this_game_count + 1) + "번째 타석입니다, " + ", ".join(_ for _ in batter_history) + "을 기록하고 있습니다.")
             annotation.append(b + " 타자 저번 타석, " + str(batter_history[-1]) + "을 기록하였습니다.")
+
         if (batter_history_when1st):
             annotation.append(b + " 타자 1루 주자가 있는 상황에서 " + ", ".join(_ for _ in batter_history_when1st) + "을 기록하고 있습니다.")
             annotation.append("오늘 1루 주자가 있는 타석에서 " + b + " 타자 최근, " + str(batter_history_when1st[-1]) + "을 기록하였습니다.")
@@ -207,7 +240,9 @@ class Ontology_String():
         strikeout = 0
         getonbase = 0
         for row in r:
-            result_history.append(row[0].split("#")[1].split("_")[1])
+            result_history.append(
+                self.change_result_history_to_korean(row[0].split("#")[1].split("_")[1])
+            )
 
             if ("Strikeout" in row[0]):
                 strikeout = strikeout + 1
@@ -248,17 +283,25 @@ class Ontology_String():
         annotation = annotation + second_runner_annotation
         annotation = annotation + third_runner_annotation
 
+        score_zone = ""
         result = ""
         if(first_runner):
-            result = result + "1루에는 " + str(first_runner) + " "
+            result = result + "1루에는 " + str(first_runner) + " 선수 "
         if (second_runner):
-            result = result + "2루에는 " + str(second_runner) + " "
+            result = result + "2루에는 " + str(second_runner) + " 선수 "
+            score_zone = score_zone + str(second_runner) + " 선수 "
+
         if (third_runner):
-            result = result + "3루에는 " + str(third_runner) + " "
+            result = result + "3루에는 " + str(third_runner) + " 선수 "
+            score_zone = score_zone + str(third_runner) + " 선수 "
 
         if not(result == ""):
             result = result + "(이)가 나가있습니다."
             annotation.append(result)
+
+        if not(score_zone == ""):
+            score_zone = score_zone + "득점권에 나가있습니다."
+            annotation.append(score_zone)
 
         return annotation
 
@@ -338,5 +381,13 @@ class Ontology_String():
 
         return annotation, runner
 
-    def get_player_name(self, name):
+    @staticmethod
+    def get_player_name(name):
         return "".join([s for s in list(name) if not s.isdigit()])
+
+    @staticmethod
+    def change_result_history_to_korean(h):
+        result = ["BaseByError", "BaseOnBalls", "HitByPitch", "Double", "HomeRun", "Triple", "SingleHit", "Fly", "OutInBase", "Strikeout"]
+        korean = ["실책 출루", "포 볼", "데드 볼", "2루타", "홈런", "3루타", "1루타", "플라이 아웃", "땅볼 아웃", "스트라이크 아웃"]
+
+        return korean[result.index(h)]
