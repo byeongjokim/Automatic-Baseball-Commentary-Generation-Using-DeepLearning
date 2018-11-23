@@ -25,6 +25,7 @@ class SceneData():
         return label, score
 
     def get_Annotation(self, label):
+        self.Ontology_String.reload()
         if (label == 0): #pitchingbatting
             annotation = self.batterBox()
 

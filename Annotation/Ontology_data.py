@@ -38,6 +38,13 @@ def create_player(onto, GameInfo, players, isaway, isbatter):
 
             player.hasBirth = [int(info["birth"])]
             player.thisAVG = [float(info["seasonHra"])]
+            ####here
+            if("스크럭스" in info["name"]):
+                player.thisAVG = [0.256]
+            if ("이원재" in info["name"]):
+                player.thisAVG = [0.337]
+            if ("정범모" in info["name"]):
+                player.thisAVG = [0.166]
 
         else:
             player = onto.Pitcher(info["name"] + info["pCode"])
@@ -53,9 +60,9 @@ def create_player(onto, GameInfo, players, isaway, isbatter):
 
 def create_inn(onto, GameInfo, inn, btop):
     if(btop == 1):
-        inning = onto.Inning(GameInfo["DateHomeAway"] + "_" + str(inn).zfill(2)+"초")
+        inning = onto.Inning(GameInfo["DateHomeAway"] + "_" + str(inn) + "회초")
     else:
-        inning = onto.Inning(GameInfo["DateHomeAway"] + "_" + str(inn).zfill(2)+"말")
+        inning = onto.Inning(GameInfo["DateHomeAway"] + "_" + str(inn) + "회말")
 
     inning.hasInning = [inn]
     onto.save()

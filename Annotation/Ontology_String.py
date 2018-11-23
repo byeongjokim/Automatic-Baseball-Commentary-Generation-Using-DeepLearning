@@ -11,6 +11,9 @@ class Ontology_String():
 
         self.home_atmosphere = 0
 
+    def reload(self):
+        self.g.load('_data/_owl/baseball.owl')
+
     def get_atmosphere(self, strike_ball_out, b=None, p=None):
         strike, ball, out = strike_ball_out
 
@@ -18,11 +21,11 @@ class Ontology_String():
         if (strike == 2):
             if(p):
                 p = self.get_player_name(p)
-                annotation_atmosphere.append("2 스트라이크 상황 " + p + " 투수 스트라이크 아웃 잡아 낼 수 있을까요?")
+                annotation_atmosphere.append("투 스트라이크 상황 " + p + " 투수 스트라이크 아웃 잡아 낼 수 있을까요?")
                 annotation_atmosphere.append(p + " 투수 삼진아웃 까지 스트라이크 하나 남겨두고 있습니다.")
             if(b):
                 b = self.get_player_name(b)
-                annotation_atmosphere.append(b + " 타자 2스트라이크 위기입니다.")
+                annotation_atmosphere.append(b + " 타자 투 스트라이크 위기입니다.")
                 annotation_atmosphere.append(b + " 타자 핀치에 몰렸습니다.")
                 annotation_atmosphere.append(b + " 타자 위기입니다.")
 
@@ -74,13 +77,13 @@ class Ontology_String():
 
         annotation = []
         if(btop == 0): #away defense
-            new = [home_Fname + " 팀 공격을 하고 있습니다.",
+            new = [home_Fname + "팀 공격을 하고 있습니다.",
                    "홈팀 공격하고 있습니다."
                    ]
 
         else:
 
-            new = [away_Fname + " 팀 공격을 하고 있습니다.",
+            new = [away_Fname + "팀 공격을 하고 있습니다.",
                    "어웨이팀 공격하고 있습니다."
                    ]
 
@@ -103,12 +106,12 @@ class Ontology_String():
         home_full_name = gameinfo[3][0]
         away_full_name = gameinfo[3][1]
 
+        ####here
         annotation = [
             str(stadium) + "에서 경기 진행중입니다.",
-            "현재 경기 스코어 " + str(homescore) + " 대 " + str(awayscore) + " 입니다.",
-            # str(inn).split("_")[-1] + " 경기 스코어 "+str(homescore)+" 대 "+str(awayscore)+" 입니다.",
+            #"현재 경기 스코어 " + str(homescore) + " 대 " + str(awayscore) + " 입니다.",
             str(inn).split("_")[-1] + " 경기 스코어 " + str(homescore) + " 대 " + str(awayscore) + " 진행중입니다.",
-            home_full_name + " 대 " + away_full_name + " 현재 " + str(homescore) + " : " + str(awayscore) + " 진행중입니다.",
+            #home_full_name + " 대 " + away_full_name + " 현재 " + str(homescore) + " 대 " + str(awayscore) + " 진행중입니다.",
         ]
 
         annotation = annotation + [about_atmosphere + " " + i for i in annotation]
@@ -133,6 +136,7 @@ class Ontology_String():
         strikeout = 0
         baseonballs = 0
 
+        #print("len r : ", str(len(r)))
         for row in r:
             if ("Strikeout" in row[0]):
                 strikeout = strikeout + 1
@@ -197,11 +201,11 @@ class Ontology_String():
             b + " 타자의 오늘 " + str(this_game_count + 1) + "번째 타석입니다.",
             b + " 타자는 이번 시즌 " + str(avg) + "의 평균 타율을 기록하고 있습니다.",
             b + " 타자 이번 타석 안타를 기록 할 수 있을까요?",
-            "타자의 오늘 " + str(this_game_count + 1) + "번째 타석입니다.",
-            "타자는 이번 시즌 " + str(avg) + "의 평균 타율을 기록하고 있습니다.",
-            "타자 이번 타석 안타를 기록 할 수 있을까요?"
+            ###here
+            #"타자의 오늘 " + str(this_game_count + 1) + "번째 타석입니다.",
+            #"타자는 이번 시즌 " + str(avg) + "의 평균 타율을 기록하고 있습니다.",
+            #"타자 이번 타석 안타를 기록 할 수 있을까요?",
         ]
-
         if (batter_history):
             annotation.append(b + " 타자 오늘 " + str(this_game_count + 1) + "번째 타석입니다, " + ", ".join(_ for _ in batter_history) + "을 기록하고 있습니다.")
             annotation.append(b + " 타자 저번 타석, " + str(batter_history[-1]) + "을 기록하였습니다.")
@@ -264,12 +268,13 @@ class Ontology_String():
         annotation = [
             b + " 타자 " + p + " 투수의 신경전 속에 " + b + " 타자는 이번시즌 " + str(avg) + "의 펑균 타율을 기록하고 있습니다.",
             b + " 타자 " + p + " 투수의 신경전 속에 " + p + " 투수는 이번시즌 " + str(era) + "의 평균 자책점을 기록하고 있습니다.",
-            b + " 타자 " + p + " 투수를 상대로 오늘 " + ", ".join(_ for _ in result_history) + "을 기록 하였습니다.",
             b + " 타자 " + p + " 투수를 상대로 오늘 " + str(getonbase) + "개의 안타 기록 하였습니다.",
             p + " 투수 " + b + " 타자를 상대로 오늘 경기 " + str(getonbase) + "개의 안타를 허용 하였습니다.",
             p + " 투수 " + b + " 타자를 상대로 오늘 경기 " + str(strikeout) + "개의 스트라이크 아웃을 잡아냈습니다.",
             "투수와 타자 사이에 팽팽한 긴장감이 감지됩니다.",
         ]
+        if (result_history):
+            annotation = annotation + [b + " 타자 " + p + " 투수를 상대로 오늘 " + ", ".join(_ for _ in result_history) + "을 기록 하였습니다."]
 
         return annotation
 
@@ -286,14 +291,14 @@ class Ontology_String():
         score_zone = ""
         result = ""
         if(first_runner):
-            result = result + "1루에는 " + str(first_runner) + " 선수 "
+            result = result + "1루에는 " + str(first_runner) + "선수 "
         if (second_runner):
-            result = result + "2루에는 " + str(second_runner) + " 선수 "
-            score_zone = score_zone + str(second_runner) + " 선수 "
+            result = result + "2루에는 " + str(second_runner) + "선수 "
+            score_zone = score_zone + str(second_runner) + "선수 "
 
         if (third_runner):
-            result = result + "3루에는 " + str(third_runner) + " 선수 "
-            score_zone = score_zone + str(third_runner) + " 선수 "
+            result = result + "3루에는 " + str(third_runner) + "선수 "
+            score_zone = score_zone + str(third_runner) + "선수 "
 
         if not(result == ""):
             result = result + "(이)가 나가있습니다."
@@ -387,7 +392,7 @@ class Ontology_String():
 
     @staticmethod
     def change_result_history_to_korean(h):
-        result = ["BaseByError", "BaseOnBalls", "HitByPitch", "Double", "HomeRun", "Triple", "SingleHit", "Fly", "OutInBase", "Strikeout"]
-        korean = ["실책 출루", "포 볼", "데드 볼", "2루타", "홈런", "3루타", "1루타", "플라이 아웃", "땅볼 아웃", "스트라이크 아웃"]
+        result = ["BaseByError", "BaseOnBalls", "HitByPitch", "Double", "HomeRun", "Triple", "SingleHit", "Fly", "OutInBase", "Strikeout", "Out", "GetOnBase"]
+        korean = ["실책 출루", "포 볼", "데드 볼", "2루타", "홈런", "3루타", "1루타", "플라이 아웃", "땅볼 아웃", "스트라이크 아웃", "아웃", "출루"]
 
         return korean[result.index(h)]

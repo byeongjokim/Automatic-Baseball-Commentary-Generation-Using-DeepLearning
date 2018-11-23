@@ -1,6 +1,8 @@
 import numpy as np
 import tensorflow as tf
 import cv2
+import xml.etree.cElementTree as ET
+
 
 class Detect_Model():
     def __init__(self, sess, istest=0):
@@ -48,10 +50,6 @@ class Detect_Model():
             self.weights_loader("./_model/detect/baseball.weights", "./_model/detect/detect.ckpt", object)
 
     def predict(self, image):
-
-        #cv2.imwrite(str(self.count) + ".jpg", image)
-        #self.count = self.count + 1
-
         h, w, c = image.shape
         ratio_h = h / 416
         ratio_w = w / 416
@@ -69,7 +67,7 @@ class Detect_Model():
             result = [
                         [bbox[0][0] * ratio_w, bbox[0][1] * ratio_h, bbox[0][2] * ratio_w, bbox[0][3] * ratio_h, bbox[2]]
                         for bbox in result
-                            if bbox[0][0] > 0 and bbox[0][1] > 0 and bbox[0][2] > 0 and bbox[0][3] > 0 and bbox[2] != "referee"
+                            if bbox[0][0] > 0 and bbox[0][1] > 0 and bbox[0][2] > 0 and bbox[0][3] > 0 #and bbox[2] != "referee"
                       ]
 
         return result
@@ -279,3 +277,74 @@ class Detect_Model():
             return nms_predictions
         else:
           return None
+
+    def evaluation(self):
+        score = {"player":[0.0, 0.0], "pitcher":[0.0, 0.0], "batter":[0.0, 0.0], "catcher":[0.0, 0.0], "referee":[0.0, 0.0]}
+        label_xml_path = "_data/_player/label_xml/"
+        image_path = "_data/_player/images/"
+
+        filenames = [str(i).zfill(5) for i in range(0, 279)]
+        print(filenames)
+        image_data = [[cv2.imread(image_path + i+".jpg"), i] for i in filenames]
+
+        for filename in filenames:
+            image = cv2.imread(image_path + filename +".jpg")
+            xml = open(label_xml_path + filename + ".xml")
+
+            tree = ET.parse(xml)
+            root = tree.getroot()
+
+            gt = []
+            for obj in root.iter('object'):
+                cls = obj.find('name').text
+                xmlbox = obj.find('bndbox')
+                gt.append([float(xmlbox.find('xmin').text), float(xmlbox.find('ymin').text), float(xmlbox.find('xmax').text), float(xmlbox.find('ymax').text), cls])
+
+            player_gt = [i[:4] for i in gt if i[4] == "player"]
+            pitcher_gt = [i[:4] for i in gt if i[4] == "pitcher"]
+            batter_gt = [i[:4] for i in gt if i[4] == "batter"]
+            catcher_gt = [i[:4] for i in gt if i[4] == "catcher"]
+            referee_gt = [i[:4] for i in gt if i[4] == "referee"]
+
+
+            result = self.predict(image)
+            if(result):
+                player_pre = [i[:4] for i in result if i[4] == "player"]
+                pitcher_pre = [i[:4] for i in result if i[4] == "pitcher"]
+                batter_pre = [i[:4] for i in result if i[4] == "batter"]
+                catcher_pre = [i[:4] for i in result if i[4] == "catcher"]
+                referee_pre = [i[:4] for i in result if i[4] == "referee"]
+
+                score["player"][1] = score["player"][1] + len(player_pre)
+                score["pitcher"][1] = score["pitcher"][1] + len(pitcher_pre)
+                score["batter"][1] = score["batter"][1] + len(batter_pre)
+                score["catcher"][1] = score["catcher"][1] + len(catcher_pre)
+                score["referee"][1] = score["referee"][1] + len(referee_pre)
+
+                score["player"][0] = score["player"][0] + self.is_hit(player_pre, player_gt)
+                score["pitcher"][0] = score["pitcher"][0] + self.is_hit(pitcher_pre, pitcher_gt)
+                score["batter"][0] = score["batter"][0] + self.is_hit(batter_pre, batter_gt)
+                score["catcher"][0] = score["catcher"][0] + self.is_hit(catcher_pre, catcher_gt)
+                score["referee"][0] = score["referee"][0] + self.is_hit(referee_pre, referee_gt)
+
+        print(score)
+
+        print(score["player"][0] / score["player"][1])
+        print(score["pitcher"][0] / score["pitcher"][1])
+        print(score["batter"][0] / score["batter"][1])
+        print(score["catcher"][0] / score["catcher"][1])
+        print(score["referee"][0] / score["referee"][1])
+
+        mAP = (score["player"][0]/score["player"][1] + score["pitcher"][0]/score["pitcher"][1] + score["batter"][0]/score["batter"][1] + score["catcher"][0]/score["catcher"][1] + score["referee"][0]/score["referee"][1])/5
+        print(mAP)
+
+    def is_hit(self, pre, gt):
+        count = 0
+        for p in pre:
+            for g in gt:
+                if (self.iou(p, g) > 0.5):
+                    count = count + 1
+                    break
+
+        return count
+

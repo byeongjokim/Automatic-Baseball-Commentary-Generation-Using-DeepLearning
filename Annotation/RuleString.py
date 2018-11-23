@@ -331,16 +331,16 @@ def strikeOut(batter):
     name = str(batter["name"])
 
     annotation = [
-        "스트라이크 아웃! " + name + " 선수는 삼진으로 물러납니다.",
-        "삼진! 결국 " + name + " 선수를 삼진으로 잡아내는군요.",
-        "삼진~! " + name + " 선수를 삼진 처리하면서 아웃카운트 하나를 따내는군요."
+        "스트라이크 아웃! " + name + "선수는 삼진으로 물러납니다.",
+        "삼진! 결국 " + name + "선수를 삼진으로 잡아내는군요.",
+        "삼진~! " + name + "선수를 삼진 처리하면서 아웃카운트 하나를 따내는군요."
     ]
     return random.choice(annotation)
 
 def lineDriveOut(batter, pos):
     name = str(batter["name"])
     annotation = [
-        "아~ 잘 맞았지만 " + pos + "의 글러브에 빨려 들어갑니다. 라인드라이브 아웃으로 " + name + " 선수는 들어갑니다."
+        "아~ 잘 맞았지만 " + pos + "의 글러브에 빨려 들어갑니다. 라인드라이브 아웃으로 " + name + "선수는 들어갑니다."
     ]
     return random.choice(annotation)
 
@@ -354,14 +354,14 @@ def flyOut(batter, pos):
 def groundBallOut(batter, pos):
     name = str(batter["name"])
     annotation = [
-        pos + " 쪽으로 흐르는 볼. " + pos + "가 잡아서 1루에 던집니다.\n" + name + " 선수는 땅볼로 물러납니다."
+        pos + " 쪽으로 흐르는 볼. " + pos + "가 잡아서 1루에 던집니다.\n" + name + "선수는 땅볼로 물러납니다."
     ]
     return random.choice(annotation)
 
 def doublePlayedOut(batter, pos):
     name = str(batter["name"])
     annotation = [
-        pos + "부터 이어지는 병살타! " + name + " 선수는 병살타를 치고 덕아웃으로 들어갑니다."
+        pos + "부터 이어지는 병살타! " + name + "선수는 병살타를 치고 덕아웃으로 들어갑니다."
     ]
     return random.choice(annotation)
 
@@ -375,40 +375,40 @@ def strikeNotOut(batter, pos):
 def sacrificeBunt(batter, pos):
     name = str(batter["name"])
     annotation = [
-        pos + "가 잡아서 1루에 던집니다. " + name + " 선수는 희생번트로 물러납니다."
+        pos + "가 잡아서 1루에 던집니다. " + name + "선수는 희생번트로 물러납니다."
     ]
     return random.choice(annotation)
 
 def tagNforceOut(name):
     annotation = [
-        name + " 선수 아웃 됩니다."
+        name + "선수 아웃 됩니다."
     ]
     return random.choice(annotation)
 #######################################################################################################안타
 def fourBall(name):
     annotation = [
-        name + " 선수는 볼넷으로 걸어나갑니다.",
-        name + " 선수, 끈질긴 승부 끝에 볼넷을 얻어냅니다."
+        name + "선수는 볼넷으로 걸어나갑니다.",
+        name + "선수, 끈질긴 승부 끝에 볼넷을 얻어냅니다."
     ]
     return random.choice(annotation)
 
 def hitByPitch(name):
     annotation = [
-        "아, 몸에 맞았군요. " + name + " 선수 몸에 맞는 볼로 출루합니다.",
-        name + " 선수 몸에 맞았어요. 몸에 맞는 볼로 걸어 나가네요."
+        "아, 몸에 맞았군요. " + name + "선수 몸에 맞는 볼로 출루합니다.",
+        name + "선수 몸에 맞았어요. 몸에 맞는 볼로 걸어 나가네요."
     ]
     return random.choice(annotation)
 
 def intentionalBaseOnBalls(name):
     annotatino = [
-        name + " 선수는 고의사구로 걸어나갑니다.",
-        "배터리가 " + name + " 선수를 거르는군요. " + name + " 선수, 고의사구로 출루합니다."
+        name + "선수는 고의사구로 걸어나갑니다.",
+        "배터리가 " + name + "선수를 거르는군요. " + name + "선수, 고의사구로 출루합니다."
     ]
     return random.choice(annotatino)
 
 def inFieldHit(name, pos):
     annotation = [
-        pos + "가 던져봤지만 세이프입니다. " + name + " 선수 빠른 발로 내야안타 만들어냅니다."
+        pos + "가 던져봤지만 세이프입니다. " + name + "선수 빠른 발로 내야안타 만들어냅니다."
     ]
     return random.choice(annotation)
 
@@ -417,41 +417,41 @@ def outFieldHit(name, pos):
         name = "이형종"
     if("중간" in pos):
         annotation = [
-            pos + "에 떨어지는 안타 만들어내면서 " + name + " 선수 1루에 안착합니다."
+            pos + "에 떨어지는 안타 만들어내면서 " + name + "선수 1루에 안착합니다."
         ]
     else:
         annotation = [
-            pos + " 앞에 떨어지는 안타! " + name + " 선수 안타 만들어냅니다."
+            pos + " 앞에 떨어지는 안타! " + name + "선수 안타 만들어냅니다."
         ]
     return random.choice(annotation)
 
 def outFieldDoubleHit(name, pos):
     annotation = [
-        pos + " 뒤로 넘어가는군요! " + name + " 선수 2루타!"
+        pos + " 뒤로 넘어가는군요! " + name + "선수 2루타!"
     ]
     return random.choice(annotation)
 
 def outFieldTripleHit(name, pos):
     annotation = [
-        pos + "가 잡지 못 했거든요! 그 사이에 " + name + " 선수는 3루까지!"
+        pos + "가 잡지 못 했거든요! 그 사이에 " + name + "선수는 3루까지!"
     ]
     return random.choice(annotation)
 
 def groundballWalk(name, pos):
     annotation = [
-        pos + " 쪽으로 흘러갑니다. 다른 주자 아웃되는 사이에 " + name + " 선수는 1루에 들어섭니다."
+        pos + " 쪽으로 흘러갑니다. 다른 주자 아웃되는 사이에 " + name + "선수는 1루에 들어섭니다."
     ]
     return random.choice(annotation)
 
 def errorWalk(name, pos):
     annotation = [
-        pos + " 의 실수로 " + name + " 선수는 1루에 들어섭니다."
+        pos + " 의 실수로 " + name + "선수는 1루에 들어섭니다."
     ]
     return random.choice(annotation)
 
 def HomeRun(name, pos):
     annotation = [
-        pos + " 를 넘어갑니다!!! " + name + " 선수 홈런~~!"
+        pos + " 를 넘어갑니다!!! " + name + "선수 홈런~~!"
     ]
     return random.choice(annotation)
 

@@ -5,6 +5,8 @@ import os
 import cv2
 import csv
 from itertools import combinations
+import collections
+import random
 
 class Motion(object):
     width = 48
@@ -388,9 +390,47 @@ class Classifier(Motion):
 
         score, output = self.sess.run([self.output, tf.argmax(self.output, 1)], feed_dict={self.image: dataset, self.L: leng, self.keep_prob: 1})
         if (max(score[0]) > 0.6):
+
             return self.motions[output[0]]
         else:
             return None
+
+    def evaluation(self):
+        score = {}
+        motions = ["batting", "batting_waiting", "throwing", "pitching", "catch_catcher", "catch_field", "run", "walking", "nope"]
+        for m in motions:
+            score[m] = [0.0, 0.0]
+
+        dataset = self.load_data()
+        random.shuffle(dataset)
+        random.shuffle(dataset)
+        random.shuffle(dataset)
+        random.shuffle(dataset)
+        dataset = dataset[:500]
+        print("fin dataset")
+
+        Y = [d["Y"] for d in dataset]
+        print(collections.Counter(Y))
+
+        for d in dataset:
+            x = [d["X"]]
+            y = d["Y"]
+            l = [d["L"]]
+            output = self.sess.run(tf.argmax(self.output, 1), feed_dict={self.image: x, self.L: l, self.keep_prob: 1})
+
+            motion = motions[output[0]]
+
+            score[motion][1] = score[motion][1] + 1
+            if(y == output[0]):
+                score[motion][0] = score[motion][0] + 1
+
+        mAP = 0
+        for m in motions:
+            mAP = mAP + score[m][0]/score[m][1]
+
+        print(mAP/len(motions))
+        print(score)
+
 
 class TRN(Motion):
     def __init__(self, sess, istest=0):
@@ -592,18 +632,3 @@ class TRN(Motion):
             return self.motions[output[0]]
         else:
             return None
-
-"""
-sess = tf.Session()
-c = Classifier(sess, istest=0)
-c.train()
-
-cae = CAE()
-cae.train()
-"""
-
-"""
-sess = tf.Session()
-c = TRN(sess)
-c.train()
-"""

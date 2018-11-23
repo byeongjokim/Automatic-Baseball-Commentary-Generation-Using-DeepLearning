@@ -50,9 +50,11 @@ class Middle():
         frame = np.zeros((h, w, c), dtype=np.uint8)
         position = Position(motion=self.motion, frame_shape=(h, w), resource=self.resources)
 
+        game_counter = 0
+
         while( not self.resources.exit ):
             label, score = self.sceneData.get_score_label(self.resources.frame)
-            print(label, score, counter)
+            #print(label, score, counter)
             """
             if(score > 0.8):
                 self.resources.set_annotation_2(label)
@@ -69,26 +71,25 @@ class Middle():
                 if(annotation):
                     annotation = self.get_random_annotation(annotation)
 
-                    if("안익훈" in annotation):
-                        annotation.replace("안익훈", "이형종")
                     print("from scene \t\t" + annotation)
                     self.resources.set_annotation(annotation)
 
-            if(counter > 14):
+            if(counter > 13):
                 if(label == 2):
                     pitcher_annotation = self.sceneData.pitcher()
                     pitcher_annotation = self.get_random_annotation(pitcher_annotation)
 
                     print("from pitcher \t\t" + pitcher_annotation)
                     self.resources.set_annotation(pitcher_annotation)
-                else:
-                    gameinfo_annotation = self.sceneData.gameinfo()
-                    gameinfo_annotation = self.get_random_annotation(gameinfo_annotation)
+                    counter = 0
 
-                    print("from gameinfo \t\t" + gameinfo_annotation)
-                    self.resources.set_annotation(gameinfo_annotation)
+            if(game_counter > 17):
+                gameinfo_annotation = self.sceneData.gameinfo()
+                gameinfo_annotation = self.get_random_annotation(gameinfo_annotation)
 
-                counter = 0
+                print("from gameinfo \t\t" + gameinfo_annotation)
+                self.resources.set_annotation(gameinfo_annotation)
+                game_counter = 0
 
             bboxes = self.detect.predict(self.resources.frame)
             if (bboxes):
@@ -102,6 +103,7 @@ class Middle():
                 self.resources.set_annotation(motion_annotation)
             pre_label = label
             counter = counter + 1
+            game_counter = game_counter + 1
 
         return 1
 

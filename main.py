@@ -25,7 +25,16 @@ fps = 29.97
 #count = 66300
 #count = 28780
 #count = 26300
-count = 91000
+
+#count = 91000
+#count = 52000
+
+#count = 75000
+#count = 77000
+
+#count = 78500
+#count = 80000
+count = 81000
 
 
 #count = 60000
