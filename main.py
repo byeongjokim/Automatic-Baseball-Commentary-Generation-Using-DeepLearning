@@ -34,7 +34,13 @@ fps = 29.97
 
 #count = 78500
 #count = 80000
-count = 81000
+#count = 81000
+
+
+#count = 58060 #외야 안타
+#count = 60720 #더블플레이
+#count = 21528 #1루땅볼
+count = 126500
 
 
 #count = 60000

@@ -39,12 +39,16 @@ def create_player(onto, GameInfo, players, isaway, isbatter):
             player.hasBirth = [int(info["birth"])]
             player.thisAVG = [float(info["seasonHra"])]
             ####here
+            if ("모창민" in info["name"]):
+                player.thisAVG = [0.270]
             if("스크럭스" in info["name"]):
                 player.thisAVG = [0.256]
             if ("이원재" in info["name"]):
                 player.thisAVG = [0.337]
             if ("정범모" in info["name"]):
                 player.thisAVG = [0.166]
+            if ("손시헌" in info["name"]):
+                player.thisAVG = [0.204]
 
         else:
             player = onto.Pitcher(info["name"] + info["pCode"])

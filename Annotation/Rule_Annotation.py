@@ -225,7 +225,9 @@ class RuleData():
                 self.PB.set(relayText, ball_data)
                 pre_pitchId = pitchId
 
+
         self.relayTexts = self.relayTexts[no:]
+
 
     def find_ball_data_with_pitchId(self, pitchId):
         for i in self.ball_data:
@@ -237,9 +239,9 @@ class RuleData():
     def get_Annotation(self):
         pre_pitchId = "000000_"+str(self.start_pitchId)
         #pre_pitchId = self.relayTexts[0]["pitchId"]
-
+        print('start naver')
         for relayText in self.relayTexts:
-
+            next = input("next : ")
             pitchId = relayText["pitchId"]
             ball_data = self.find_ball_data_with_pitchId(pitchId)
 
@@ -259,7 +261,6 @@ class RuleData():
 
                 pre_pitchId = pitchId
 
-            next = input("next : ")
             print("from rule\t\t", annotation)
             self.resources.set_annotation(annotation)
 

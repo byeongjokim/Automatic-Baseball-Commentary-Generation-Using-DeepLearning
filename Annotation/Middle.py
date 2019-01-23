@@ -43,8 +43,8 @@ class Middle():
     def generate_Annotation_with_Scene(self):
         counter = 0
 
-        time.sleep(5)
-
+        time.sleep(40)
+        print('start')
         pre_label = -1
         h, w, c = self.resources.frame.shape
         frame = np.zeros((h, w, c), dtype=np.uint8)
@@ -52,6 +52,7 @@ class Middle():
 
         game_counter = 0
 
+        flag = 0
         while( not self.resources.exit ):
             label, score = self.sceneData.get_score_label(self.resources.frame)
             #print(label, score, counter)
@@ -59,14 +60,29 @@ class Middle():
             if(score > 0.8):
                 self.resources.set_annotation_2(label)
             """
-
+            #print(label)
             if(label != pre_label and ssim(self.resources.frame, frame, multichannel=True) < 0.6): #scene changed
                 #print("refresh")
                 counter = 0
                 frame = self.resources.frame
                 position.clear()
 
-            if(counter == 6):
+            if(label == 11 and flag == 0):
+                annotation = "좌익수 이형종선수 쪽 입니다."
+                print(annotation)
+                self.resources.set_annotation(annotation)
+                flag = 1
+
+            """
+            if(label == 5 and flag == 0):
+                annotation = "1루수 공을 잡았습니다."
+                print(annotation)
+                self.resources.set_annotation(annotation)
+                flag = 1
+            """
+
+
+            if(counter == 9):
                 annotation = self.sceneData.get_Annotation(label)
                 if(annotation):
                     annotation = self.get_random_annotation(annotation)
@@ -87,8 +103,8 @@ class Middle():
                 gameinfo_annotation = self.sceneData.gameinfo()
                 gameinfo_annotation = self.get_random_annotation(gameinfo_annotation)
 
-                print("from gameinfo \t\t" + gameinfo_annotation)
-                self.resources.set_annotation(gameinfo_annotation)
+                #print("from gameinfo \t\t" + gameinfo_annotation)
+                #self.resources.set_annotation(gameinfo_annotation)
                 game_counter = 0
 
             bboxes = self.detect.predict(self.resources.frame)
