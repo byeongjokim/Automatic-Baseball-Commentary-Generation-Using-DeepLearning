@@ -12,8 +12,8 @@ This research describes the three models (scene classifier, player detection, mo
 </tr>
 
 <tr>
-<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/demo/1st_ground.gif?raw=1" height="148" width="100" alt="Noop"></td>
-<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/demo/double.gif?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/demo/1st_ground.gif?raw=1" height="200" width="350" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/demo/double.gif?raw=1" height="200" width="350" alt="Noop"></td>
 </tr>
 
 <tr>
@@ -22,8 +22,8 @@ This research describes the three models (scene classifier, player detection, mo
 </tr>
 
 <tr>
-<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/demo/outfield_1.gif?raw=1" height="148" width="100" alt="Noop"></td>
-<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/demo/outfield_2.gif?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/demo/outfield_1.gif?raw=1" height="200" width="350" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/demo/outfield_2.gif?raw=1" height="200" width="350" alt="Noop"></td>
 </tr>
 
 </table>
