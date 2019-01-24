@@ -7,6 +7,23 @@ This research describes the three models (scene classifier, player detection, mo
 ![Demo](/PNG/demo.gif)
 <table>
 <tr>
+<td colspan="1"><sub>Demo 1</sub></td>
+</tr>
+
+<tr>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/demo/demo1.gif?raw=1" height="500" width="800" alt="Noop"></td>
+</tr>
+
+<tr>
+<td colspan="1"><sub>Demo 2</sub></td>
+</tr>
+
+<tr>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/demo/demo2.gif?raw=1" height="500" width="800" alt="Noop"></td>
+</tr>
+</table>
+<table>
+<tr>
 <td colspan="1"><sub>Ground to 1st Base</sub></td>
 <td colspan="1"><sub>Double Play</sub></td>
 </tr>
