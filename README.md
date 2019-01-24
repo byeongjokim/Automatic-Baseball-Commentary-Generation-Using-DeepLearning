@@ -78,6 +78,8 @@ This research describes the three models (scene classifier, player detection, mo
 
 ## Models
 ### Scene Classifier
+![Scene Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/model.png?raw=1)
+#### Classes
 <table>
 <tr><td colspan="3"><strong>About. BatterBox</strong></td></tr>
 <tr>
@@ -138,8 +140,9 @@ This research describes the three models (scene classifier, player detection, mo
 ---
 
 ### Player Detector
+![Scene Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/player/model.png?raw=1)
+#### Classes
 <table>
-
 <tr>
 <td colspan="1"><sub>Pitcher</sub></td>
 <td colspan="1"><sub>Batter</sub></td>
@@ -161,13 +164,13 @@ This research describes the three models (scene classifier, player detection, mo
 
 
 ### Motion Classifier
-
+![Motion Model1](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/model.png?raw=1)
+#### Classes
 <table>
-
 <tr>
 <td colspan="1"><sub>Pitching</sub></td>
 <td colspan="1"><sub>Waiting</sub></td>
-<td colspan="1"><sub>Batting</sub></td>
+<td colspan="1"><sub>Swing</sub></td>
 <td colspan="1"><sub>Catching - Catcher</sub></td>
 </tr>
 
