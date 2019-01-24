@@ -1,88 +1,130 @@
-# Make Comments in KBO video
-In korea, there is a baseball game called [kbo](https://www.koreabaseball.com "Korea Baseball League"), and text broadcasting service [site](https://sports.news.naver.com/kbaseball/schedule/index.nhn). But the text service has no reality. It just send the sentences like "1 strike".
-<br>
-This is a program which can make comments about the baseball game with a video and web data using deep learning and ontology.
+# Baseball Game Casting with Deep Learning
+There have been many studies to make captions or explanations about images and video with deep learning. A combination of CNN and RNN is mainly used to generate captions from the features of image and frame. Recently, the attention model has been combined to explain a more detailed and accurate situation. Through these studies, deep learning can describe the real state of an image Human-Like. However, when casting a sports event, castings are created not only from contextual information about who does what, but also from understanding and reasoning using the player’s information and past knowledge.<br>
+This research describes the three models (scene classifier, player detection, motion recognition) to obtain contextual information from the sports frame and the ontology to inference knowledge from past data. There are three types of castings: First, create castings by knowledge from real-time web data. Second, castings are created by combining 13 kinds of scene and ontology. Last, recognizes the position of the player and 8 actions and combines them with the ontology to create castings. Data in [KBO(Korea Baseball Organization League)](https://www.koreabaseball.com "Korea Baseball League") games from 1 April 2018 to 14 April 2018 is used for learning three models.
+
 
 ## Demo
 ![Demo](/PNG/demo.gif)
 
 ## Models
-![Flow_chart](/PNG/flow_chart.png)
+![Flow_chart](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/flow_chart.png?raw=1)
 
-When video playing, two thread are runned. One is about scene data and the other is about web data. The thread about web data crawls the text broadcasting, and save it to the ontology. And the other thread about scene data classifies the scene using CNN, classifies the person's motion who locates in the center of video using YOLO, CNN and RNN. With all of data which can retrieve from scene and ontology, the comments are created.
+## Scene Classifier
+<table>
+<tr><td colspan="3"><strong>About. BatterBox</strong></td></tr>
+<tr>
+<td colspan="1"><sub>BatterBox</sub></td>
+<td colspan="1"><sub>Batter</sub></td>
+<td colspan="1"><sub>Close up</sub></td>
+</tr>
 
+<tr>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/batterbox.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/batter.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/closeup.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+</tr>
 
-### Scene Classifier
-![Scene](/PNG/scene_annotation.png)
+<tr><td colspan="7"><strong>About. Field</strong></td></tr>
+<tr>
+<td colspan="1"><sub>1st. Base</sub></td>
+<td colspan="1"><sub>2nd. Base</sub></td>
+<td colspan="1"><sub>3rd. Base</sub></td>
+<td colspan="1"><sub>Right Outfield</sub></td>
+<td colspan="1"><sub>Center Outfield</sub></td>
+<td colspan="1"><sub>Left Outfield</sub></td>
+<td colspan="1"><sub>ShortStop</sub></td>
+</tr>
 
-- Using Vgg16
-- 13 classes (10 classes data)
-- training data : highlights videos of baseball game in 15 days
+<tr>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/1stbase.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/2ndbase.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/3rdbase.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/rightoutfield.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/centeroutfield.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/leftoutfield.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/shortstop.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+</tr>
 
+<tr><td colspan="7"><strong>Etc.</strong></td></tr>
+<tr>
+<td colspan="1"><sub>Coach</sub></td>
+<td colspan="1"><sub>Gallery</sub></td>
+<td colspan="1"><sub>etc.</sub></td>
+</tr>
 
-#### Labeling
-![Scene](/PNG/scene_labeling.png)
-- 1 : Batter box
-- 2 : Closeup Batter
-- 3 : Closeup Players
-- 4 : Closeup Coach
-- 5 : Gallery
-- 6 ~ 9 : Center, Right Field
-- 10 : etc. (Ad., before playing)
-- 11 ~ 13 : Left Field
-
-
-#### About Field
-![Scene](/PNG/field_classify.png)
-
-- 6 : About 1st Base
-- 7 : About OutField
-- 8 : About Right OutField
-- 9 : About 2nd Base and InField
-- 11 : About 3rd Base (with Zero-Shot Laerning)
-- 12 : About Left OutField (with Zero-Shot Laerning)
-- 13 : About SS
-
+<tr>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/coach.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/gallery.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/etc.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+</tr>
+</table>
 
 #### Zero-Shot Learning
-![Scene](/PNG/zero_shot.png)
+![Scene](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/zero_shot.png?raw=1)
 
 - using 0 3rd Base data, 0 Left OutField data.
 - In Baseball Game, There are few data of 3rd Base and Right OutField than others. But I can train these two data with others. Almost Baseball Field have symmetrical characters. So I can get these data with flipping other training data.
 - 3rd Base <-> 1st Base
-- Left OutField <-> Right OutField
+- Right OutField <-> Left OutField
 
+---
+
+## Player Detector
+<table>
+
+<tr>
+<td colspan="1"><sub>Pitcher</sub></td>
+<td colspan="1"><sub>Batter</sub></td>
+<td colspan="1"><sub>Catcher</sub></td>
+<td colspan="1"><sub>Fielder</sub></td>
+<td colspan="1"><sub>Referee</sub></td>
+</tr>
+
+<tr>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/player/pitcher.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/player/batter.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/player/catcher.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/player/fielder.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/player/referee.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+</tr>
+</table>
 
 ---
 
 
-### Motion Classifier
-![Motion](/PNG/motion_classifier.png)
+## Motion Classifier
 
-- get player with YOLO-tiny-v2
-- using CNN + RNN
-	- CNN is the encoder part of auto-encoder model
-- make dataset with interval
-	- because of other process time, the motion model can get people's images with every some intervals (not real time)
-    - 5 ~ 20 frames intervals
-    - when training the model, apply intervals in train data
+<table>
 
+<tr>
+<td colspan="1"><sub>Pitching</sub></td>
+<td colspan="1"><sub>Waiting</sub></td>
+<td colspan="1"><sub>Batting</sub></td>
+<td colspan="1"><sub>Catching - Catcher</sub></td>
+</tr>
 
-#### Labeling
-![Motion](/PNG/motion_labeling.png)
+<tr>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/pitching.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/waiting.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/batting.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/catching-catcher.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+</tr>
 
-- 0 : Batting Waiting
-- 1 : Batting
-- 2 : Throwing
-- 3 : Pitching
-- 4 : Catching - catcher
-- 5 : Catching - fielder
-- 6 : Running
-- 7 : Walking
+<tr>
+<td colspan="1"><sub>Throwing</sub></td>
+<td colspan="1"><sub>Catching - Fielder</sub></td>
+<td colspan="1"><sub>Walking</sub></td>
+<td colspan="1"><sub>Running</sub></td>
+</tr>
 
+<tr>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/throwing.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/catching-fielder.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/walking.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/running.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+</tr>
 
-#### Motion dataset
-![Motion](/PNG/motion_dataset.png)
+</table>
 
 ---
 

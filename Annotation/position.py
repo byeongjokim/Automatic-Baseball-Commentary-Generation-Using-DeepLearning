@@ -115,18 +115,15 @@ class Position(object):
                 if (m == "catch_field"):
                     player = self.get_player_with_position("1st")
                     annotation = ["1루수 공을 잡았습니다.", player + "선수 공을 잡았습니다.", "1루수 " + player + "선수 공을 잡았습니다."]
-                    ##here
-                    #annotation = ["1루수 양석환 선수 공을 잡았습니다."]
                     return annotation
 
         elif (label == 8):  # second base
             if (person_bbox["2nd_"] and self.is_motion_changed("2nd")):
                 m = person_bbox["2nd_"]
-                ###here
-                #if (m == "catch_field"):
-                #    player = self.get_player_with_position("2nd")
-                #    annotation = ["2루수 공을 잡았습니다.", player + "선수 공을 잡았습니다.", "2루수 " + player + "선수 공을 잡았습니다."]
-                #    return annotation
+                if (m == "catch_field"):
+                    player = self.get_player_with_position("2nd")
+                    annotation = ["2루수 공을 잡았습니다.", player + "선수 공을 잡았습니다.", "2루수 " + player + "선수 공을 잡았습니다."]
+                    return annotation
 
         elif (label == 10):  # third base
             if (person_bbox["3rd_"] and self.is_motion_changed("3rd")):
@@ -139,12 +136,8 @@ class Position(object):
         elif (label == 6):  # center outfield
             if (person_bbox["center fielder_"] and self.is_motion_changed("center fielder")):
                 m = person_bbox["center fielder_"]
-                # player = self.get_player_with_position("COF")
-                # return self.field_motion("중견수", player, m)
-
-                ###here
-                player = self.get_player_with_position("ROF")
-                return self.field_motion("우익수", player, m)
+                player = self.get_player_with_position("COF")
+                return self.field_motion("중견수", player, m)
 
         elif (label == 7):  # right outfield
             if (person_bbox["right fielder_"] and self.is_motion_changed("right fielder")):
@@ -162,8 +155,7 @@ class Position(object):
             if (person_bbox["ss_"] and self.is_motion_changed("ss")):
                 m = person_bbox["ss_"]
                 player = self.get_player_with_position("ss")
-                ##here
-                ##return self.field_motion("유격수", player, m)
+                return self.field_motion("유격수", player, m)
 
         return None
 
@@ -206,8 +198,6 @@ class Position(object):
         elif(motion == "catch_field"):
             annotation = [position + " 공을 잡았습니다.", player + "선수 공을 잡았습니다.", position + " " + player + "선수 공을 잡았습니다."]
         elif(motion == "run" or motion == "walking"):
-            #here
-            player = "이형종"
             annotation = [position + " 쪽 입니다.", player + "선수 쪽 입니다.", position + " " + player + "선수 쪽 입니다.", position + " " + player + "선수"]
         return annotation
 
