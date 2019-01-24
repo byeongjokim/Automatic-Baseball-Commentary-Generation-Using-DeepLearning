@@ -45,7 +45,7 @@ This research describes the three models (scene classifier, player detection, mo
 </table>
 
 ## Flow
-![Flow_chart](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/flow_chart.png?raw=1)
+![Flow_chart](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/flow.png?raw=1)
 
 <table>
 <tr>
@@ -203,21 +203,14 @@ This research describes the three models (scene classifier, player detection, mo
 
 ---
 
-### Web Data
-![web](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/throwing.jpg?raw=1)
-
-- In [N company](http://www.naver.com), there is a KBO Text Broadcasting site. I can get text data in real time, when game is playing. [Text Broadcasting](http://sports.news.naver.com/kbaseball/schedule/indexnhn)
-
----
-
 ### Ontology
 #### Schema
 ![schema](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/ontology/schema.png?raw=1)
 
-#### Example
+#### Example of retrieve knowledges
 <table>
 <tr>
-<td colspan="1">Situation</td>
+<td colspan="1">Knowledge</td>
 <td colspan="1">SPARQL</td>
 </tr>
 <tr>
@@ -227,6 +220,16 @@ SELECT ?o WHERE {?s toHitter A . ?s fromPitcher B . ?s result ?o}
 </td>
 </tr>
 </table>
+
+---
+
+### Web Data
+![web](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/web/webdata.png?raw=1)
+
+![web2ontology](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/web/web2ontology.png?raw=1)
+
+- In [N company](http://www.naver.com), there is a [KBO Text Broadcasting site](http://sports.news.naver.com/kbaseball/schedule/indexnhn).
+- Each events can intelligible with Ontology in real-time.
 
 ---
 
