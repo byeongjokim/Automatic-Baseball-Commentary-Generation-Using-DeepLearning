@@ -6,7 +6,7 @@ This research describes the three models (scene classifier, player detection, mo
 ## Demo
 <table>
 <tr>
-<td colspan="1"><sub>Demo 1</sub></td>
+<td colspan="1">Demo 1</td>
 </tr>
 
 <tr>
@@ -14,7 +14,7 @@ This research describes the three models (scene classifier, player detection, mo
 </tr>
 
 <tr>
-<td colspan="1"><sub>Demo 2</sub></td>
+<td colspan="1">Demo 2</td>
 </tr>
 
 <tr>
@@ -23,8 +23,8 @@ This research describes the three models (scene classifier, player detection, mo
 </table>
 <table>
 <tr>
-<td colspan="1"><sub>Ground to 1st Base</sub></td>
-<td colspan="1"><sub>Double Play</sub></td>
+<td colspan="1">Ground to 1st Base</td>
+<td colspan="1">Double Play</td>
 </tr>
 
 <tr>
@@ -33,8 +33,8 @@ This research describes the three models (scene classifier, player detection, mo
 </tr>
 
 <tr>
-<td colspan="1"><sub>Outfield Single Hit</sub></td>
-<td colspan="1"><sub>Outfield Two-Base Hit</sub></td>
+<td colspan="1">Outfield Single Hit</td>
+<td colspan="1">Outfield Two-Base Hit</td>
 </tr>
 
 <tr>
@@ -84,9 +84,9 @@ This research describes the three models (scene classifier, player detection, mo
 <table>
 <tr><td colspan="3"><strong>About. BatterBox</strong></td></tr>
 <tr>
-<td colspan="1"><sub>BatterBox</sub></td>
-<td colspan="1"><sub>Batter</sub></td>
-<td colspan="1"><sub>Close up</sub></td>
+<td colspan="1">BatterBox</td>
+<td colspan="1">Batter</td>
+<td colspan="1">Close up</td>
 </tr>
 
 <tr>
@@ -97,13 +97,13 @@ This research describes the three models (scene classifier, player detection, mo
 
 <tr><td colspan="7"><strong>About. Field</strong></td></tr>
 <tr>
-<td colspan="1"><sub>1st. Base</sub></td>
-<td colspan="1"><sub>2nd. Base</sub></td>
-<td colspan="1"><sub>3rd. Base</sub></td>
-<td colspan="1"><sub>Right Outfield</sub></td>
-<td colspan="1"><sub>Center Outfield</sub></td>
-<td colspan="1"><sub>Left Outfield</sub></td>
-<td colspan="1"><sub>ShortStop</sub></td>
+<td colspan="1">1st. Base</td>
+<td colspan="1">2nd. Base</td>
+<td colspan="1">3rd. Base</td>
+<td colspan="1">Right Outfield</td>
+<td colspan="1">Center Outfield</td>
+<td colspan="1">Left Outfield</td>
+<td colspan="1">ShortStop</td>
 </tr>
 
 <tr>
@@ -118,9 +118,9 @@ This research describes the three models (scene classifier, player detection, mo
 
 <tr><td colspan="7"><strong>Etc.</strong></td></tr>
 <tr>
-<td colspan="1"><sub>Coach</sub></td>
-<td colspan="1"><sub>Gallery</sub></td>
-<td colspan="1"><sub>etc.</sub></td>
+<td colspan="1">Coach</td>
+<td colspan="1">Gallery</td>
+<td colspan="1">etc.</td>
 </tr>
 
 <tr>
@@ -147,11 +147,11 @@ This research describes the three models (scene classifier, player detection, mo
 #### Classes
 <table>
 <tr>
-<td colspan="1"><sub>Pitcher</sub></td>
-<td colspan="1"><sub>Batter</sub></td>
-<td colspan="1"><sub>Catcher</sub></td>
-<td colspan="1"><sub>Fielder</sub></td>
-<td colspan="1"><sub>Referee</sub></td>
+<td colspan="1">Pitcher</td>
+<td colspan="1">Batter</td>
+<td colspan="1">Catcher</td>
+<td colspan="1">Fielder</td>
+<td colspan="1">Referee</td>
 </tr>
 
 <tr>
@@ -169,8 +169,8 @@ This research describes the three models (scene classifier, player detection, mo
 <td colspan="2">ex) Scene of 1st Base</td>
 </tr>
 <tr>
-<td colspan="1"><sub>Detected <strong>one</strong> field player.</sub></td>
-<td colspan="1"><sub>Detected <strong>many</strong> field players.</sub></td>
+<td colspan="1">Detected <strong>one</strong> field player.</td>
+<td colspan="1">Detected <strong>many</strong> field players.</td>
 </tr>
 
 <tr>
@@ -193,10 +193,10 @@ This research describes the three models (scene classifier, player detection, mo
 #### Classes
 <table>
 <tr>
-<td colspan="1"><sub>Pitching</sub></td>
-<td colspan="1"><sub>Waiting</sub></td>
-<td colspan="1"><sub>Swing</sub></td>
-<td colspan="1"><sub>Catching - Catcher</sub></td>
+<td colspan="1">Pitching</td>
+<td colspan="1">Waiting</td>
+<td colspan="1">Swing</td>
+<td colspan="1">Catching - Catcher</td>
 </tr>
 
 <tr>
@@ -207,17 +207,17 @@ This research describes the three models (scene classifier, player detection, mo
 </tr>
 
 <tr>
-<td colspan="1"><sub>Throwing</sub></td>
-<td colspan="1"><sub>Catching - Fielder</sub></td>
-<td colspan="1"><sub>Walking</sub></td>
-<td colspan="1"><sub>Running</sub></td>
+<td colspan="1">Throwing</td>
+<td colspan="1">Walking</td>
+<td colspan="1">Running</td>
+<td colspan="1">Catching - Fielder</td>
 </tr>
 
 <tr>
 <td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/throwing.jpg?raw=1" height="148" width="100" alt="Noop"></td>
-<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/catching-fielder.jpg?raw=1" height="148" width="100" alt="Noop"></td>
 <td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/walking.jpg?raw=1" height="148" width="100" alt="Noop"></td>
 <td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/running.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/catching-fielder.jpg?raw=1" height="148" width="100" alt="Noop"></td>
 </tr>
 
 </table>
