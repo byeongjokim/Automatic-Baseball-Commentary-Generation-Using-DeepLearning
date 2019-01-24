@@ -163,6 +163,27 @@ This research describes the three models (scene classifier, player detection, mo
 </tr>
 </table>
 
+#### Recognize Position
+<table>
+<tr>
+<td colspan="2">ex) Scene of 1st Base</td>
+</tr>
+<tr>
+<td colspan="1"><sub>Detected <strong>one</strong> field player.</sub></td>
+<td colspan="1"><sub>Detected <strong>many</strong> field players.</sub></td>
+</tr>
+
+<tr>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/player/position_1.png?raw=1" height="200" width="380" alt="Noop"></td>
+<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/player/position_2.png?raw=1" height="200" width="380" alt="Noop"></td>
+</tr>
+
+<tr>
+<td colspan="1"><strong>Only one</strong> player who is in 1st Base scene<br>=> 1st Baseman</td>
+<td colspan="1">The player who is in <strong>significant area</strong> of 1st Base scene<br>=> 1st Baseman</td>
+</tr>
+</table>
+
 ---
 
 
