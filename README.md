@@ -7,7 +7,7 @@ This research describes the three models (scene classifier, player detection, mo
 ![Demo](/PNG/demo.gif)
 
 ## Models
-![Flow_chart](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/flow_chart.png?raw=1)
+![Flow_chart](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/flow_chart.png?raw=1)
 
 ## Scene Classifier
 <table>
