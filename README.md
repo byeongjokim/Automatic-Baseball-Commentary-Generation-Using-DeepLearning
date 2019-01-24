@@ -234,8 +234,3 @@ SELECT ?o WHERE {?s toHitter A . ?s fromPitcher B . ?s result ?o}
 ---
 
 ## How to run
-
-### Requirements
-- Python3
-- Tensorflow
-- Opencv3
