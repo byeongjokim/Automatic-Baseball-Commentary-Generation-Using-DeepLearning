@@ -4,7 +4,6 @@ This research describes the three models (scene classifier, player detection, mo
 
 
 ## Demo
-![Demo](/PNG/demo.gif)
 <table>
 <tr>
 <td colspan="1"><sub>Demo 1</sub></td>
@@ -45,10 +44,40 @@ This research describes the three models (scene classifier, player detection, mo
 
 </table>
 
-## Models
+## Flow
 ![Flow_chart](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/flow_chart.png?raw=1)
 
-## Scene Classifier
+<table>
+<tr>
+<td colspan="1">Type</td>
+<td colspan="1"></td>
+<td colspan="1">example</td>
+<td colspan="1">in English</td>
+</tr>
+<tr>
+<td colspan="1">A</td>
+<td colspan="1">Casting Using <strong>Web Data</strong> and <strong>Ontology(knowledge)</strong></td>
+<td colspan="1">스트라이크! 구석에 꽂히는 직구에 타자가 제대로 속았습니다. 유희관 투수 이번 시즌 높은 확률로 초구 스트라이크 잡아내고 있습니다.</td>
+<td colspan="1">Strike! The fastball in the corner. Yoo Hee-kwan is making his first pitch this season with a high chance.</td>
+</tr>
+<tr>
+<td colspan="1">B</td>
+<td colspan="1">Casting Using <strong>Scene Data</strong> and <strong>Ontology(knowledge)</strong></td>
+<td colspan="1"> 오지환 타자와 유희관 투수 사이에 긴장이 흐르는 가운데 오지환 타자 이번 시즌 2할 7푼의 타율을 기록하고 있습니다.</td>
+<td colspan="1">Amid tensions between Oh and Yoo, Oh has recorded a .27 batting average this season.</td>
+</tr>
+<tr>
+<td colspan="1">C</td>
+<td colspan="1">Casting Using <strong>Motion of Player</strong>, <strong>Position</strong> and <strong>Ontology(knowledge)</strong></td>
+<td colspan="1">유희관 투수 공을 던졌습니다.</td>
+<td colspan="1">Yoo Hee-kwan pitched.
+</td>
+</tr>
+</table>
+
+
+## Models
+### Scene Classifier
 <table>
 <tr><td colspan="3"><strong>About. BatterBox</strong></td></tr>
 <tr>
@@ -108,7 +137,7 @@ This research describes the three models (scene classifier, player detection, mo
 
 ---
 
-## Player Detector
+### Player Detector
 <table>
 
 <tr>
@@ -131,7 +160,7 @@ This research describes the three models (scene classifier, player detection, mo
 ---
 
 
-## Motion Classifier
+### Motion Classifier
 
 <table>
 
