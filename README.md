@@ -50,8 +50,8 @@ This research describes the three models (scene classifier, player detection, mo
 <table>
 <tr>
 <td colspan="1">Type</td>
-<td colspan="1"></td>
-<td colspan="1">example</td>
+<td colspan="1">Method</td>
+<td colspan="1">Example</td>
 <td colspan="1">in English</td>
 </tr>
 <tr>
