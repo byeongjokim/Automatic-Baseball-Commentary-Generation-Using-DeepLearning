@@ -56,21 +56,21 @@ This research describes the three models (scene classifier, player detection, mo
 </tr>
 <tr>
 <td colspan="1">A</td>
-<td colspan="1">Casting Using <strong>Web Data</strong> and <strong>Ontology(knowledge)</strong></td>
-<td colspan="1">스트라이크! 구석에 꽂히는 직구에 타자가 제대로 속았습니다. 유희관 투수 이번 시즌 높은 확률로 초구 스트라이크 잡아내고 있습니다.</td>
-<td colspan="1">Strike! The fastball in the corner. Yoo Hee-kwan is making his first pitch this season with a high chance.</td>
+<td colspan="1">Casting Using <span style="color:blue"><strong>Web Data</strong></span> and <span style="color:red"><strong>Ontology(knowledge)</strong></span></td>
+<td colspan="1"><span style="color:blue">스트라이크! 구석에 꽂히는 직구에</span> 타자가 제대로 속았습니다. <span style="color:red">유희관 투수 이번 시즌 높은 확률로 초구 스트라이크 잡아내고 있습니다.</span></td>
+<td colspan="1"><span style="color:blue">Strike! The fastball in the corner.</span> <span style="color:red">Yoo Hee-kwan is making his first pitch this season with a high chance.</span></td>
 </tr>
 <tr>
 <td colspan="1">B</td>
-<td colspan="1">Casting Using <strong>Scene Data</strong> and <strong>Ontology(knowledge)</strong></td>
-<td colspan="1"> 오지환 타자와 유희관 투수 사이에 긴장이 흐르는 가운데 오지환 타자 이번 시즌 2할 7푼의 타율을 기록하고 있습니다.</td>
-<td colspan="1">Amid tensions between Oh and Yoo, Oh has recorded a .27 batting average this season.</td>
+<td colspan="1">Casting Using <span style="color:blue"><strong>Scene Data</strong></span> and <span style="color:red"><strong>Ontology(knowledge)</strong></span></td>
+<td colspan="1"> <span style="color:blue">오지환 타자와 유희관 투수 사이에</span> 긴장이 흐르는 가운데 오지환 타자 <span style="color:red">이번 시즌 2할 7푼의 타율을 기록하고 있습니다.</span></td>
+<td colspan="1">Amid tensions <span style="color:blue">between Oh and Yoo</span>, <span style="color:red">Oh has recorded a .27 batting average this season.</span></td>
 </tr>
 <tr>
 <td colspan="1">C</td>
-<td colspan="1">Casting Using <strong>Motion of Player</strong>, <strong>Position</strong> and <strong>Ontology(knowledge)</strong></td>
-<td colspan="1">유희관 투수 공을 던졌습니다.</td>
-<td colspan="1">Yoo Hee-kwan pitched.
+<td colspan="1">Casting Using <span style="color:blue"><strong>Motion</strong></span> and <span style="color:green"><strong>Position</strong></span> of Player, and <span style="color:red"><strong>Ontology(knowledge)</strong></span></td>
+<td colspan="1"><span style="color:green">유희관 투수</span> <span style="color:blue">공을 던졌습니다.</span></td>
+<td colspan="1"><span style="color:green">Yoo Hee-kwan</span> <span style="color:blue">pitched.</span>
 </td>
 </tr>
 </table>
@@ -78,6 +78,7 @@ This research describes the three models (scene classifier, player detection, mo
 
 ## Models
 ### Scene Classifier
+#### Model
 ![Scene Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/model.png?raw=1)
 #### Classes
 <table>
@@ -140,7 +141,9 @@ This research describes the three models (scene classifier, player detection, mo
 ---
 
 ### Player Detector
-![Scene Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/player/model.png?raw=1)
+#### Model
+[Yolo tiny v2 model](https://pjreddie.com/darknet/yolo/)
+![Yolo Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/player/model.png?raw=1)
 #### Classes
 <table>
 <tr>
@@ -164,7 +167,8 @@ This research describes the three models (scene classifier, player detection, mo
 
 
 ### Motion Classifier
-![Motion Model1](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/model.png?raw=1)
+#### Model
+![Motion Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/model.png?raw=1)
 #### Classes
 <table>
 <tr>
@@ -200,9 +204,29 @@ This research describes the three models (scene classifier, player detection, mo
 ---
 
 ### Web Data
-![Flow_chart](/PNG/TextBroadcasting.png)
+![web](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/throwing.jpg?raw=1)
 
 - In [N company](http://www.naver.com), there is a KBO Text Broadcasting site. I can get text data in real time, when game is playing. [Text Broadcasting](http://sports.news.naver.com/kbaseball/schedule/indexnhn)
+
+---
+
+### Ontology
+#### Schema
+![schema](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/ontology/schema.png?raw=1)
+
+#### Example
+<table>
+<tr>
+<td colspan="1">Situation</td>
+<td colspan="1">SPARQL</td>
+</tr>
+<tr>
+<td colspan="1">Previous record between pitcher A and batter B</td>
+<td colspan="1">
+SELECT ?o WHERE {?s toHitter A . ?s fromPitcher B . ?s result ?o}
+</td>
+</tr>
+</table>
 
 ---
 
