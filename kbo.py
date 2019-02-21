@@ -29,7 +29,3 @@ class KBO():
     def train(self):
         vision = Vision(istest=0)
         vision.train(model="motion")
-
-kbo = KBO(istest=1)
-#kbo.train()
-kbo.run()

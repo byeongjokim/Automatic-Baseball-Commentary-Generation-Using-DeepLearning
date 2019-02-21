@@ -1,5 +1,5 @@
-**/_data
+*.mp4
+*.mp3
 **/_model
 **/__pycache__
 **/.idea
-*.mp3
