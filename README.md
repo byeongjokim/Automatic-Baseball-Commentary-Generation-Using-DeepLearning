@@ -56,19 +56,19 @@ This research describes the three models (scene classifier, player detection, mo
 </tr>
 <tr>
 <td colspan="1">A</td>
-<td colspan="1">Casting Using <span style="color:blue"><strong>Web Data</strong></span> and <span style="color:red"><strong>Ontology(knowledge)</strong></span></td>
-<td colspan="1"><span style="color:blue">스트라이크! 구석에 꽂히는 직구에</span> 타자가 제대로 속았습니다. <span style="color:red">유희관 투수 이번 시즌 높은 확률로 초구 스트라이크 잡아내고 있습니다.</span></td>
-<td colspan="1"><span style="color:blue">Strike! The fastball in the corner.</span> <span style="color:red">Yoo Hee-kwan is making his first pitch this season with a high chance.</span></td>
+<td colspan="1">Guessing with <span style="color:green"><strong>Situation Recognizer</strong></span>, Casting using <span style="color:blue"><strong>Web Data</strong></span> and <span style="color:red"><strong>Ontology(knowledge)</strong></span></td>
+<td colspan="1"><span style="color:blue"><span style="color:green">볼 인가요?</span> 아니네요 스트라이크! 구석에 꽂히는 직구에</span> 타자가 제대로 속았습니다. <span style="color:red">유희관 투수 이번 시즌 높은 확률로 초구 스트라이크 잡아내고 있습니다.</span></td>
+<td colspan="1"><span style="color:blue"><span style="color:green">Is it Ball?</span> No, Strike! The fastball in the corner.</span> <span style="color:red">Yoo Hee-kwan is making his first pitch this season with a high chance.</span></td>
 </tr>
 <tr>
 <td colspan="1">B</td>
-<td colspan="1">Casting Using <span style="color:blue"><strong>Scene Data</strong></span> and <span style="color:red"><strong>Ontology(knowledge)</strong></span></td>
+<td colspan="1">Casting using <span style="color:blue"><strong>Scene Data</strong></span> and <span style="color:red"><strong>Ontology(knowledge)</strong></span></td>
 <td colspan="1"> <span style="color:blue">오지환 타자와 유희관 투수 사이에</span> 긴장이 흐르는 가운데 오지환 타자 <span style="color:red">이번 시즌 2할 7푼의 타율을 기록하고 있습니다.</span></td>
 <td colspan="1">Amid tensions <span style="color:blue">between Oh and Yoo</span>, <span style="color:red">Oh has recorded a .27 batting average this season.</span></td>
 </tr>
 <tr>
 <td colspan="1">C</td>
-<td colspan="1">Casting Using <span style="color:blue"><strong>Motion</strong></span> and <span style="color:green"><strong>Position</strong></span> of Player, and <span style="color:red"><strong>Ontology(knowledge)</strong></span></td>
+<td colspan="1">Casting using <span style="color:blue"><strong>Motion</strong></span> and <span style="color:green"><strong>Position</strong></span> of Player, and <span style="color:red"><strong>Ontology(knowledge)</strong></span></td>
 <td colspan="1"><span style="color:green">유희관 투수</span> <span style="color:blue">공을 던졌습니다.</span></td>
 <td colspan="1"><span style="color:green">Yoo Hee-kwan</span> <span style="color:blue">pitched.</span>
 </td>
@@ -186,8 +186,7 @@ This research describes the three models (scene classifier, player detection, mo
 
 ---
 
-
-### Motion Classifier
+### Motion Recognizer
 #### Model
 ![Motion Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/model.png?raw=1)
 #### Classes
@@ -218,6 +217,26 @@ This research describes the three models (scene classifier, player detection, mo
 <td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/walking.jpg?raw=1" height="148" width="100" alt="Noop"></td>
 <td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/running.jpg?raw=1" height="148" width="100" alt="Noop"></td>
 <td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/catching-fielder.jpg?raw=1" height="148" width="100" alt="Noop"></td>
+</tr>
+
+</table>
+
+---
+
+### Situation Recognizer
+#### Model
+![Motion Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/situation/model.png?raw=1)
+
+#### Classes
+<table>
+<tr>
+<td colspan="1">Strike</td>
+<td colspan="1">Ball</td>
+<td colspan="1">Foul</td>
+<td colspan="1">Hit</td>
+<td colspan="1">Ground ball</td>
+<td colspan="1">Flying ball</td>
+<td colspan="1">etc</td>
 </tr>
 
 </table>
