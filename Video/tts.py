@@ -26,7 +26,7 @@ class TTS():
 
                 if(rescode==200):
                     response_body = response.read()
-                    path = "./video/annotation"+str(count)+".mp3"
+                    path = "./_data/tts/"+str(count)+".mp3"
                     with open(path, 'wb') as f:
                         f.write(response_body)
                     playsound.playsound(path)

@@ -22,8 +22,8 @@ class Scene_Model():
         self.lr = 0.0005
         self.rgb = 3
 
-        #self.ckpt = './_model/scene/scene.ckpt'
-        self.ckpt = './_model/scene/normal/scene.ckpt'
+        self.pre_train_ckpt = './_model/scene/pretrain/scene.ckpt'
+        self.ckpt = './_model/scene/scene.ckpt'
 
         self.X = tf.placeholder(tf.float32, [None, self.width, self.height, self.rgb])
         self.Y = tf.placeholder(tf.float32, [None, self.num_label])
@@ -36,7 +36,7 @@ class Scene_Model():
             P1 = tf.nn.dropout(P1, keep_prob=self.keep_prob)
 
             C2 = self.conv_layer(filter_size=3, fin=64, fout=128, din=P1, name='C2')
-            C2_2 = self.conv_layer(filter_size=3, fin=128, fout=128, din=C2, name='C2_2')
+            #C2_2 = self.conv_layer(filter_size=3, fin=128, fout=128, din=C2, name='C2_2')
             P2 = self.pool(C2, option="maxpool")
             P2 = tf.nn.dropout(P2, keep_prob=self.keep_prob)
 
@@ -52,8 +52,8 @@ class Scene_Model():
 
             C5_1 = self.conv_layer(filter_size=3, fin=512, fout=512, din=P4, name='C5_1')
             C5_2 = self.conv_layer(filter_size=3, fin=512, fout=512, din=C5_1, name='C5_2')
-            P5 = self.pool(C5_2, option="maxpool")
-            P5 = tf.nn.dropout(P5, keep_prob=self.keep_prob)
+            self.P5 = self.pool(C5_2, option="maxpool")
+            P5 = tf.nn.dropout(self.P5, keep_prob=self.keep_prob)
 
             fc0 = tf.reshape(P5, [-1, 7 * 7 * 512])
 
@@ -70,7 +70,6 @@ class Scene_Model():
                 b3 = tf.get_variable("b3", shape=[self.num_label], initializer=tf.contrib.layers.xavier_initializer())
                 self.model = tf.matmul(fc2, W3) + b3
 
-        print(self.model)
         self.cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=self.model, labels=self.Y))
         self.output = tf.nn.softmax(self.model)
 
@@ -80,8 +79,7 @@ class Scene_Model():
             saver = tf.train.Saver(scene)
             saver.restore(self.sess, self.ckpt)
 
-    @staticmethod
-    def conv_layer(filter_size, fin, fout, din, name):
+    def conv_layer(self, filter_size, fin, fout, din, name):
         with tf.variable_scope(name):
             W = tf.get_variable(name=name + "_W", shape=[filter_size, filter_size, fin, fout],
                                 initializer=tf.contrib.layers.xavier_initializer())
@@ -90,8 +88,7 @@ class Scene_Model():
             R = tf.nn.relu(tf.nn.bias_add(C, b))
             return R
 
-    @staticmethod
-    def pool(din, option='maxpool'):
+    def pool(self, din, option='maxpool'):
         if (option == 'maxpool'):
             pool = tf.nn.max_pool(din, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
         elif (option == 'avrpool'):
@@ -100,8 +97,7 @@ class Scene_Model():
             return din
         return pool
 
-    @staticmethod
-    def crop_img(img, scale=1.0):
+    def crop_img(self, img, scale=1.0):
         center_x, center_y = img.shape[1] / 2, img.shape[0] / 2
         width_scaled, height_scaled = img.shape[1] * scale, img.shape[0] * scale
         left_x, right_x = center_x - width_scaled / 2, center_x + width_scaled / 2
@@ -113,9 +109,9 @@ class Scene_Model():
         data_set = []
 
         for p in play:
-            folder_path = "../kbo/_data/" + p + "/"
+            print(p)
+            folder_path = "_data/" + p + "/"
             csv_path = folder_path + p + ".csv"
-            print(csv_path)
 
             dataset = []
             f = open(csv_path, "r")
@@ -123,16 +119,17 @@ class Scene_Model():
             for line in reader:
                 if(int(line[0]) < int(line[1]) and int(line[1]) - int(line[0]) < 200):
                     sett = {"start":line[0], "end":line[1], "label":line[2]}
-                    """
-                    if (int(sett["label"]) != 11 and int(sett["label"]) != 12):
-                        dataset.append(sett)
-                    """
+                    if (sett["label"] == "13"):  #right field
+                        sett["label"] = "9"
                     dataset.append(sett)
-
             f.close()
 
-            interval = 4
             for i in dataset:
+                if(i["label"] == "0" or i["label"] == "1" or i["label"] == "2"):
+                    interval = 3
+                else:
+                    interval = 1
+
                 for j in range(int(i["start"]), int(i["end"])+1, interval):
                     if(self.rgb == 1):
                         image = cv2.resize(
@@ -152,36 +149,36 @@ class Scene_Model():
                         )
 
                     data_set.append({"image":image, "label":int(i["label"])})
-                    """
-                    if (int(i["label"]) == 6):  #first base
+
+                    if (int(i["label"]) == 5):  #first base
+                        image = cv2.flip(image, 1)
+                        data_set.append({"image":image, "label":10})
+                    if (int(i["label"]) == 10):  # third base
+                        image = cv2.flip(image, 1)
+                        data_set.append({"image": image, "label": 5})
+
+                    if (int(i["label"]) == 11):  # left field
+                        image = cv2.flip(image, 1)
+                        data_set.append({"image": image, "label": 7})
+                    if (int(i["label"]) == 7):  #right field
                         image = cv2.flip(image, 1)
                         data_set.append({"image":image, "label":11})
 
-                    if (int(i["label"]) == 8):  #right field
-                        image = cv2.flip(image, 1)
-                        data_set.append({"image":image, "label":12})
-                    """
-        random.shuffle(data_set)
 
         X = np.array([i["image"] for i in data_set])
         _y = np.array([i["label"] for i in data_set])
-        third_base = [i for i in data_set if (i["label"] == 11)]
-        left_outfield = [i for i in data_set if (i["label"] == 12)]
-        print("==================================================")
-        print("3rd base : ", str(len(third_base)))
-        print("left_outfield : ", str(len(left_outfield)))
-        print("==================================================")
         Y = np.zeros((len(_y), len(set(_y))))
-        Y[np.arange(len(_y)), [i-1 for i in _y]] = 1
+        Y[np.arange(len(_y)), [i for i in _y]] = 1
 
         num_data = len(X)
-
+        print(num_data)
+        """
         num_test = 30
         num_test = num_test * -1
 
         num_validation = 100
         num_validation = num_validation * -1
-
+        
         self.train_x = X[:num_validation + num_test]
         self.train_y = Y[:num_validation + num_test]
 
@@ -190,8 +187,11 @@ class Scene_Model():
 
         self.test_x = X[num_test:].reshape(-1, self.width, self.height, self.rgb)
         self.test_y = Y[num_test:]
-
+        
         print(str(num_data) + " data, " + str(len(self.train_x)) + " train data " + str(len(self.valid_x)) + " valid data " + str(len(self.test_x)) + " test data ")
+        """
+        self.train_x = X
+        self.train_y = Y
 
     def train(self):
         optimizer = tf.train.AdamOptimizer(self.lr).minimize(self.cost)
@@ -201,16 +201,12 @@ class Scene_Model():
 
         scene = [k for k in all_vars if k.name.startswith("scene")]
         saver = tf.train.Saver(scene)
-        #saver.restore(self.sess, self.ckpt)
+        saver.restore(self.sess, self.pre_train_ckpt)
 
         xs = []
         ys = []
-        yv = []
 
         total_batch = int(len(self.train_x) / self.batch_size)
-
-        validation_loss = self.sess.run(self.cost, feed_dict={self.X: self.valid_x, self.Y: self.valid_y, self.keep_prob: 1}) * 100
-        print("Validation Set Accuracy : ", validation_loss)
         for e in range(self.epoch):
             total_cost = 0
 
@@ -227,32 +223,22 @@ class Scene_Model():
                 batch_x = batch_x.reshape(-1, self.width, self.height, self.rgb)
                 batch_y = batch_y.reshape(-1, self.num_label)
 
-                _, cost_val = self.sess.run([optimizer, self.cost],
-                                            feed_dict={self.X: batch_x, self.Y: batch_y, self.keep_prob: 0.75})
+                _, cost_val = self.sess.run([optimizer, self.cost], feed_dict={self.X: batch_x, self.Y: batch_y, self.keep_prob: 0.75})
 
                 total_cost = total_cost + cost_val
 
             print('Epoch:', '%d' % (e + 1), 'Average cost =', '{:.3f}'.format(total_cost / total_batch))
 
-            validation_loss = self.sess.run(self.cost, feed_dict={self.X: self.valid_x, self.Y: self.valid_y, self.keep_prob: 1})
-            print("Validation Set Accuracy : ", validation_loss)
-
-            if (validation_loss < 0.03):
-                break
-
             if (total_cost / total_batch < 0.03):
                 break
-
 
             xs.append(e+1)
             ys.append(total_cost / total_batch)
 
-            yv.append(validation_loss)
 
         print("complete")
         saver.save(self.sess, self.ckpt)
         plt.plot(xs, ys, 'b')
-        plt.plot(xs, yv, 'r')
         plt.show()
 
     def get_accuracy(self, v):
@@ -307,13 +293,9 @@ class Scene_Model():
                 batch_y = Y[j:j + batch_size]
                 j = j + batch_size
 
-            #print('accuracy: ', self.sess.run(accuracy, feed_dict={self.X: batch_x, self.Y: batch_y, self.keep_prob: 1}) * 100)
             acc = acc + self.sess.run(accuracy, feed_dict={self.X: batch_x, self.Y: batch_y, self.keep_prob: 1}) * 100
 
         print(acc/total_batch)
-
-        #print('accuracy: ', self.sess.run(accuracy, feed_dict={self.X: X, self.Y: Y, self.keep_prob: 1}) * 100)
-
 
     def predict(self, image):
         image = cv2.resize(image, (self.width, self.height))
@@ -327,7 +309,7 @@ class Scene_Model():
 
         image_X = image.reshape(-1, self.width, self.height, self.rgb)
 
-        score, output = self.sess.run([self.output, tf.argmax(self.output, 1)],
+        score, output, P5 = self.sess.run([self.output, tf.argmax(self.output, 1), self.P5],
                                       feed_dict={self.X: image_X, self.keep_prob: 1})
 
-        return output[0], max(score[0])
+        return output[0], max(score[0]), np.reshape(P5, (7, 7, 512))

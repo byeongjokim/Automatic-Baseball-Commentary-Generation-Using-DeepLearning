@@ -1,12 +1,11 @@
-import numpy
-class Resources():
+class Resource():
     frame = []
 
     exit = False
 
     seq = 1
-    prev_annotation = ""
     prev_annotation_text = ""
+    prev_annotation = ""
     annotation = "중계방송 준비중입니다."
 
     break_time = False
@@ -14,36 +13,6 @@ class Resources():
     strike = 0
     ball = 0
     out = 0
-
-    def set_annotation_2(self, label):
-        if(label == 0):
-            self.annotation = "타석 장면"
-        elif(label == 1):
-            self.annotation = "타자 장면"
-        elif (label == 2):
-            self.annotation = "클로즈업 장면"
-        elif (label == 3):
-            self.annotation = "코치석 장면"
-        elif (label == 4):
-            self.annotation = "응원석 장면"
-        elif (label == 5):
-            self.annotation = "1루 장면"
-        elif (label == 6):
-            self.annotation = "중앙 외야 장면"
-        elif (label == 7):
-            self.annotation = "오른쪽 외야 장면"
-        elif (label == 8):
-            self.annotation = "2루 장면"
-        elif (label == 9):
-            self.annotation = "기타 장면"
-        elif (label == 10):
-            self.annotation = "3루 장면"
-        elif (label == 11):
-            self.annotation = "왼쪽 외야 장면"
-        elif (label == 12):
-            self.annotation = "유격수 장면"
-
-
 
     def set_annotation(self, annotation):
         self.prev_annotation = self.annotation
@@ -56,7 +25,7 @@ class Resources():
         else:
             return 0
 
-    def is_new_annotation_text(self):
+    def is_new_annotation_video(self):
         if not (self.prev_annotation_text == self.annotation):
             self.prev_annotation_text = self.annotation
             return 1
@@ -163,7 +132,7 @@ class Resources():
 
     def set_LineUp(self, LineUp):
 
-        sett = {"catcher":None, "1st":None, "2nd":None, "3rd":None, "SS":None, "ROF":None, "LOF":None, "COF":None}
+        sett = {"catcher":None, "1st":None, "2nd":None, "3rd":None, "ss":None, "ROF":None, "LOF":None, "COF":None}
 
         hometeam = LineUp["HomePitchers"] + LineUp["HomeBatters"]
         awayteam = LineUp["AwayPitchers"] + LineUp["AwayBatters"]
@@ -188,7 +157,7 @@ class Resources():
 
         self.homeTeam = sett
 
-        sett = {"catcher":None, "1st":None, "2nd":None, "3rd":None, "SS":None, "ROF":None, "LOF":None, "COF":None}
+        sett = {"catcher":None, "1st":None, "2nd":None, "3rd":None, "ss":None, "ROF":None, "LOF":None, "COF":None}
 
         for player in LineUp["AwayBatters"]:
             if(player["posName"] == "1루수"):
@@ -262,5 +231,11 @@ class Resources():
             if (self.awayTeam["COF"] == player_out):
                 self.awayTeam["COF"] = player_in
 
-        print(self.homeTeam)
-        print(self.awayTeam)
+    def get_player_with_position(self, position):
+        btop = self.get_btop()
+        if btop == 0:
+            lineup = self.get_LineUp(0)
+        else:
+            lineup = self.get_LineUp(1)
+
+        return lineup[position]["name"]

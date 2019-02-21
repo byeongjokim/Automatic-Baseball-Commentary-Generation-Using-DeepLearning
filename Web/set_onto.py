@@ -1,7 +1,3 @@
-import owlready2
-import re
-import rdflib
-
 def create_game(onto, GameInfo):
 
     game = onto.Game(GameInfo["DateHomeAway"])

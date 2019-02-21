@@ -1,18 +1,41 @@
 import rdflib
+import settings
 
-class Ontology_String():
+class Annotation():
     def __init__(self):
         self.g = rdflib.Graph()
-        #self.g.load('../_data/_owl/180515SKOB.owl')
-        self.g.load('_data/_owl/baseball.owl')
-        self.uri = "http://ailab.hanyang.ac.kr/ontology/baseball#"
-        self.set_object_properties()
-        self.set_data_properties()
+        self.g.load(settings.OWL_FILE)
+        self.uri = settings.OWL_URI
+        self._set_object_properties()
+        self._set_data_properties()
 
         self.home_atmosphere = 0
 
+    def _set_instance(self):
+
+        return 1
+
+    def _set_object_properties(self):
+        self.inGame = rdflib.URIRef(self.uri + "inGame")
+
+        self.fromPitcher = rdflib.URIRef(self.uri + "fromPitcher")
+        self.toHitter = rdflib.URIRef(self.uri + "toHitter")
+
+        self.stayIn1stBase = rdflib.URIRef(self.uri + "stayIn1stBase")
+        self.stayIn2ndBase = rdflib.URIRef(self.uri + "stayIn2ndBase")
+        self.stayIn3rdBase = rdflib.URIRef(self.uri + "stayIn3rdBase")
+
+        self.result = rdflib.URIRef(self.uri + "result")
+
+    def _set_data_properties(self):
+        self.thisERA = rdflib.URIRef(self.uri + "thisERA")
+        self.thisAVG = rdflib.URIRef(self.uri + "thisAVG")
+
     def reload(self):
-        self.g.load('_data/_owl/baseball.owl')
+        try:
+            self.g.load(settings.OWL_FILE)
+        except:
+            pass
 
     def get_atmosphere(self, strike_ball_out, b=None, p=None):
         strike, ball, out = strike_ball_out
@@ -32,12 +55,12 @@ class Ontology_String():
         elif(ball == 3):
             if(p):
                 p = self.get_player_name(p)
-                annotation_atmosphere.append("포볼인 상황 " + p + " 투수 좋은 공을 던져야 합니다.")
+                annotation_atmosphere.append("쓰리볼인 상황 " + p + " 투수 좋은 공을 던져야 합니다.")
             if(b):
                 b = self.get_player_name(b)
                 annotation_atmosphere.append(b + " 타자 포볼로 출루 할 수 있는 기회입니다.")
                 annotation_atmosphere.append(b + " 타자 출루까지 볼 하나 남겨두고 있습니다.")
-                annotation_atmosphere.append("포볼인 상황 " + b + " 타자 공을 잘 걸러낼 수 있을까요?")
+                annotation_atmosphere.append("쓰리볼인 상황 " + b + " 타자 공을 잘 걸러낼 수 있을까요?")
 
         elif (out == 2):
             if(p):
@@ -48,28 +71,6 @@ class Ontology_String():
                 annotation_atmosphere.append(b + " 타자 아웃 당하면 이번 공격 마무리 됩니다.")
 
         return annotation_atmosphere
-
-    def set_instance(self):
-
-        return 1
-
-    def set_object_properties(self):
-        #arrivedTo1stBase = rdflib.URIRef(self.uri + "arrivedTo1stBase")
-
-        self.inGame = rdflib.URIRef(self.uri + "inGame")
-
-        self.fromPitcher = rdflib.URIRef(self.uri + "fromPitcher")
-        self.toHitter = rdflib.URIRef(self.uri + "toHitter")
-
-        self.stayIn1stBase = rdflib.URIRef(self.uri + "stayIn1stBase")
-        self.stayIn2ndBase = rdflib.URIRef(self.uri + "stayIn2ndBase")
-        self.stayIn3rdBase = rdflib.URIRef(self.uri + "stayIn3rdBase")
-
-        self.result = rdflib.URIRef(self.uri + "result")
-
-    def set_data_properties(self):
-        self.thisERA = rdflib.URIRef(self.uri + "thisERA")
-        self.thisAVG = rdflib.URIRef(self.uri + "thisAVG")
 
     def search_team(self, gameinfo, btop):
         home_Fname = gameinfo[3][0]
@@ -330,8 +331,8 @@ class Ontology_String():
         if(runner):
             runner = self.get_player_name(str(runner))
             annotation = [
-                "1루에 " + str(runner) + "선수가 주자로 나와있습니다.",
-                "1루에 " + str(runner) + "선수가 나가 있습니다.",
+                "1루에는 " + str(runner) + "선수가 주자로 나가있습니다.",
+                "1루에는 " + str(runner) + "선수가 나가있습니다.",
             ]
 
         return annotation, runner
@@ -355,8 +356,8 @@ class Ontology_String():
         if (runner):
             runner = self.get_player_name(str(runner))
             annotation = [
-                "2루에 " + str(runner) + "선수가 주자로 나와있습니다.",
-                "2루에 " + str(runner) + "선수가 나가 있습니다.",
+                "2루에 " + str(runner) + "선수가 주자로 나가있습니다.",
+                "2루에 " + str(runner) + "선수가 나가있습니다.",
             ]
 
         return annotation, runner
@@ -380,19 +381,105 @@ class Ontology_String():
         if (runner):
             runner = self.get_player_name(str(runner))
             annotation = [
-                "3루에 " + str(runner) + "선수가 주자로 나와있습니다.",
-                "3루에 " + str(runner) + "선수가 나가 있습니다.",
+                "3루에 " + str(runner) + "선수가 주자로 나가있습니다.",
+                "3루에 " + str(runner) + "선수가 나가있습니다.",
             ]
 
         return annotation, runner
 
-    @staticmethod
-    def get_player_name(name):
+    def get_player_name(self, name):
         return "".join([s for s in list(name) if not s.isdigit()])
 
-    @staticmethod
-    def change_result_history_to_korean(h):
+    def change_result_history_to_korean(self, h):
         result = ["BaseByError", "BaseOnBalls", "HitByPitch", "Double", "HomeRun", "Triple", "SingleHit", "Fly", "OutInBase", "Strikeout", "Out", "GetOnBase"]
         korean = ["실책 출루", "포 볼", "데드 볼", "2루타", "홈런", "3루타", "1루타", "플라이 아웃", "땅볼 아웃", "스트라이크 아웃", "아웃", "출루"]
 
         return korean[result.index(h)]
+
+    def get_motion_annotation(self, scene_label, motion_label, who=None, resource=None):
+        anno = []
+        if (who):
+            if(who == "pitcher" and motion_label == 3):
+                pitcher = self._get_player_name(resource.get_pitcher())
+                anno = [
+                    str(pitcher) + " 투수 공을 던졌습니다.",
+                    "공을 던졌습니다.",
+                    str(pitcher) + " 투수 타자를 향해 힘껏 공을 던졌습니다.",
+                ]
+
+            if(who == "batter" and motion_label == 0):
+                batter = self.get_player_name(resource.get_batter())
+                anno = [
+                    str(batter) + "타자 배트를 휘둘렀습니다.",
+                    str(batter) + "타자 힘차게 배트를 휘둘렀습니다.",
+                    "배트를 휘둘렀습니다.",
+                    "스윙!",
+                ]
+        else:
+            position = ""
+            position_ = ""
+            if (scene_label == 5):  # first base
+                position = "1st"
+                position_ = "1루수"
+            if (scene_label == 8):  # second base
+                position = "2nd"
+                position_ = "2루수"
+            if (scene_label == 10):  # third base
+                position = "3rd"
+                position_ = "3루수"
+            if (scene_label == 6):  # center outfield
+                position = "COF"
+                position_ = "중견수"
+            if (scene_label == 7):  # right outfield
+                position = "ROF"
+                position_ = "우익수"
+            if (scene_label == 11):  # left outfield
+                position = "LOF"
+                position_ = "좌익수"
+            if (scene_label == 12):  # ss
+                position = "ss"
+                position_ = "유격수"
+
+            if(position):
+                player = resource.get_player_with_position(position)
+                player = self._get_player_name(player)
+                anno = []
+                if (motion_label == 2):
+                    anno = [position_ + " 송구 하였습니다.", player + "선수 송구 하였습니다.",
+                            position_ + " " + player + "선수 송구 하였습니다."]
+                elif (motion_label == 5):
+                    anno = [position_ + " 공을 잡았습니다.", player + "선수 공을 잡았습니다.",
+                            position_ + " " + player + "선수 공을 잡았습니다."]
+                elif (motion_label == 6 or motion_label == 7):
+                    anno = [position_ + " 쪽 입니다.",
+                            player + "선수 쪽 입니다.",
+                            position_ + " " + player + "선수 쪽 입니다.",
+                            position_ + " " + player + "선수"]
+        return anno
+
+    def get_situation_annotation(self, situation_label, scene_label):
+        anno = []
+        if(((scene_label > 4 and scene_label < 13) and scene_label != 9) and (situation_label < 6 and situation_label > 2)):
+            print("hit or ground or flying", situation_label)
+            if(situation_label == 3):
+                anno = anno + ["타자 친공, 안타가 될 수 있을까요?"]
+
+            elif(situation_label == 4):
+                anno = anno + ["타자 플라이아웃 인가요?",
+                               "타자가 친공 높이 떴습니다."
+                               ]
+            elif(situation_label == 5):
+                anno = anno + ["타자가 친공 낮게 굴러갑니다.",
+                               "땅볼 처리 되나요?"]
+
+        if((scene_label < 3 ) and (situation_label < 3)):
+            if(situation_label == 0):
+                anno = anno + ["스트라이크 인가요?",
+                               "스트라이크로 예상됩니다."]
+            elif(situation_label == 1):
+                anno = anno + ["볼로 판정 될 것 같습니다."]
+
+        return anno
+
+    def _get_player_name(self, name):
+        return "".join([s for s in list(name) if not s.isdigit()])
