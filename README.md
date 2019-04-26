@@ -11,7 +11,7 @@ This research describes the three models (scene classifier, player detection, mo
 
 <tr>
 <td colspan="1">
-[Download video](https://1drv.ms/v/s!AvVDi_7fZiBTmTx1YdA1Y_yb2-z2)
+[Download video](https://1drv.ms/v/s!AvVDi_7fZiBTmTx1YdA1Y_yb2-z2) 
 </td>
 </tr>
 
@@ -21,9 +21,9 @@ This research describes the three models (scene classifier, player detection, mo
 
 <tr>
 <td colspan="1">
-[Download video(high)](https://1drv.ms/v/s!AvVDi_7fZiBTjF4pHNja6cCqGoJm)
+[Download video(high)](https://1drv.ms/v/s!AvVDi_7fZiBTjF4pHNja6cCqGoJm) 
 <br>
-[Download video(low)](https://1drv.ms/v/s!AvVDi_7fZiBTjFzcG_MBqgyz5kXt)
+[Download video(low)](https://1drv.ms/v/s!AvVDi_7fZiBTjFzcG_MBqgyz5kXt) 
 </td>
 </tr>
 </table>
