@@ -6,19 +6,25 @@ This research describes the three models (scene classifier, player detection, mo
 ## Demo
 <table>
 <tr>
-<td colspan="1">Demo 1</td>
+<td colspan="1">Demo 1 (with situation recognition, 2:27)</td>
 </tr>
 
 <tr>
-<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/demo/demo1.gif?raw=1" height="500" width="800" alt="Noop"></td>
+<td colspan="1">
+[Download video](https://1drv.ms/v/s!AvVDi_7fZiBTmTx1YdA1Y_yb2-z2)
+</td>
 </tr>
 
 <tr>
-<td colspan="1">Demo 2</td>
+<td colspan="1">Demo 2 (without situation recognition, 5:07)</td>
 </tr>
 
 <tr>
-<td colspan="1"><img src="https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/demo/demo2.gif?raw=1" height="500" width="800" alt="Noop"></td>
+<td colspan="1">
+[Download video(high)](https://1drv.ms/v/s!AvVDi_7fZiBTjF4pHNja6cCqGoJm)
+<br>
+[Download video(low)](https://1drv.ms/v/s!AvVDi_7fZiBTjFzcG_MBqgyz5kXt)
+</td>
 </tr>
 </table>
 <table>
@@ -56,9 +62,9 @@ This research describes the three models (scene classifier, player detection, mo
 </tr>
 <tr>
 <td colspan="1">A</td>
-<td colspan="1">Guessing with <span style="color:green"><strong>Situation Recognizer</strong></span>, Casting using <span style="color:blue"><strong>Web Data</strong></span> and <span style="color:red"><strong>Ontology(knowledge)</strong></span></td>
-<td colspan="1"><span style="color:blue"><span style="color:green">볼 인가요?</span> 아니네요 스트라이크! 구석에 꽂히는 직구에</span> 타자가 제대로 속았습니다. <span style="color:red">유희관 투수 이번 시즌 높은 확률로 초구 스트라이크 잡아내고 있습니다.</span></td>
-<td colspan="1"><span style="color:blue"><span style="color:green">Is it Ball?</span> No, Strike! The fastball in the corner.</span> <span style="color:red">Yoo Hee-kwan is making his first pitch this season with a high chance.</span></td>
+<td colspan="1">Casting using <span style="color:blue"><strong>*Web Data</strong></span>, <span style="color:green"><strong>Situation Recognition</strong></span> and <span style="color:red"><strong>Ontology(knowledge)</strong></span></td>
+<td colspan="1"><span style="color:blue"><span style="color:green">볼 인가요?</span> 스트라이크! 구석에 꽂히는 직구에</span> 타자가 제대로 속았습니다. <span style="color:red">유희관 투수 이번 시즌 높은 확률로 초구 스트라이크 잡아내고 있습니다.</span></td>
+<td colspan="1"><span style="color:blue"><span style="color:green">Is it Ball?</span> Strike! The fastball in the corner.</span> <span style="color:red">Yoo Hee-kwan is making his first pitch this season with a high chance.</span></td>
 </tr>
 <tr>
 <td colspan="1">B</td>
@@ -75,9 +81,12 @@ This research describes the three models (scene classifier, player detection, mo
 </tr>
 </table>
 
+*** The referee's judgment(strike, ball, foul, out ...) is casted by web data
+
+
 
 ## Models
-### Scene Classifier
+### Scene Classification
 #### Model
 ![Scene Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/model.png?raw=1)
 #### Classes
@@ -130,17 +139,16 @@ This research describes the three models (scene classifier, player detection, mo
 </tr>
 </table>
 
-#### Zero-Shot Learning
+#### Data Augmentation
 ![Scene](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/zero_shot.png?raw=1)
 
-- using 0 3rd Base data, 0 Left OutField data.
-- In Baseball Game, There are few data of 3rd Base and Right OutField than others. But I can train these two data with others. Almost Baseball Field have symmetrical characters. So I can get these data with flipping other training data.
+- In Baseball Game, There are few data of 3rd Base and Right OutField than others. But I can train these with others. Almost Baseball Field have symmetrical characters. So I can supplement data with flipping other classes' data.
 - 3rd Base <-> 1st Base
 - Right OutField <-> Left OutField
 
 ---
 
-### Player Detector
+### Player Detection
 #### Model
 [Yolo tiny v2 model](https://pjreddie.com/darknet/yolo/)
 ![Yolo Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/player/model.png?raw=1)
@@ -186,7 +194,7 @@ This research describes the three models (scene classifier, player detection, mo
 
 ---
 
-### Motion Recognizer
+### Motion Recognition
 #### Model
 ![Motion Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/model.png?raw=1)
 #### Classes
@@ -223,23 +231,18 @@ This research describes the three models (scene classifier, player detection, mo
 
 ---
 
-### Situation Recognizer
+### Situation Recognition
 #### Model
 ![Motion Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/situation/model.png?raw=1)
 
 #### Classes
-<table>
-<tr>
-<td colspan="1">Strike</td>
-<td colspan="1">Ball</td>
-<td colspan="1">Foul</td>
-<td colspan="1">Hit</td>
-<td colspan="1">Ground ball</td>
-<td colspan="1">Flying ball</td>
-<td colspan="1">etc</td>
-</tr>
-
-</table>
+- Strike
+- Ball
+- Foul
+- Hit
+- Ground Ball
+- Flying Ball
+- Etc.
 
 ---
 
