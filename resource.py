@@ -38,6 +38,9 @@ class Resource():
         else:
             return self.annotation
 
+    def set_frameno(self, frameno):
+        self.frameno = frameno
+
     def set_frame(self, frame):
         self.frame = frame
 

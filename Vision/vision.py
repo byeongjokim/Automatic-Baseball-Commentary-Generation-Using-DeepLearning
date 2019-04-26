@@ -90,7 +90,6 @@ class Vision(object):
                     print("===============", situation_count, situation_label, situation_score, scene_label)
                 """
                 if (situation_count == 9):
-                    print("===============", situation_label, scene_label)
                     anno = self.annotation.get_situation_annotation(situation_label, scene_label)
                     situation_count = 0
                     self._choose_random_annotation(anno)

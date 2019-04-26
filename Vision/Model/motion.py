@@ -259,7 +259,7 @@ class Motion_Model(Motion):
         return tf.gather(flat, index)
 
     def load_data(self):
-        folder_name = "./_data/_motion/"
+        folder_name = "D:\\work\\kbo\\_data\\_motion\\"
         csv_path = folder_name + "motion.csv"
 
         f = open(csv_path, "r")
@@ -283,6 +283,7 @@ class Motion_Model(Motion):
 
                     dataset.append({"X" : X, "Y" : m, "L" : leng})
 
+                    """
                     X = [cv2.resize(cv2.imread(folder_name + str(i) + ".jpg"), (self.width, self.height)) for j in range(i, i + self.length, 3) if (j <= int(line[1]))]
                     leng = len(X)
 
@@ -300,7 +301,7 @@ class Motion_Model(Motion):
                         X = X + [pad for j in range(num_pad)]
 
                     dataset.append({"X": X, "Y": m, "L": leng})
-
+                    """
 
         return dataset
 
@@ -383,14 +384,11 @@ class Motion_Model(Motion):
             return None, None
 
     def evaluation(self):
-        score = {}
         motions = ["batting", "batting_waiting", "throwing", "pitching", "catch_catcher", "catch_field", "run", "walking", "nope"]
-        for m in motions:
-            score[m] = [0.0, 0.0]
 
         dataset = self.load_data()
-        random.shuffle(dataset)
-        random.shuffle(dataset)
+        #random.shuffle(dataset)
+        #random.shuffle(dataset)
         random.shuffle(dataset)
         random.shuffle(dataset)
         dataset = dataset[:500]
@@ -399,22 +397,21 @@ class Motion_Model(Motion):
         Y = [d["Y"] for d in dataset]
         print(collections.Counter(Y))
 
+        a = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        b = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        c = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+
         for d in dataset:
             x = [d["X"]]
             y = d["Y"]
             l = [d["L"]]
             output = self.sess.run(tf.argmax(self.output, 1), feed_dict={self.image: x, self.L: l, self.keep_prob: 1})
 
-            motion = motions[output[0]]
-
-            score[motion][1] = score[motion][1] + 1
+            a[y] = a[y] + 1
+            b[output[0]] = b[output[0]] + 1
             if(y == output[0]):
-                score[motion][0] = score[motion][0] + 1
+                c[output[0]] = c[output[0]] + 1
 
-        mAP = 0
-        for m in motions:
-            mAP = mAP + score[m][0]/score[m][1]
-
-        print(mAP/len(motions))
-        print(score)
-
+        print(a)
+        print(b)
+        print(c)

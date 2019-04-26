@@ -113,7 +113,6 @@ class Web(object):
             else:  # pitching and batting
                 annotation = self.PB.set(relayText, ball_data)
 
-            #shutil.copy2(settings.OWL_FILE, settings.OWL_FILE_READONLY)
             print("from rule\t\t", annotation)
             if(flag == 1):
                 self.resources.set_annotation(annotation)

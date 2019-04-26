@@ -105,6 +105,8 @@ class Scene_Model():
         img_cropped = img[int(top_y):int(bottom_y), int(left_x):int(right_x)]
         return img_cropped
 
+    def make_data(self):
+        v = ["180515LGSS", "180516LGSS", "1"]
     def load_data(self, play):
         data_set = []
 

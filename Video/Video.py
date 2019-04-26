@@ -24,21 +24,33 @@ def play(resource):
 
     text = resource.get_annotation()
     textimage = text_2_img(text)
+    #resource.set_frameno(settings.START_FRAME + 1)
 
+    frameno = settings.START_FRAME + 1
+    save_flag = 0
+    save_imgno = 0
     while True:
         start = time()
 
         success, frame = video.read()
+        frameno = frameno + 1
         resource.set_frame(frame)
+        #resource.set_frameno(settings.START_FRAME + frameno)
         if cv2.waitKey(1) == ord('q'):
             break
 
         if (resource.is_new_annotation_video()):
+            save_flag = 1
             text = resource.get_annotation()
             textimage = text_2_img(text)
 
         frame[h - 100 : h - 50, 100 : w - 100] = textimage
         cv2.imshow("play", frame)
+
+        if(save_flag == 1):
+            cv2.imwrite("./_result/" + settings.FILE_NAME + "/" + str(frameno).zfill(3) + ".jpg", frame)
+            save_flag = 0
+            save_imgno = save_imgno + 1
 
         diff = time() - start
         while diff < fps:
