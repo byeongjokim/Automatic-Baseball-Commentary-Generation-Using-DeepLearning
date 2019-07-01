@@ -87,18 +87,21 @@ class Web(object):
 
         return newlist
 
-    def parsing_relaytext(self):
+    def get_frameno(self, pitch_timestamp):
+        pitch_second = int(str(pitch_timestamp)[:2]) * 3600 + int(str(pitch_timestamp)[2:4]) * 60 + int(str(pitch_timestamp)[4:6])
+        frame_interval = (pitch_second - settings.FIRST_BATTERBOX_START_IN_OWL_SECOND) * settings.FPS
+        now_frameno = frame_interval + settings.FIRST_BATTERBOX_START_IN_VIDEO
+
+        return now_frameno
+
+    def parsing_before(self):
         self.PB = PitchingBatting(self.GameInfo, self.LineUp, self.onto, self.resources)
         self.C = Change(self.GameInfo, self.LineUp, self.onto, self.resources)
         self.R = Result(self.GameInfo, self.LineUp, self.onto, self.resources)
 
-        flag = 0
-        for relayText in self.relayTexts:
-            if (int(relayText["pitchId"].split("_")[-1]) > int(settings.START_WEB) and flag == 0):
-                flag = 1
-            if(flag == 1):
-                next = input("next : ")
-
+        for idx, relayText in enumerate(self.relayTexts):
+            if (int(relayText["pitchId"].split("_")[-1]) > int(settings.START_WEB)):
+                break
             pitchId = relayText["pitchId"]
             ball_data = self._find_ball_data_with_pitchId(pitchId)
 
@@ -113,9 +116,40 @@ class Web(object):
             else:  # pitching and batting
                 annotation = self.PB.set(relayText, ball_data)
 
-            print("from rule\t\t", annotation)
-            if(flag == 1):
-                self.resources.set_annotation(annotation)
+        return idx
+
+    def parsing_relaytext(self):
+        idx = self.parsing_before()
+        after_relayTexts = self.relayTexts[idx:]
+
+        idx = 0
+        while(True):
+            relayText = after_relayTexts[idx]
+            next = input("next : "+relayText["liveText"])
+
+            pitchId = relayText["pitchId"]
+            """
+            if not (pitchId == "-1"):
+                pitch_timestamp = pitchId.split("_")[-1]
+                if (self.get_frameno(pitch_timestamp) > self.resources.get_frameno()):
+                    continue
+            """
+            ball_data = self._find_ball_data_with_pitchId(pitchId)
+
+            self.resources.set_gamescore(relayText["homeScore"], relayText["awayScore"])
+
+            if (ball_data is None):
+                if (relayText["ballcount"] == 0):  # 모든 교체(수비위치, 타석, 주자, 팀공격)
+                    annotation = self.C.set(relayText)
+                else:
+                    annotation = self.R.set(relayText)
+
+            else:  # pitching and batting
+                annotation = self.PB.set(relayText, ball_data)
+
+            print(annotation)
+            self.resources.set_annotation(annotation)
+            idx = idx + 1
 
     def _find_ball_data_with_pitchId(self, pitchId):
         for i in self.ball_data:

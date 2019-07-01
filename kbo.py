@@ -21,8 +21,8 @@ class KBO():
         vision_thread = threading.Thread(target=self.vision.play)
         vision_thread.start()
 
-        tts = threading.Thread(target=self.tts.text_2_speech)
-        tts.start()
+        #tts = threading.Thread(target=self.tts.text_2_speech)
+        #tts.start()
 
         play(self.resource)
 

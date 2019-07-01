@@ -460,7 +460,6 @@ class Annotation():
     def get_situation_annotation(self, situation_label, scene_label):
         anno = []
         if(((scene_label > 4 and scene_label < 13) and scene_label != 9) and (situation_label < 6 and situation_label > 2)):
-            print("hit or ground or flying", situation_label)
             if(situation_label == 3):
                 anno = anno + ["타자 친공, 안타가 될 수 있을까요?"]
 

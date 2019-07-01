@@ -73,55 +73,66 @@ class Motion(object):
 class CAE(Motion):
     def __init__(self):
         self.batch_size = 100
-        self.epoch = 300
+        self.epoch = 50
         self.lr = 0.0001
 
         self.image = tf.placeholder(tf.float32, [None, self.height, self.width, self.rgb])
         self.keep_prob = tf.placeholder(tf.float32)
 
         with tf.variable_scope("CAE"):
-            out = self.conv2d(self.image, name="conv_1", filter_size=7, output_channel=15)
+            out = self.conv2d(self.image, name="conv_1", filter_size=3, output_channel=16)
             out = self.maxpool(out, name="pool_1", filter_size=2)
             out = tf.nn.dropout(out, keep_prob=self.keep_prob)
 
-            out = self.conv2d(out, name="conv_2", filter_size=5, output_channel=25)
+            out = self.conv2d(out, name="conv_2", filter_size=3, output_channel=32)
+            out = self.conv2d(out, name="conv_3", filter_size=3, output_channel=32)
             out = self.maxpool(out, name="pool_2", filter_size=2)
             out = tf.nn.dropout(out, keep_prob=self.keep_prob)
 
-            out = tf.reshape(out, shape=[-1, 12 * 12 * 25])
-            out = self.fc(out, name="fc_1", output_channel=12 * 12 * 5)
+            out = self.conv2d(out, name="conv_4", filter_size=3, output_channel=64)
+            out = self.conv2d(out, name="conv_5", filter_size=3, output_channel=64)
+            out = self.maxpool(out, name="pool_3", filter_size=2)
             out = tf.nn.dropout(out, keep_prob=self.keep_prob)
 
-            out = self.fc(out, name="fc_2", output_channel=12 * 12 * 3)
+            out = tf.reshape(out, shape=[-1, 6 * 6 * 64])
+            out = self.fc(out, name="fc_1", output_channel=6 * 6 * 32)
+            out = tf.nn.dropout(out, keep_prob=self.keep_prob)
+
+            out = self.fc(out, name="fc_2", output_channel=6 * 6 * 16)
             out = tf.nn.dropout(out, keep_prob=self.keep_prob)
 
             out = self.fc(out, name="fc_3", output_channel=64)
 
-            out = self.fc(out, name="fc_4", output_channel=12 * 12 * 3)
+            out = self.fc(out, name="fc_4", output_channel=6 * 6 * 16)
             out = tf.nn.dropout(out, keep_prob=self.keep_prob)
 
-            out = self.fc(out, name="fc_5", output_channel=12 * 12 * 5)
+            out = self.fc(out, name="fc_5", output_channel=6 * 6 * 32)
             out = tf.nn.dropout(out, keep_prob=self.keep_prob)
 
-            out = self.fc(out, name="fc_6", output_channel=12 * 12 * 25)
+            out = self.fc(out, name="fc_6", output_channel=6 * 6 * 64)
             out = tf.nn.dropout(out, keep_prob=self.keep_prob)
 
-            out = tf.reshape(out, shape=[-1, 12, 12, 25])
+            out = tf.reshape(out, shape=[-1, 6, 6, 64])
 
-            out = self.deconv2d(out, name="dconv_1", filter_size=5, output_channel=15)
+            out = self.deconv2d(out, name="dconv_1", filter_size=3, output_channel=64)
+            out = self.deconv2d(out, name="dconv_2", filter_size=3, output_channel=32)
             out = self.upsample(out, name="ups_1", times=2)
 
-            out = self.deconv2d(out, name="dconv_2", filter_size=7, output_channel=3)
+            out = self.deconv2d(out, name="dconv_3", filter_size=3, output_channel=32)
+            out = self.deconv2d(out, name="dconv_4", filter_size=3, output_channel=16)
+            out = self.upsample(out, name="ups_2", times=2)
+
+            out = self.deconv2d(out, name="dconv_5", filter_size=3, output_channel=3)
             out = self.upsample(out, name="ups_2", times=2)
 
             out = tf.reshape(out, shape=[-1, 48 * 48 * 3])
             out = self.fc(out, name="fc_7", output_channel=48 * 48 * 3)
 
         self.output = tf.reshape(out, shape=[-1, 48, 48, 3])
-        self.cost = tf.reduce_mean(tf.square(tf.subtract(out, tf.reshape(self.image, shape=[-1, 48 * 48 * 3]))))
+        self.cost = tf.reduce_mean(tf.losses.absolute_difference(out, tf.reshape(self.image, shape=[-1, 48 * 48 * 3])))
 
     def load_data(self):
-        folder_name = "./_data/motion/"
+        folder_name = "D:\\work\\kbo\\_data\\_motion\\"
 
         dataset = []
 
@@ -148,7 +159,7 @@ class CAE(Motion):
         all_vars = tf.global_variables()
         cae = [k for k in all_vars if k.name.startswith("CAE")]
         saver = tf.train.Saver(cae)
-        #saver.restore(sess, './_model/motion/CAE/CAE.ckpt')
+        saver.restore(sess, './CAE/CAE.ckpt')
 
         total_batch = int(len(dataset) / self.batch_size)
 
@@ -168,28 +179,28 @@ class CAE(Motion):
 
             print('Epoch:', '%d' % (e + 1), 'Average cost =', '{:.3f}'.format(total_cost / total_batch))
 
-            if (total_cost / total_batch < 950):
-                break
-
         print("complete")
-        saver.save(sess, './_model/motion/CAE/CAE.ckpt')
+        saver.save(sess, './CAE/CAE.ckpt')
 
         return 1
 
     def test(self):
-        x = cv2.resize(cv2.imread("_data/_motion/1058.jpg"), (self.width, self.height))
-        x = np.array([x])
-
         sess = tf.Session()
         all_vars = tf.global_variables()
         cae = [k for k in all_vars if k.name.startswith("CAE")]
         saver = tf.train.Saver(cae)
-        saver.restore(sess, './_model/motion/CAE/CAE.ckpt')
+        saver.restore(sess, './CAE/CAE.ckpt')
 
-        o = sess.run(self.output, feed_dict={self.image: x, self.keep_prob: 1})
-        o = np.resize(o, [self.width, self.height, 3])
+        for i in range(0, 10):
+            f = random.randint(0, 10000)
+            f = str(f)+".jpg"
+            x = cv2.resize(cv2.imread("D:\\work\\kbo\\_data\\_motion\\"+f), (self.width, self.height))
+            x = np.array([x])
 
-        cv2.imwrite('1a.jpg', o)
+            o = sess.run(self.output, feed_dict={self.image: x, self.keep_prob: 1})
+            o = np.resize(o, [self.width, self.height, 3])
+
+            cv2.imwrite(f, o)
 
 class Motion_Model(Motion):
     def __init__(self, sess, istest=0):
@@ -197,7 +208,7 @@ class Motion_Model(Motion):
         self.length = 10
         self.num_hidden = 64
         self.batch_size = 100
-        self.epoch = 200
+        self.epoch = 100
         self.lr = 0.0005
 
         self.image = tf.placeholder(tf.float32, [None, self.length, self.height, self.width, self.rgb])
@@ -208,19 +219,25 @@ class Motion_Model(Motion):
         with tf.variable_scope("CAE", reuse=tf.AUTO_REUSE):
             for i in range(self.length):
                 input = self.image[:, i, :, :, :]
-                out = self.conv2d(input, name="conv_1", filter_size=7, output_channel=15)
+                out = self.conv2d(input, name="conv_1", filter_size=3, output_channel=16)
                 out = self.maxpool(out, name="pool_1", filter_size=2)
                 out = tf.nn.dropout(out, keep_prob=self.keep_prob)
 
-                out = self.conv2d(out, name="conv_2", filter_size=5, output_channel=25)
+                out = self.conv2d(out, name="conv_2", filter_size=3, output_channel=32)
+                out = self.conv2d(out, name="conv_3", filter_size=3, output_channel=32)
                 out = self.maxpool(out, name="pool_2", filter_size=2)
                 out = tf.nn.dropout(out, keep_prob=self.keep_prob)
 
-                out = tf.reshape(out, shape=[-1, 12 * 12 * 25])
-                out = self.fc(out, name="fc_1", output_channel=12 * 12 * 5)
+                out = self.conv2d(out, name="conv_4", filter_size=3, output_channel=64)
+                out = self.conv2d(out, name="conv_5", filter_size=3, output_channel=64)
+                out = self.maxpool(out, name="pool_3", filter_size=2)
                 out = tf.nn.dropout(out, keep_prob=self.keep_prob)
 
-                out = self.fc(out, name="fc_2", output_channel=12 * 12 * 3)
+                out = tf.reshape(out, shape=[-1, 6 * 6 * 64])
+                out = self.fc(out, name="fc_1", output_channel=6 * 6 * 32)
+                out = tf.nn.dropout(out, keep_prob=self.keep_prob)
+
+                out = self.fc(out, name="fc_2", output_channel=6 * 6 * 16)
                 out = tf.nn.dropout(out, keep_prob=self.keep_prob)
 
                 out = self.fc(out, name="fc_3", output_channel=64)
@@ -248,7 +265,8 @@ class Motion_Model(Motion):
             all_vars = tf.global_variables()
             cls = [k for k in all_vars if k.name.startswith("CAE") or k.name.startswith("cls")]
             saver = tf.train.Saver(cls)
-            saver.restore(self.sess, './_model/motion/cls/cls.ckpt')
+            saver.restore(self.sess, './_model/motion/CLS/cls.ckpt')
+            #saver.restore(self.sess, './CLS/cls.ckpt')
 
     def last_relevant(self, seq, length):
         batch_size = tf.shape(seq)[0]
@@ -274,6 +292,7 @@ class Motion_Model(Motion):
 
             if(start < end):
                 for i in range(start, end):
+                    """
                     X = [cv2.resize(cv2.imread(folder_name + str(i) + ".jpg"), (self.width, self.height)) for j in range(i, i+self.length, 2) if(j <= int(line[1]))]
                     leng = len(X)
 
@@ -283,7 +302,7 @@ class Motion_Model(Motion):
 
                     dataset.append({"X" : X, "Y" : m, "L" : leng})
 
-                    """
+
                     X = [cv2.resize(cv2.imread(folder_name + str(i) + ".jpg"), (self.width, self.height)) for j in range(i, i + self.length, 3) if (j <= int(line[1]))]
                     leng = len(X)
 
@@ -292,7 +311,7 @@ class Motion_Model(Motion):
                         X = X + [pad for j in range(num_pad)]
 
                     dataset.append({"X": X, "Y": m, "L": leng})
-
+                    """
                     X = [cv2.resize(cv2.imread(folder_name + str(i) + ".jpg"), (self.width, self.height)) for j in range(i, i + self.length, 4) if (j <= int(line[1]))]
                     leng = len(X)
 
@@ -301,7 +320,6 @@ class Motion_Model(Motion):
                         X = X + [pad for j in range(num_pad)]
 
                     dataset.append({"X": X, "Y": m, "L": leng})
-                    """
 
         return dataset
 
@@ -313,18 +331,19 @@ class Motion_Model(Motion):
         train_y[np.arange(len(_y)), [i for i in _y]] = 1
         train_l = np.array([i["L"] for i in dataset])
 
-        optimizer = tf.train.AdamOptimizer(self.lr).minimize(self.cost)
+        all_vars = tf.global_variables()
+        only_cls = [k for k in all_vars if k.name.startswith("cls")]
+        optimizer = tf.train.AdamOptimizer(self.lr).minimize(self.cost, var_list=only_cls)
 
         self.sess.run(tf.global_variables_initializer())
-        all_vars = tf.global_variables()
 
         cae = [k for k in all_vars if k.name.startswith("CAE")]
         saver = tf.train.Saver(cae)
-        saver.restore(self.sess, './_model/motion/CAE/CAE.ckpt')
+        saver.restore(self.sess, './CAE/CAE.ckpt')
 
         cls = [k for k in all_vars if k.name.startswith("CAE") or k.name.startswith("cls")]
         saver2 = tf.train.Saver(cls)
-        #saver2.restore(self.sess, './_model/motion/cls/cls.ckpt')
+        saver2.restore(self.sess, './CLS/cls.ckpt')
 
         xs = []
         ys = []
@@ -352,14 +371,14 @@ class Motion_Model(Motion):
 
             print('Epoch:', '%d' % (e + 1), 'Average cost =', '{:.3f}'.format(total_cost / total_batch))
 
-            if (total_cost / total_batch < 0.1):
+            if (total_cost / total_batch < 0.2):
                 break
 
             xs.append(e + 1)
             ys.append(total_cost / total_batch)
 
         print("complete")
-        saver2.save(self.sess, './_model/motion/cls/cls.ckpt')
+        saver2.save(self.sess, './CLS/cls.ckpt')
         plt.plot(xs, ys, 'b')
         plt.show()
 
@@ -378,6 +397,7 @@ class Motion_Model(Motion):
         leng = np.array([leng])
 
         score, output = self.sess.run([self.output, tf.argmax(self.output, 1)], feed_dict={self.image: dataset, self.L: leng, self.keep_prob: 1})
+
         if(max(score[0]) > 0.9):
             return output[0], max(score[0])
         else:
@@ -387,8 +407,7 @@ class Motion_Model(Motion):
         motions = ["batting", "batting_waiting", "throwing", "pitching", "catch_catcher", "catch_field", "run", "walking", "nope"]
 
         dataset = self.load_data()
-        #random.shuffle(dataset)
-        #random.shuffle(dataset)
+
         random.shuffle(dataset)
         random.shuffle(dataset)
         dataset = dataset[:500]
@@ -415,3 +434,4 @@ class Motion_Model(Motion):
         print(a)
         print(b)
         print(c)
+

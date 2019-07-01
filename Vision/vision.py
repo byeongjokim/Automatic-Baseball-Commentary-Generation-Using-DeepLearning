@@ -64,8 +64,8 @@ class Vision(object):
             if (scene_label == 0 and position_images_seq["batter"] and motion_label["batter"] != 0):
                 batter_motion_label, motion_score = self.motion.predict(position_images_seq["batter"])
                 motion_label["batter"] = batter_motion_label
-                #anno = self.annotation.get_motion_annotation(scene_label=scene_label, motion_label=batter_motion_label, who="batter", resource=self.resource)
-                #self._choose_random_annotation(anno)
+                anno = self.annotation.get_motion_annotation(scene_label=scene_label, motion_label=batter_motion_label, who="batter", resource=self.resource)
+                self._choose_random_annotation(anno)
 
             if (position_images_seq["player"] and motion_label["player"] == None):
                 player_motion_label, motion_score = self.motion.predict(position_images_seq["player"])

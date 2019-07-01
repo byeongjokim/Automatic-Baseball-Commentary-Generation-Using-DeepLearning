@@ -47,6 +47,9 @@ class Resource():
     def get_frame(self):
         return self.frame
 
+    def get_frameno(self):
+        return self.frameno
+
     def set_exit(self, exit):
         self.exit = exit
 

@@ -1,0 +1,173 @@
+import os
+import csv
+from nltk.translate.bleu_score import sentence_bleu, corpus_bleu, SmoothingFunction
+from nltk.translate import meteor_score
+from _result.showandtell.im2txt.run_inference import test
+from sklearn.metrics import average_precision_score
+# real_sentence = ["투수 7회까지 4개의 안타를 허용하였습니다", "타자 올해 0.3 타율을 보이고 있습니다", "투수 오늘 15번째 타석입니다"]
+# generated_sentence = ["윌슨 투수 오늘 4개의 안타를 내줬습니다", "이원재 타자, 이번 시즌 0.3 타율을 기록합니다", "투수 오늘 경기 15번째 타석에서 공을 던지고 있습니다"]
+
+def BLEU(generated_sentence, real_sentence):
+    print("=====BLEU=====")
+    generated_sentence_ = [sentence.split(" ") for sentence in generated_sentence]
+    real_sentence_ = [[sentence.split(" ")] for sentence in real_sentence]
+    total_bleu_1_score = 0.0
+    total_bleu_2_score = 0.0
+
+    total_bleu_1_score += round(corpus_bleu(real_sentence_, generated_sentence_, weights=tuple([1 / 1] * 1)), 4)
+    total_bleu_2_score += round(corpus_bleu(real_sentence_, generated_sentence_, weights=tuple([1 / 2] * 2)), 4)
+    print("==BLEU@1==")
+    print(total_bleu_1_score)
+    print("==BLEU@2==")
+    print(total_bleu_2_score)
+
+def meteor(generated_sentence, real_sentence):
+    print("=====METEOR=====")
+    total = 0.0
+    for i in range(len(generated_sentence)):
+        score = round(meteor_score.meteor_score([real_sentence[i]], generated_sentence[i]), 4)
+        total += score
+    print(total/len(generated_sentence))
+
+def ours_eval():
+    print("=========================OURS=========================")
+    with open("_result/180906LGNC_FULL/resultwithreal.csv", "r") as f:
+        generated_sentence = []
+        real_sentence = []
+        reader = csv.reader(f)
+        count = 0
+        for line in reader:
+            if (line[2]):
+                count = count + 1
+                generated_sentence.append(line[1])
+                real_sentence.append(line[2])
+    BLEU(generated_sentence, real_sentence)
+    meteor(generated_sentence, real_sentence)
+    #meteor_mAP2(generated_sentence, real_sentence)
+
+def show_and_tell_eval():
+    print("=========================SHOW AND TELL=========================")
+    with open("_result/180906LGNC_FULL/resultwithreal.csv", "r") as f:
+        real_lines = []
+        reader = csv.reader(f)
+        count = 0
+        for line in reader:
+            if (line[2]):
+                count = count + 1
+                real_lines.append({"frame":int(line[0]), "sentence":line[2], "image":"_result/180906LGNC_FULL/" + line[0] + ".jpg"})
+
+    image_files = [i["image"] for i in real_lines]
+    image_files = ",".join(image_files)
+    real_sentence = [i["sentence"] for i in real_lines]
+    generated_sentence = test("_result/showandtell/im2txt/model/model.ckpt-5000000", "_result/showandtell/im2txt/model/word_counts.txt", image_files)
+
+    BLEU(generated_sentence, real_sentence)
+    meteor(generated_sentence, real_sentence)
+
+def s2vt_eval():
+    print("=========================S2VT=========================")
+    startframe_1 = 125634
+    startframe_2 = 153296
+    startframe_3 = 162557
+
+    folder = "./_result/s2vt/"
+    filenames = os.listdir(folder)
+
+    output_file = []
+    for filename in filenames:
+        if "output" in filename:
+            output_file.append({"videoID":int(filename.split("-")[0].split("_")[-1]), "index": int(filename.split("-")[1]), "filename":os.path.join(folder, filename)})
+    output_file = sorted(output_file, key=lambda k:(k["videoID"], k["index"]))
+
+    generated_lines = []
+    for i in output_file:
+        f = open(i["filename"], "r")
+        while True:
+            line = f.readline()
+            if not line: break
+
+            startframe = 5 * 29.97 * (i["index"] - 1) + int(line.split("\t")[0][3]) * 30
+            if i["videoID"] == 1:
+                startframe += startframe_1
+            elif i["videoID"] == 2:
+                startframe += startframe_2
+            else:
+                startframe += startframe_3
+            endframe = startframe + 100
+
+            generated_lines.append({"videoID":i["videoID"], "index":i["index"], "vidID":line.split("\t")[0], "generated":line.split("\t")[1].rstrip(), "startFrame":int(startframe), "endFrame":int(endframe)})
+
+    generated_lines = sorted(generated_lines, key=lambda k:(k["videoID"], k["index"], k["vidID"]))
+
+    with open("_result/180906LGNC_FULL/resultwithreal.csv", "r") as f:
+        real_lines = []
+        reader = csv.reader(f)
+        count = 0
+        for line in reader:
+            if (line[2]):
+                count = count + 1
+                real_lines.append({"frame":int(line[0]), "sentence":line[2]})
+
+    real_sentence = []
+    generated_sentence = []
+    generated_frame = [i["endFrame"] for i in generated_lines]
+    for real in real_lines:
+        close_i = -123
+        for i in generated_frame:
+            if abs(real["frame"] - close_i) > abs(real["frame"] - i):
+                close_i = i
+        for j in generated_lines:
+            if j["endFrame"] == close_i:
+                generated_sentence.append(j["generated"])
+                break
+        real_sentence.append(real["sentence"])
+    #print(generated_sentence)
+    BLEU(generated_sentence, real_sentence)
+    meteor(generated_sentence, real_sentence)
+
+def meteor_mAP(generated_sentence, real_sentence):
+    #real_sentence = ["투수 7회까지 4개의 안타를 허용하였습니다", "타자 올해 0.3 타율을 보이고 있습니다", "투수 오늘 15번째 타석입니다"]
+    #generated_sentence = ["윌슨 투수 오늘 4개의 안타를 내줬습니다", "이원재 타자, 이번 시즌 0.3 타율을 기록합니다", "투수 오늘 경기 15번째 타석에서 공을 던지고 있습니다"]
+
+    r_p = [{"th": 0.0, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.05, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.1, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.15, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.2, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.25, "TP": 0, "FP": 0, "PR":0, "RE":0}]
+    #r_p = [{"th": 0.0, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.1, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.2, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.3, "TP": 0, "FP": 0, "PR":0, "RE":0},
+    #       {"th": 0.4, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.5, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.6, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.7, "TP": 0, "FP": 0, "PR":0, "RE":0},
+    #       {"th": 0.8, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.9, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 1.0, "TP": 0, "FP": 0, "PR":0, "RE":0}]
+
+    for i in range(len(generated_sentence)):
+        score = round(meteor_score.meteor_score([real_sentence[i]], generated_sentence[i]), 4)
+        for j in r_p:
+            if (score >= j["th"]):
+                j["TP"] += 1
+            else:
+                j["FP"] += 1
+    sum = 0
+    for i in r_p:
+        i["PR"] = i["TP"] / (i["TP"] + i["FP"])
+        sum += i["PR"]
+    #print(sum/len(r_p))
+    print(sum)
+
+def meteor_mAP2(generated_sentence, real_sentence):
+    #real_sentence = ["투수 7회까지 4개의 안타를 허용하였습니다", "타자 올해 0.3 타율을 보이고 있습니다", "투수 오늘 15번째 타석입니다"]
+    #generated_sentence = ["윌슨 투수 오늘 4개의 안타를 내줬습니다", "이원재 타자, 이번 시즌 0.3 타율을 기록합니다", "투수 오늘 경기 15번째 타석에서 공을 던지고 있습니다"]
+
+    #r_p = [{"th": 0.0, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.05, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.1, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.15, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.2, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.25, "TP": 0, "FP": 0, "PR":0, "RE":0}]
+    r_p = [{"th": 0.0, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.1, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.2, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.3, "TP": 0, "FP": 0, "PR":0, "RE":0},
+           {"th": 0.4, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.5, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.6, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.7, "TP": 0, "FP": 0, "PR":0, "RE":0},
+           {"th": 0.8, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.9, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 1.0, "TP": 0, "FP": 0, "PR":0, "RE":0}]
+
+    for j in r_p:
+        y_score = [0 for i in range(len(generated_sentence))]
+        for i in range(len(generated_sentence)):
+            score = round(meteor_score.meteor_score([real_sentence[i]], generated_sentence[i]), 4)
+            if (score >= j["th"]):
+                y_score[i] = 1
+        print(y_score)
+
+
+#meteor_mAP2()
+#meteor_mAP()
+#ours_eval()
+#show_and_tell_eval()
+#s2vt_eval()
