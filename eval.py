@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*- 
 import os
 import csv
 from nltk.translate.bleu_score import sentence_bleu, corpus_bleu, SmoothingFunction
 from nltk.translate import meteor_score
 from _result.showandtell.im2txt.run_inference import test
-from sklearn.metrics import average_precision_score
+
 # real_sentence = ["투수 7회까지 4개의 안타를 허용하였습니다", "타자 올해 0.3 타율을 보이고 있습니다", "투수 오늘 15번째 타석입니다"]
 # generated_sentence = ["윌슨 투수 오늘 4개의 안타를 내줬습니다", "이원재 타자, 이번 시즌 0.3 타율을 기록합니다", "투수 오늘 경기 15번째 타석에서 공을 던지고 있습니다"]
 
@@ -34,13 +35,18 @@ def ours_eval():
     with open("_result/180906LGNC_FULL/resultwithreal.csv", "r") as f:
         generated_sentence = []
         real_sentence = []
+        
+        tmp_real_lines = []
         reader = csv.reader(f)
         count = 0
         for line in reader:
-            if (line[2]):
-                count = count + 1
-                generated_sentence.append(line[1])
-                real_sentence.append(line[2])
+            tmp_real_lines.append(line)
+        
+        for line_num in range(len(tmp_real_lines)):
+            if(tmp_real_lines[line_num][2] and tmp_real_lines[line_num][0] and tmp_real_lines[line_num + 1][1] and tmp_real_lines[line_num + 1][2]):
+                generated_sentence.append(tmp_real_lines[line_num + 1][1])
+                real_sentence.append(tmp_real_lines[line_num + 1][2])
+        
     BLEU(generated_sentence, real_sentence)
     meteor(generated_sentence, real_sentence)
     #meteor_mAP2(generated_sentence, real_sentence)
@@ -48,19 +54,26 @@ def ours_eval():
 def show_and_tell_eval():
     print("=========================SHOW AND TELL=========================")
     with open("_result/180906LGNC_FULL/resultwithreal.csv", "r") as f:
+        tmp_real_lines = []
         real_lines = []
         reader = csv.reader(f)
         count = 0
         for line in reader:
-            if (line[2]):
-                count = count + 1
-                real_lines.append({"frame":int(line[0]), "sentence":line[2], "image":"_result/180906LGNC_FULL/" + line[0] + ".jpg"})
+            tmp_real_lines.append(line)
+        
+        for line_num in range(len(tmp_real_lines)):
+            if(tmp_real_lines[line_num][2] and tmp_real_lines[line_num][0]):
+                real_lines.append({"frame":int(tmp_real_lines[line_num][0]), "sentence":tmp_real_lines[line_num+1][2], "image":"_result/180906LGNC_FULL/" + tmp_real_lines[line_num][0] + ".jpg"})
+        
+        # if (line[2] and line[1] and not line[0]):
+        #     count = count + 1
+        #     real_lines.append({"frame":int(line[0]), "sentence":line[2], "image":"_result/180906LGNC_FULL/" + line[0] + ".jpg"})
 
     image_files = [i["image"] for i in real_lines]
     image_files = ",".join(image_files)
     real_sentence = [i["sentence"] for i in real_lines]
     generated_sentence = test("_result/showandtell/im2txt/model/model.ckpt-5000000", "_result/showandtell/im2txt/model/word_counts.txt", image_files)
-
+    print(generated_sentence)
     BLEU(generated_sentence, real_sentence)
     meteor(generated_sentence, real_sentence)
 
@@ -100,14 +113,17 @@ def s2vt_eval():
     generated_lines = sorted(generated_lines, key=lambda k:(k["videoID"], k["index"], k["vidID"]))
 
     with open("_result/180906LGNC_FULL/resultwithreal.csv", "r") as f:
+        tmp_real_lines = []
         real_lines = []
         reader = csv.reader(f)
         count = 0
         for line in reader:
-            if (line[2]):
-                count = count + 1
-                real_lines.append({"frame":int(line[0]), "sentence":line[2]})
-
+            tmp_real_lines.append(line)
+        
+        for line_num in range(len(tmp_real_lines)):
+            if(tmp_real_lines[line_num][2] and tmp_real_lines[line_num][0]):
+                real_lines.append({"frame":int(tmp_real_lines[line_num][0]), "sentence":tmp_real_lines[line_num+1][2]})
+        
     real_sentence = []
     generated_sentence = []
     generated_frame = [i["endFrame"] for i in generated_lines]
@@ -166,8 +182,6 @@ def meteor_mAP2(generated_sentence, real_sentence):
         print(y_score)
 
 
-#meteor_mAP2()
-#meteor_mAP()
-#ours_eval()
-#show_and_tell_eval()
-#s2vt_eval()
+ours_eval()
+show_and_tell_eval()
+s2vt_eval()
