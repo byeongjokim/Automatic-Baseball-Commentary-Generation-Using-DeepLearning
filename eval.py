@@ -5,24 +5,36 @@ from nltk.translate.bleu_score import sentence_bleu, corpus_bleu, SmoothingFunct
 from nltk.translate import meteor_score
 from _result.showandtell.im2txt.run_inference import test
 
-# real_sentence = ["투수 7회까지 4개의 안타를 허용하였습니다", "타자 올해 0.3 타율을 보이고 있습니다", "투수 오늘 15번째 타석입니다"]
-# generated_sentence = ["윌슨 투수 오늘 4개의 안타를 내줬습니다", "이원재 타자, 이번 시즌 0.3 타율을 기록합니다", "투수 오늘 경기 15번째 타석에서 공을 던지고 있습니다"]
-
 def BLEU(generated_sentence, real_sentence):
+    generated_sentence = [i.lower() for i in generated_sentence]
+    real_sentence = [i.lower() for i in real_sentence]
     print("=====BLEU=====")
     generated_sentence_ = [sentence.split(" ") for sentence in generated_sentence]
     real_sentence_ = [[sentence.split(" ")] for sentence in real_sentence]
+
     total_bleu_1_score = 0.0
     total_bleu_2_score = 0.0
+    total_bleu_3_score = 0.0
+    total_bleu_4_score = 0.0
+    total_bleu_5_score = 0.0
 
     total_bleu_1_score += round(corpus_bleu(real_sentence_, generated_sentence_, weights=tuple([1 / 1] * 1)), 4)
     total_bleu_2_score += round(corpus_bleu(real_sentence_, generated_sentence_, weights=tuple([1 / 2] * 2)), 4)
+    total_bleu_3_score += round(corpus_bleu(real_sentence_, generated_sentence_, weights=tuple([1 / 3] * 3)), 4)
+    total_bleu_4_score += round(corpus_bleu(real_sentence_, generated_sentence_, weights=tuple([1 / 4] * 4)), 4)
+
     print("==BLEU@1==")
     print(total_bleu_1_score)
     print("==BLEU@2==")
     print(total_bleu_2_score)
+    print("==BLEU@3==")
+    print(total_bleu_3_score)
+    print("==BLEU@4==")
+    print(total_bleu_4_score)
 
 def meteor(generated_sentence, real_sentence):
+    generated_sentence = [i.lower() for i in generated_sentence]
+    real_sentence = [i.lower() for i in real_sentence]
     print("=====METEOR=====")
     total = 0.0
     for i in range(len(generated_sentence)):
@@ -30,6 +42,20 @@ def meteor(generated_sentence, real_sentence):
         total += score
     print(total/len(generated_sentence))
 
+def for_examples():
+    real_sentence = ["The pitcher gave up only 4 hits in 7 innings", "The hitter records 0.3 avg in this year", "This is 15 TBF of the pitcher"]
+    generated_sentence = ["The pitcher Wilson, gave up 4 hits today", "The hitter Lee, records 0.3 avg in this season", "The pitcher has pitched in 15 TBF in this game"]
+    
+    generated_sentence_ = [sentence.split(" ") for sentence in generated_sentence]
+    real_sentence_ = [[sentence.split(" ")] for sentence in real_sentence]
+    
+    for i in range(len(real_sentence_)):
+        print(round(sentence_bleu(real_sentence_[i], generated_sentence_[i], weights=tuple([1 / 1] * 1)), 4))
+        print(round(sentence_bleu(real_sentence_[i], generated_sentence_[i], weights=tuple([1 / 2] * 2)), 4))
+        #print(round(sentence_bleu(real_sentence_[i], generated_sentence_[i], weights=tuple([1 / 3] * 3)), 4))
+        #print(round(sentence_bleu(real_sentence_[i], generated_sentence_[i], weights=tuple([1 / 4] * 4)), 4))
+        print(round(meteor_score.meteor_score([real_sentence[i]], generated_sentence[i]), 4))
+        
 def ours_eval():
     print("=========================OURS=========================")
     with open("_result/180906LGNC_FULL/resultwithreal.csv", "r") as f:
@@ -46,7 +72,7 @@ def ours_eval():
             if(tmp_real_lines[line_num][2] and tmp_real_lines[line_num][0] and tmp_real_lines[line_num + 1][1] and tmp_real_lines[line_num + 1][2]):
                 generated_sentence.append(tmp_real_lines[line_num + 1][1])
                 real_sentence.append(tmp_real_lines[line_num + 1][2])
-        
+    
     BLEU(generated_sentence, real_sentence)
     meteor(generated_sentence, real_sentence)
     #meteor_mAP2(generated_sentence, real_sentence)
@@ -182,6 +208,7 @@ def meteor_mAP2(generated_sentence, real_sentence):
         print(y_score)
 
 
-ours_eval()
-show_and_tell_eval()
-s2vt_eval()
+#ours_eval()
+#show_and_tell_eval()
+#s2vt_eval()
+for_examples()

@@ -25,7 +25,7 @@ def play(resource):
         h, w, c = frame.shape
 
     text = resource.get_annotation()
-    textimage = text_2_img(text)
+    #textimage = text_2_img(text)
     resource.set_frameno(settings.START_FRAME + 1)
 
     #result_text = open("./_result4/" + settings.FILE_NAME + "/result.csv", "w")

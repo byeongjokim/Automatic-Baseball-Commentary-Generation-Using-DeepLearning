@@ -16,7 +16,7 @@ def create_game(onto, GameInfo):
         month = onto.Month(month)
     if not (onto[day]):
         day = onto.Day(day)
-
+    
     game.inYear = [year]
     game.inMonth = [month]
     game.inDay = [day]
