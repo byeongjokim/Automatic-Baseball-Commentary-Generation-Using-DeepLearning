@@ -163,7 +163,38 @@ def s2vt_eval():
                 generated_sentence.append(j["generated"])
                 break
         real_sentence.append(real["sentence"])
-    #print(generated_sentence)
+
+    BLEU(generated_sentence, real_sentence)
+    meteor(generated_sentence, real_sentence)
+
+def scst_eval():
+    print("=========================SCST=========================")
+    with open("_result/180906LGNC_FULL/resultwithreal.csv", "r") as f:
+        tmp_real_lines = []
+        real_lines = []
+        reader = csv.reader(f)
+        count = 0
+        for line in reader:
+            tmp_real_lines.append(line)
+        
+        for line_num in range(len(tmp_real_lines)):
+            if(tmp_real_lines[line_num][2] and tmp_real_lines[line_num][0]):
+                real_lines.append({"frame":int(tmp_real_lines[line_num][0]), "sentence":tmp_real_lines[line_num+1][2], "image":tmp_real_lines[line_num][0] + ".jpg"})
+    
+    with open("_result/scst/result.csv", "r") as f:
+        all_generated_sentence = []
+        rdr = csv.reader(f)
+        for line in rdr:
+            all_generated_sentence.append(line)
+
+    generated_sentence = []
+    for real in real_lines:
+        for gen in all_generated_sentence:
+            if(gen[0] == real["image"]):
+                generated_sentence.append(gen[1])
+                break
+
+    real_sentence = [i["sentence"] for i in real_lines]
     BLEU(generated_sentence, real_sentence)
     meteor(generated_sentence, real_sentence)
 
@@ -211,4 +242,5 @@ def meteor_mAP2(generated_sentence, real_sentence):
 #ours_eval()
 #show_and_tell_eval()
 #s2vt_eval()
-for_examples()
+#scst_eval()
+#for_examples()
