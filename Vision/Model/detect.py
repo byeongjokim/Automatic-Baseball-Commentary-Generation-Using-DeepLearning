@@ -56,6 +56,7 @@ class Detect_Model():
 
         if(result):
             result = [
+                #[int(bbox[0][0] * ratio_w), int(bbox[0][1] * ratio_h), int(bbox[0][2] * ratio_w), int(bbox[0][3] * ratio_h), bbox[2], bbox[1]] #for mAP
                 [int(bbox[0][0] * ratio_w), int(bbox[0][1] * ratio_h), int(bbox[0][2] * ratio_w), int(bbox[0][3] * ratio_h), bbox[2]]
                 for bbox in result
                     if bbox[0][0] > 0 and bbox[0][1] > 0 and bbox[0][2] > 0 and bbox[0][3] > 0

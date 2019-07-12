@@ -1,10 +1,67 @@
 # -*- coding: utf-8 -*- 
 import os
 import csv
+import cv2
 from nltk.translate.bleu_score import sentence_bleu, corpus_bleu, SmoothingFunction
 from nltk.translate import meteor_score
 from _result.showandtell.im2txt.run_inference import test
 
+def extract_C3D():
+    def prepare_input_files(base_folder, video_folder, v):
+        video_full_filenames = video_folder + v
+        cap = cv2.VideoCapture(video_full_filenames)
+        frame_folder = base_folder +"input/frm/"+ v.split(".")[0] + "/"
+        
+        if not os.path.exists(frame_folder):
+            os.mkdir(frame_folder)
+
+        num = 1
+        while (cap.isOpened()):
+            ret, frame = cap.read()
+            if not ret:
+                break
+            cv2.imwrite(frame_folder+str(num).zfill(6)+".jpg", frame)
+            num = num + 1
+        cap.release()
+        return num
+    
+    def prepare_setting_files(base_folder, video_filenames, total_frame):
+        input_list_frm = "/prototxt/input_list_frm.txt"
+        full_input_list_frm_txt = base_folder+input_list_frm
+        with open(full_input_list_frm_txt, "w") as f:
+            for v, num in zip(video_filenames, total_frame):
+                full_folder_name = "input/frm/"+ v.split('.')[0] + "/"
+                for n in range(1, num-16, 16):
+                    f.write(full_folder_name + " "+str(n)+" 0\n")
+        
+        output_list_prefix = "/prototxt/output_list_prefix.txt"
+        full_output_list_prefix_txt = base_folder+output_list_prefix
+        with open(full_output_list_prefix_txt, "w") as f:
+            for v, num in zip(video_filenames, total_frame):
+                full_folder_name = "output/c3d/"+ v.split('.')[0] + "/"
+                for n in range(1, num-16, 16):
+                    f.write(full_folder_name + str(n).zfill(6)+"\n")
+    
+    def extract_c3d_features():
+        return 1
+    
+    base_folder = "_result/videos/"
+    video_folder = base_folder + "input/mp4/"
+    filenames = os.listdir(video_folder)
+    
+    video_filenames = []
+    for filename in filenames:
+        if ".mp4" in filename or ".avi" in filename:
+            video_filenames.append(filename)
+    
+    total_frame = []
+    for v in video_filenames:
+        total_frame.append(prepare_input_files(base_folder, video_folder, v))
+
+    prepare_setting_files(base_folder, video_filenames, total_frame)
+        
+
+extract_C3D()
 def BLEU(generated_sentence, real_sentence):
     generated_sentence = [i.lower() for i in generated_sentence]
     real_sentence = [i.lower() for i in real_sentence]
