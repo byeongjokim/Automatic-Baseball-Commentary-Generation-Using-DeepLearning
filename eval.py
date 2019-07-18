@@ -6,68 +6,12 @@ from nltk.translate.bleu_score import sentence_bleu, corpus_bleu, SmoothingFunct
 from nltk.translate import meteor_score
 from _result.showandtell.im2txt.run_inference import test
 
-def extract_C3D():
-    def prepare_input_files(base_folder, video_folder, v):
-        video_full_filenames = video_folder + v
-        cap = cv2.VideoCapture(video_full_filenames)
-        frame_folder = base_folder +"input/frm/"+ v.split(".")[0] + "/"
-        
-        if not os.path.exists(frame_folder):
-            os.mkdir(frame_folder)
-
-        num = 1
-        while (cap.isOpened()):
-            ret, frame = cap.read()
-            if not ret:
-                break
-            cv2.imwrite(frame_folder+str(num).zfill(6)+".jpg", frame)
-            num = num + 1
-        cap.release()
-        return num
-    
-    def prepare_setting_files(base_folder, video_filenames, total_frame):
-        input_list_frm = "/prototxt/input_list_frm.txt"
-        full_input_list_frm_txt = base_folder+input_list_frm
-        with open(full_input_list_frm_txt, "w") as f:
-            for v, num in zip(video_filenames, total_frame):
-                full_folder_name = "input/frm/"+ v.split('.')[0] + "/"
-                for n in range(1, num-16, 16):
-                    f.write(full_folder_name + " "+str(n)+" 0\n")
-        
-        output_list_prefix = "/prototxt/output_list_prefix.txt"
-        full_output_list_prefix_txt = base_folder+output_list_prefix
-        with open(full_output_list_prefix_txt, "w") as f:
-            for v, num in zip(video_filenames, total_frame):
-                full_folder_name = "output/c3d/"+ v.split('.')[0] + "/"
-                for n in range(1, num-16, 16):
-                    f.write(full_folder_name + str(n).zfill(6)+"\n")
-    
-    def extract_c3d_features():
-        return 1
-    
-    base_folder = "_result/videos/"
-    video_folder = base_folder + "input/mp4/"
-    filenames = os.listdir(video_folder)
-    
-    video_filenames = []
-    for filename in filenames:
-        if ".mp4" in filename or ".avi" in filename:
-            video_filenames.append(filename)
-    
-    total_frame = []
-    for v in video_filenames:
-        total_frame.append(prepare_input_files(base_folder, video_folder, v))
-
-    prepare_setting_files(base_folder, video_filenames, total_frame)
-        
-
-extract_C3D()
 def BLEU(generated_sentence, real_sentence):
     generated_sentence = [i.lower() for i in generated_sentence]
-    real_sentence = [i.lower() for i in real_sentence]
+    real_sentence = [[j.lower() for j in i] for i in real_sentence]
     print("=====BLEU=====")
     generated_sentence_ = [sentence.split(" ") for sentence in generated_sentence]
-    real_sentence_ = [[sentence.split(" ")] for sentence in real_sentence]
+    real_sentence_ = [[s.split(" ") for s in sentence] for sentence in real_sentence]
 
     total_bleu_1_score = 0.0
     total_bleu_2_score = 0.0
@@ -91,11 +35,12 @@ def BLEU(generated_sentence, real_sentence):
 
 def meteor(generated_sentence, real_sentence):
     generated_sentence = [i.lower() for i in generated_sentence]
-    real_sentence = [i.lower() for i in real_sentence]
+    real_sentence = [[j.lower() for j in i] for i in real_sentence]
+
     print("=====METEOR=====")
     total = 0.0
     for i in range(len(generated_sentence)):
-        score = round(meteor_score.meteor_score([real_sentence[i]], generated_sentence[i]), 4)
+        score = round(meteor_score.meteor_score(real_sentence[i], generated_sentence[i]), 4)
         total += score
     print(total/len(generated_sentence))
 
@@ -128,7 +73,7 @@ def ours_eval():
         for line_num in range(len(tmp_real_lines)):
             if(tmp_real_lines[line_num][2] and tmp_real_lines[line_num][0] and tmp_real_lines[line_num + 1][1] and tmp_real_lines[line_num + 1][2]):
                 generated_sentence.append(tmp_real_lines[line_num + 1][1])
-                real_sentence.append(tmp_real_lines[line_num + 1][2])
+                real_sentence.append([tmp_real_lines[line_num + 1][2]])
     
     BLEU(generated_sentence, real_sentence)
     meteor(generated_sentence, real_sentence)
@@ -154,7 +99,7 @@ def show_and_tell_eval():
 
     image_files = [i["image"] for i in real_lines]
     image_files = ",".join(image_files)
-    real_sentence = [i["sentence"] for i in real_lines]
+    real_sentence = [[i["sentence"]] for i in real_lines]
     generated_sentence = test("_result/showandtell/im2txt/model/model.ckpt-5000000", "_result/showandtell/im2txt/model/word_counts.txt", image_files)
     print(generated_sentence)
     BLEU(generated_sentence, real_sentence)
@@ -219,7 +164,7 @@ def s2vt_eval():
             if j["endFrame"] == close_i:
                 generated_sentence.append(j["generated"])
                 break
-        real_sentence.append(real["sentence"])
+        real_sentence.append([real["sentence"]])
 
     BLEU(generated_sentence, real_sentence)
     meteor(generated_sentence, real_sentence)
@@ -251,53 +196,79 @@ def scst_eval():
                 generated_sentence.append(gen[1])
                 break
 
-    real_sentence = [i["sentence"] for i in real_lines]
+    real_sentence = [[i["sentence"]] for i in real_lines]
     BLEU(generated_sentence, real_sentence)
     meteor(generated_sentence, real_sentence)
 
-def meteor_mAP(generated_sentence, real_sentence):
-    #real_sentence = ["투수 7회까지 4개의 안타를 허용하였습니다", "타자 올해 0.3 타율을 보이고 있습니다", "투수 오늘 15번째 타석입니다"]
-    #generated_sentence = ["윌슨 투수 오늘 4개의 안타를 내줬습니다", "이원재 타자, 이번 시즌 0.3 타율을 기록합니다", "투수 오늘 경기 15번째 타석에서 공을 던지고 있습니다"]
+def dvc_eval():
+    print("=========================DVC=========================")
+    with open("_result/180906LGNC_FULL/resultwithreal.csv", "r") as f:
+        tmp_real_lines = []
+        real_lines = []
+        reader = csv.reader(f)
+        count = 0
+        for line in reader:
+            tmp_real_lines.append(line)
+        
+        for line_num in range(len(tmp_real_lines)):
+            if(tmp_real_lines[line_num][2] and tmp_real_lines[line_num][0]):
+                real_lines.append({"frame":int(tmp_real_lines[line_num][0]), "sentence":tmp_real_lines[line_num+1][2]})
+    
+    with open("_result/DVC/result.csv", "r") as f:
+        all_generated_sentence = []
+        rdr = csv.reader(f)
+        for line in rdr:
+            all_generated_sentence.append(line)
+    
+    sentences = []
+    for gen in all_generated_sentence:
+        real_sentences = []
+        for real in real_lines:
+            if(int(gen[0].split(".")[0]) < real["frame"] and int(gen[1].split(".")[0]) > real["frame"]):
+                real_sentences.append(real["sentence"])
+        if(real_sentences):
+            sentences.append({"generated":gen[2], "real":real_sentences})
+    
+    BLEU([i["generated"] for i in sentences], [i["real"] for i in sentences])
+    meteor([i["generated"] for i in sentences], [i["real"] for i in sentences])
 
-    r_p = [{"th": 0.0, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.05, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.1, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.15, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.2, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.25, "TP": 0, "FP": 0, "PR":0, "RE":0}]
-    #r_p = [{"th": 0.0, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.1, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.2, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.3, "TP": 0, "FP": 0, "PR":0, "RE":0},
-    #       {"th": 0.4, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.5, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.6, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.7, "TP": 0, "FP": 0, "PR":0, "RE":0},
-    #       {"th": 0.8, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.9, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 1.0, "TP": 0, "FP": 0, "PR":0, "RE":0}]
+def wsdec_eval():
+    print("=========================DVC=========================")
+    with open("_result/180906LGNC_FULL/resultwithreal.csv", "r") as f:
+        tmp_real_lines = []
+        real_lines = []
+        reader = csv.reader(f)
+        count = 0
+        for line in reader:
+            tmp_real_lines.append(line)
+        
+        for line_num in range(len(tmp_real_lines)):
+            if(tmp_real_lines[line_num][2] and tmp_real_lines[line_num][0]):
+                real_lines.append({"frame":int(tmp_real_lines[line_num][0]), "sentence":tmp_real_lines[line_num+1][2]})
+    
+    with open("_result/WSDEC/data/custom/result.csv", "r") as f:
+        all_generated_sentence = []
+        rdr = csv.reader(f)
+        for line in rdr:
+            all_generated_sentence.append(line)
+    
+    sentences = []
+    for gen in all_generated_sentence:
+        real_sentences = []
+        for real in real_lines:
+            if(int(gen[0].split(".")[0]) < real["frame"] and int(gen[1].split(".")[0]) > real["frame"]):
+                real_sentences.append(real["sentence"])
+        if(real_sentences):
+            sentences.append({"generated":gen[2], "real":real_sentences})
+    
+    BLEU([i["generated"] for i in sentences], [i["real"] for i in sentences])
+    meteor([i["generated"] for i in sentences], [i["real"] for i in sentences])
 
-    for i in range(len(generated_sentence)):
-        score = round(meteor_score.meteor_score([real_sentence[i]], generated_sentence[i]), 4)
-        for j in r_p:
-            if (score >= j["th"]):
-                j["TP"] += 1
-            else:
-                j["FP"] += 1
-    sum = 0
-    for i in r_p:
-        i["PR"] = i["TP"] / (i["TP"] + i["FP"])
-        sum += i["PR"]
-    #print(sum/len(r_p))
-    print(sum)
+# ours_eval()
+# show_and_tell_eval()
+# s2vt_eval()
+# scst_eval()
+# dvc_eval()
+wsdec_eval()
 
-def meteor_mAP2(generated_sentence, real_sentence):
-    #real_sentence = ["투수 7회까지 4개의 안타를 허용하였습니다", "타자 올해 0.3 타율을 보이고 있습니다", "투수 오늘 15번째 타석입니다"]
-    #generated_sentence = ["윌슨 투수 오늘 4개의 안타를 내줬습니다", "이원재 타자, 이번 시즌 0.3 타율을 기록합니다", "투수 오늘 경기 15번째 타석에서 공을 던지고 있습니다"]
-
-    #r_p = [{"th": 0.0, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.05, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.1, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.15, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.2, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.25, "TP": 0, "FP": 0, "PR":0, "RE":0}]
-    r_p = [{"th": 0.0, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.1, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.2, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.3, "TP": 0, "FP": 0, "PR":0, "RE":0},
-           {"th": 0.4, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.5, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.6, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.7, "TP": 0, "FP": 0, "PR":0, "RE":0},
-           {"th": 0.8, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 0.9, "TP": 0, "FP": 0, "PR":0, "RE":0}, {"th": 1.0, "TP": 0, "FP": 0, "PR":0, "RE":0}]
-
-    for j in r_p:
-        y_score = [0 for i in range(len(generated_sentence))]
-        for i in range(len(generated_sentence)):
-            score = round(meteor_score.meteor_score([real_sentence[i]], generated_sentence[i]), 4)
-            if (score >= j["th"]):
-                y_score[i] = 1
-        print(y_score)
-
-
-#ours_eval()
-#show_and_tell_eval()
-#s2vt_eval()
-#scst_eval()
-#for_examples()
+# for_examples()
