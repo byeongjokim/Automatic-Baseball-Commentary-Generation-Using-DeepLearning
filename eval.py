@@ -75,9 +75,13 @@ def ours_eval():
                 generated_sentence.append(tmp_real_lines[line_num + 1][1])
                 real_sentence.append([tmp_real_lines[line_num + 1][2]])
     
+    ind = [0, 2, 4, 8, 9, 10, 13, 15, 16, 19, 21, 23, 25, 30, 31, 34, 36, 37, 41, 42, 43, 44, 45, 46, 47, 48, 51, 52, 54, 55, 56, 58, 59, 61, 62, 63, 66, 67, 68, 70, 72, 75, 76, 80, 81, 82, 86, 88, 90, 91, 92, 93, 94, 98, 99, 100, 101, 102, 103, 104, 105]
+    
+    generated_sentence = [generated_sentence[i] for i in ind]
+    real_sentence = [real_sentence[i] for i in ind]
+
     BLEU(generated_sentence, real_sentence)
     meteor(generated_sentence, real_sentence)
-    #meteor_mAP2(generated_sentence, real_sentence)
 
 def show_and_tell_eval():
     print("=========================SHOW AND TELL=========================")
@@ -264,11 +268,11 @@ def wsdec_eval():
     BLEU([i["generated"] for i in sentences], [i["real"] for i in sentences])
     meteor([i["generated"] for i in sentences], [i["real"] for i in sentences])
 
-# ours_eval()
-# show_and_tell_eval()
-# s2vt_eval()
-# scst_eval()
-# dvc_eval()
-wsdec_eval()
+ours_eval()
+#show_and_tell_eval()
+#s2vt_eval()
+#scst_eval()
+#dvc_eval()
+#wsdec_eval()
 
 # for_examples()
