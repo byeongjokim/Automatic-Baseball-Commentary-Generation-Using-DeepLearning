@@ -5,15 +5,11 @@ class Annotation():
     def __init__(self):
         self.g = rdflib.Graph()
         self.g.load(settings.OWL_FILE)
+
         self.uri = settings.OWL_URI
+
         self._set_object_properties()
         self._set_data_properties()
-
-        self.home_atmosphere = 0
-
-    def _set_instance(self):
-
-        return 1
 
     def _set_object_properties(self):
         self.inGame = rdflib.URIRef(self.uri + "inGame")
