@@ -11,19 +11,26 @@ import random
 
 class Vision(object):
     annotation_history = []
-    def __init__(self, resource=None, istest=1):
-        if(istest == 1):
-            sess = tf.Session()
-            self.scene = Scene_Model(sess=sess, istest=istest)
-            self.detect = Detect_Model(sess=sess, istest=istest)
-            self.motion = Motion_Model(sess=sess, istest=istest)
-            self.situation = Situation_Model(sess=sess, istest=istest)
-            self.annotation = Annotation()
 
-            self.resource = resource
+    scene_threshold = 10
+    closeup_threshold = 15
+    situation_threshold = 9
+    silence_threshold = 20
+
+    def __init__(self, resource):
+        sess = tf.Session()
+        self.scene = Scene_Model(sess=sess)
+        self.detect = Detect_Model(sess=sess)
+        self.motion = Motion_Model(sess=sess)
+        self.situation = Situation_Model(sess=sess)
+        self.annotation = Annotation()
+
+        self.resource = resource
 
     def play(self):
         time.sleep(7)
+
+        print("[+] activate commentary framework via deep-learning and ontology")
 
         image = self.resource.get_frame()
         self.image_width, self.image_height, self.image_channel = image.shape
@@ -85,23 +92,18 @@ class Vision(object):
                 else:
                     human_queue.append([])
                 scene_queue, human_queue, situation_label, situation_score = self.situation.predict(scene_queue=scene_queue, human_queue=human_queue, L=scene_length)
-                """
-                if (situation_count > 7):
-                    print("===============", situation_count, situation_label, situation_score, scene_label)
-                """
-                if (situation_count == 9):
+
+                if (situation_count >= self.situation_threshold):
                     anno = self.annotation.get_situation_annotation(situation_label, scene_label)
-                    situation_count = 0
                     self._choose_random_annotation(anno)
 
-                if(situation_count > 15):
                     situation_count = 0
                     scene_queue = []
                     scene_length = 0
                     human_queue = []
 
             anno = []
-            if(count == 10 and scene_label != 9):
+            if(count == self.scene_threshold and scene_label != 9):
                 self.annotation.reload()
                 if(scene_label == 0):
                     anno = anno + self.annotation.search_batter(self.resource.get_gamecode(), self.resource.get_batter(), self.resource.get_strike_ball_out())
@@ -112,12 +114,12 @@ class Vision(object):
                 elif(scene_label == 1):
                     anno = anno + self.annotation.search_batter(self.resource.get_gamecode(), self.resource.get_batter(), self.resource.get_strike_ball_out())
 
-            if(count > 15 and scene_label == 2):
+            if(count >= self.closeup_threshold and scene_label == 2):
                 self.annotation.reload()
                 anno = anno + self.annotation.search_pitcher(self.resource.get_gamecode(), self.resource.get_pitcher(), self.resource.get_strike_ball_out())
                 count = 0
 
-            if(too_long > 20 and scene_label != 9):
+            if(too_long > self.silence_threshold and scene_label != 9):
                 self.annotation.reload()
                 anno = anno + self.annotation.search_gameInfo(self.resource.get_gamecode(), self.resource.get_inn(), self.resource.get_gamescore(), self.resource.get_gameinfo())
                 anno = anno + self.annotation.search_team(self.resource.get_gameinfo(), self.resource.get_btop())
@@ -204,16 +206,3 @@ class Vision(object):
                 else:
                     s = s + 0.0
         return s / len(bboxes2)
-
-    def train(self, model=None):
-        sess = tf.Session()
-        if(model == "scene"):
-            scene = Scene_Model(sess=sess, istest=0)
-            scene.load_data(["20180929_531801"])
-            scene.train()
-        elif(model == "detect"):
-            return 1
-        elif(model == "motion"):
-            motionCAE = CAE()
-            motionCAE.train()
-            # motion = Motion_Model(sess=sess, istest=0)

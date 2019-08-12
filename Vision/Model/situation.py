@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np
 
 class Situation_Model(object):
-    def __init__(self, sess, istest=1):
+    def __init__(self, sess):
         self.situations = ["strike", "ball", "foul", "hit", "ground", "flying", "etc"]
 
         self.max_length = 30
@@ -23,28 +23,25 @@ class Situation_Model(object):
         self.human_height = 50
         self.human_width = 50
         self.human_rgb = 3
+
         self.human_pad = np.zeros((self.human_height, self.human_width, self.human_rgb), np.float32)
         self.human_pad_max = np.zeros((1, self.human_max_length, self.human_height, self.human_width, self.human_rgb), np.float32)
 
         self.total_ckpt = "./_model/situation/total.ckpt"
 
-        self.istest = istest
+        self.sess = sess
+        self.batch_size = 1
 
-        if(istest == 1):
-            self.sess = sess
-            self.batch_size = 1
+        self.X = tf.placeholder(tf.float32, [self.batch_size, self.max_length, 7, 7, 512])
+        self.H = tf.placeholder(tf.float32, [self.batch_size, self.max_length, self.human_max_length, self.human_height, self.human_width, self.human_rgb])
+        self.L = tf.placeholder(tf.int32, [self.batch_size])
 
-            self.X = tf.placeholder(tf.float32, [self.batch_size, self.max_length, 7, 7, 512])
-            self.H = tf.placeholder(tf.float32, [self.batch_size, self.max_length, self.human_max_length, self.human_height, self.human_width, self.human_rgb])
-            self.L = tf.placeholder(tf.int32, [self.batch_size])
+        self.model(self.H, self.L, self.X)
 
-            self.model(self.H, self.L, self.X)
-
-            all_vars = tf.global_variables()
-            situ = [k for k in all_vars if k.name.startswith("situation")]
-            saver = tf.train.Saver(situ)
-            saver.restore(self.sess, self.total_ckpt)
-
+        all_vars = tf.global_variables()
+        situ = [k for k in all_vars if k.name.startswith("situation")]
+        saver = tf.train.Saver(situ)
+        saver.restore(self.sess, self.total_ckpt)
 
     def model(self, H, L, scene_model, Y=None):
         with tf.variable_scope("situation"):
@@ -101,12 +98,6 @@ class Situation_Model(object):
             self.logits = tf.nn.xw_plus_b(self.outputs, last_W, last_b, name="logits")
             self.softmax_logits = tf.nn.softmax(self.logits)
             self.predictions = tf.argmax(self.logits, 1, name="predictions")
-
-            if(self.istest == 0):
-                self.loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=self.logits, labels=Y))
-
-                correct_predictions = tf.equal(self.predictions, tf.argmax(Y, axis=1))
-                self.accuracy = tf.reduce_mean(tf.cast(correct_predictions, tf.float32), name="accuracy")
 
     def predict(self, scene_queue, human_queue, L):
         while (len(human_queue[-1]) < self.human_max_length):

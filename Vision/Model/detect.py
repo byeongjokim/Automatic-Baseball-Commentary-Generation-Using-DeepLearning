@@ -3,7 +3,7 @@ import tensorflow as tf
 import cv2
 
 class Detect_Model():
-    def __init__(self, sess, istest=0):
+    def __init__(self, sess):
         self.sess = sess
 
         self.classes = ["player", "pitcher", "batter", "catcher", "referee"]
@@ -32,11 +32,10 @@ class Detect_Model():
             tmp = self.conv_layer(3, 1024, 1024, tmp, name="C8")
             self.model = self.conv_layer(1, 1024, 50, tmp, name="C9", activation="None")
 
-        if(istest):
-            all_vars = tf.global_variables()
-            object = [k for k in all_vars if k.name.startswith("object")]
-            saver = tf.train.Saver(object)
-            saver.restore(self.sess, "./_model/detect/detect.ckpt")
+        all_vars = tf.global_variables()
+        object = [k for k in all_vars if k.name.startswith("object")]
+        saver = tf.train.Saver(object)
+        saver.restore(self.sess, "./_model/detect/detect.ckpt")
 
     def get_model(self):
         return self.model, self.detect_X

@@ -72,10 +72,6 @@ class Motion(object):
 
 class CAE(Motion):
     def __init__(self):
-        self.batch_size = 100
-        self.epoch = 50
-        self.lr = 0.0001
-
         self.image = tf.placeholder(tf.float32, [None, self.height, self.width, self.rgb])
         self.keep_prob = tf.placeholder(tf.float32)
 
@@ -129,60 +125,6 @@ class CAE(Motion):
             out = self.fc(out, name="fc_7", output_channel=48 * 48 * 3)
 
         self.output = tf.reshape(out, shape=[-1, 48, 48, 3])
-        self.cost = tf.reduce_mean(tf.losses.absolute_difference(out, tf.reshape(self.image, shape=[-1, 48 * 48 * 3])))
-
-    def load_data(self):
-        folder_name = "D:\\work\\kbo\\_data\\_motion\\"
-
-        dataset = []
-
-        filenames = os.listdir(folder_name)
-
-        for filename in filenames[::3]:
-            full_filename = os.path.join(folder_name, filename)
-            ext = os.path.splitext(full_filename)[-1]
-            if ext == '.jpg':
-                sett = {"X":cv2.resize(cv2.imread(full_filename), (self.width, self.height))}
-                dataset.append(sett)
-
-        return dataset
-
-    def train(self):
-        dataset = self.load_data()
-        x = np.array([i["X"] for i in dataset])
-
-        sess = tf.Session()
-
-        optimizer = tf.train.AdamOptimizer(self.lr).minimize(self.cost)
-
-        sess.run(tf.global_variables_initializer())
-        all_vars = tf.global_variables()
-        cae = [k for k in all_vars if k.name.startswith("CAE")]
-        saver = tf.train.Saver(cae)
-        saver.restore(sess, './CAE/CAE.ckpt')
-
-        total_batch = int(len(dataset) / self.batch_size)
-
-        for e in range(self.epoch):
-            total_cost = 0
-
-            j = 0
-            for i in range(total_batch):
-                if (j + self.batch_size > len(x)):
-                    batch_x = x[j:]
-                else:
-                    batch_x = x[j:j + self.batch_size]
-                    j = j + self.batch_size
-
-                _, cost_val = sess.run([optimizer, self.cost], feed_dict={self.image : batch_x, self.keep_prob : 0.75})
-                total_cost = total_cost + cost_val
-
-            print('Epoch:', '%d' % (e + 1), 'Average cost =', '{:.3f}'.format(total_cost / total_batch))
-
-        print("complete")
-        saver.save(sess, './CAE/CAE.ckpt')
-
-        return 1
 
     def test(self):
         sess = tf.Session()
@@ -203,13 +145,10 @@ class CAE(Motion):
             cv2.imwrite(f, o)
 
 class Motion_Model(Motion):
-    def __init__(self, sess, istest=0):
+    def __init__(self, sess):
         self.sess = sess
         self.length = 10
         self.num_hidden = 64
-        self.batch_size = 100
-        self.epoch = 100
-        self.lr = 0.0005
 
         self.image = tf.placeholder(tf.float32, [None, self.length, self.height, self.width, self.rgb])
         self.Y = tf.placeholder(tf.float32, [None, len(self.motions)])
@@ -258,15 +197,12 @@ class Motion_Model(Motion):
             b = tf.Variable(tf.random_normal([len(self.motions)]))
 
         self.model = tf.matmul(outputs, W) + b
-        self.cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=self.model, labels=self.Y))
         self.output = tf.nn.softmax(self.model)
 
-        if(istest==1):
-            all_vars = tf.global_variables()
-            cls = [k for k in all_vars if k.name.startswith("CAE") or k.name.startswith("cls")]
-            saver = tf.train.Saver(cls)
-            saver.restore(self.sess, './_model/motion/CLS/cls.ckpt')
-            #saver.restore(self.sess, './CLS/cls.ckpt')
+        all_vars = tf.global_variables()
+        cls = [k for k in all_vars if k.name.startswith("CAE") or k.name.startswith("cls")]
+        saver = tf.train.Saver(cls)
+        saver.restore(self.sess, './_model/motion/CLS/cls.ckpt')
 
     def last_relevant(self, seq, length):
         batch_size = tf.shape(seq)[0]
@@ -275,112 +211,6 @@ class Motion_Model(Motion):
         index = tf.range(0, batch_size) * max_length + (length - 1)
         flat = tf.reshape(seq, [-1, input_size])
         return tf.gather(flat, index)
-
-    def load_data(self):
-        folder_name = "D:\\work\\kbo\\_data\\_motion\\"
-        csv_path = folder_name + "motion.csv"
-
-        f = open(csv_path, "r")
-        reader = csv.reader(f)
-        pad = np.zeros((self.width, self.height, self.rgb))
-
-        dataset = []
-        for line in reader:
-            start = int(line[0])
-            end = int(line[1])
-            m = self.motions_.index(line[2])
-
-            if(start < end):
-                for i in range(start, end):
-                    """
-                    X = [cv2.resize(cv2.imread(folder_name + str(i) + ".jpg"), (self.width, self.height)) for j in range(i, i+self.length, 2) if(j <= int(line[1]))]
-                    leng = len(X)
-
-                    if (leng < self.length):
-                        num_pad = self.length - leng
-                        X = X + [pad for j in range(num_pad)]
-
-                    dataset.append({"X" : X, "Y" : m, "L" : leng})
-
-
-                    X = [cv2.resize(cv2.imread(folder_name + str(i) + ".jpg"), (self.width, self.height)) for j in range(i, i + self.length, 3) if (j <= int(line[1]))]
-                    leng = len(X)
-
-                    if (leng < self.length):
-                        num_pad = self.length - leng
-                        X = X + [pad for j in range(num_pad)]
-
-                    dataset.append({"X": X, "Y": m, "L": leng})
-                    """
-                    X = [cv2.resize(cv2.imread(folder_name + str(i) + ".jpg"), (self.width, self.height)) for j in range(i, i + self.length, 4) if (j <= int(line[1]))]
-                    leng = len(X)
-
-                    if (leng < self.length):
-                        num_pad = self.length - leng
-                        X = X + [pad for j in range(num_pad)]
-
-                    dataset.append({"X": X, "Y": m, "L": leng})
-
-        return dataset
-
-    def train(self):
-        dataset = self.load_data()
-        train_x = np.array([i["X"] for i in dataset])
-        _y = np.array([i["Y"] for i in dataset])
-        train_y = np.zeros((len(_y), len(self.motions)))
-        train_y[np.arange(len(_y)), [i for i in _y]] = 1
-        train_l = np.array([i["L"] for i in dataset])
-
-        all_vars = tf.global_variables()
-        only_cls = [k for k in all_vars if k.name.startswith("cls")]
-        optimizer = tf.train.AdamOptimizer(self.lr).minimize(self.cost, var_list=only_cls)
-
-        self.sess.run(tf.global_variables_initializer())
-
-        cae = [k for k in all_vars if k.name.startswith("CAE")]
-        saver = tf.train.Saver(cae)
-        saver.restore(self.sess, './CAE/CAE.ckpt')
-
-        cls = [k for k in all_vars if k.name.startswith("CAE") or k.name.startswith("cls")]
-        saver2 = tf.train.Saver(cls)
-        saver2.restore(self.sess, './CLS/cls.ckpt')
-
-        xs = []
-        ys = []
-
-        total_batch = int(len(dataset) / self.batch_size)
-
-        for e in range(self.epoch):
-            total_cost = 0
-
-            j = 0
-            for i in range(total_batch):
-                if (j + self.batch_size > len(train_x)):
-                    batch_x = train_x[j:]
-                    batch_y = train_y[j:]
-                    batch_l = train_l[j:]
-                else:
-                    batch_x = train_x[j:j + self.batch_size]
-                    batch_y = train_y[j:j + self.batch_size]
-                    batch_l = train_l[j:j + self.batch_size]
-                    j = j + self.batch_size
-
-                _, cost_val = self.sess.run([optimizer, self.cost], feed_dict={self.image: batch_x, self.Y: batch_y, self.L: batch_l, self.keep_prob: 0.75})
-
-                total_cost = total_cost + cost_val
-
-            print('Epoch:', '%d' % (e + 1), 'Average cost =', '{:.3f}'.format(total_cost / total_batch))
-
-            if (total_cost / total_batch < 0.2):
-                break
-
-            xs.append(e + 1)
-            ys.append(total_cost / total_batch)
-
-        print("complete")
-        saver2.save(self.sess, './CLS/cls.ckpt')
-        plt.plot(xs, ys, 'b')
-        plt.show()
 
     def predict(self, person_seq):
         person_seq = person_seq[-self.length:]
@@ -402,36 +232,3 @@ class Motion_Model(Motion):
             return output[0], max(score[0])
         else:
             return None, None
-
-    def evaluation(self):
-        motions = ["batting", "batting_waiting", "throwing", "pitching", "catch_catcher", "catch_field", "run", "walking", "nope"]
-
-        dataset = self.load_data()
-
-        random.shuffle(dataset)
-        random.shuffle(dataset)
-        dataset = dataset[:500]
-        print("fin dataset")
-
-        Y = [d["Y"] for d in dataset]
-        print(collections.Counter(Y))
-
-        a = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-        b = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-        c = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-
-        for d in dataset:
-            x = [d["X"]]
-            y = d["Y"]
-            l = [d["L"]]
-            output = self.sess.run(tf.argmax(self.output, 1), feed_dict={self.image: x, self.L: l, self.keep_prob: 1})
-
-            a[y] = a[y] + 1
-            b[output[0]] = b[output[0]] + 1
-            if(y == output[0]):
-                c[output[0]] = c[output[0]] + 1
-
-        print(a)
-        print(b)
-        print(c)
-
