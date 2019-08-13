@@ -67,7 +67,8 @@ class Annotation():
             str(stadium) + "에서 진행 중인 경기, ",
             str(stadium) + "에서 진행 중인 " + str(home_full_name) + " 대 " + str(away_full_name) + "경기, ",
             inn + " " + str(home_full_name) + " 대 " + str(away_full_name) + "경기, ",
-            inn + " 경기 스코어 " + str(homescore) + " 대 " + str(awayscore) + " 진행 중, "
+            inn + " 경기 스코어 " + str(homescore) + " 대 " + str(awayscore) + " 진행 중, ",
+            ""
         ]
 
         if(homescore < awayscore):
@@ -102,17 +103,31 @@ class Annotation():
         batterbox_uri = rdflib.URIRef(self.uri + bbox)
         thisGame = rdflib.URIRef(self.uri + gameCode)
         pitcher = rdflib.URIRef(self.uri + isaboutpitcher)
+        pitcher_name = self.get_player_name(isaboutpitcher)
         hitter = rdflib.URIRef(self.uri + isaboutbatter)
+        hitter_name = self.get_player_name(isaboutbatter)
 
         situation = self.get_situation(gameinfo=gameinfo, inn=inn, score=score, sbo=sbo)
         annotation = []
         if(isaboutpitcher):
-            annotation_about_this_game = ["투수 오늘 경기 0 번째 타석에서 공을 던집니다",
-                                          "투수 오늘 경기 0 번째 타자를 상대하고 있습니다",
-                                          "투수 오늘 경기 0 개의 삼진을 잡아내고 있습니다",
-                                          "투수 오늘 경기 0 개의 포볼로 타자 출루 시켰습니다"]
-            annotation = annotation + list(map("".join, product(situation, annotation_about_this_game)))
+            """
+                이름 추가해서
+                    상황 추가해서
+                        0 팀 소속 0 투수
+                        투수 오늘 경기 0 번째 타석에서 공을 던집니다.
+                        투수 오늘 경기 0 번째 타자를 상대하고 있습니다.
+                        투수 오늘 경기 0 개의 삼진을 잡아내고 있습니다.
+                        투수 오늘 경기 0 개의 포볼로 타자 출루 시켰습니다.
+                        투수 오늘 경기 0 개의 플라이 아웃으로 타자 잡아냈습니다.
+                        투수 오늘 경기 0 개의 땅볼 아웃으로 타자 잡아냈습니다.
+                        투수 오늘 경기 0 개의 싱글 안타 허용하였습니다.
+                        투수 오늘 경기 0 개의 2루타 허용하였습니다.
 
+                    투수 이번 시즌 0의 평균 자책점을 기록하고 있습니다.
+                    투수 저번 타석 0을 기록하였습니다.
+
+                투수 과연 어떤 공을 던질까요?
+            """
             query = "SELECT ?o WHERE {?pitcher ?thisERA ?o}"
             r = self.rdf.query(query, initBindings={"pitcher": pitcher, "thisERA": self.thisERA})
             era = list(r)[0][0]
@@ -132,24 +147,41 @@ class Annotation():
 
             recent_result = self.change_result_history_to_korean(list(r)[0][0].split("#")[1].split("_")[1])
 
-            """
-            이름 추가해서
-                상황 추가해서
-                    0 팀 소속 0 투수
-                    투수 오늘 경기 0 번째 타석에서 공을 던집니다.
-                    투수 오늘 경기 0 번째 타자를 상대하고 있습니다.
-                    투수 오늘 경기 0 개의 삼진을 잡아내고 있습니다.
-                    투수 오늘 경기 0 개의 포볼로 타자 출루 시켰습니다.
-                    투수 오늘 경기 0 개의 플라이 아웃으로 타자 잡아냈습니다.
-                    투수 오늘 경기 0 개의 땅볼 아웃으로 타자 잡아냈습니다.
-                    투수 오늘 경기 0 개의 싱글 안타 허용하였습니다.
-                    투수 오늘 경기 0 개의 2루타 허용하였습니다.
-                
-                투수 이번 시즌 0의 평균 자책점을 기록하고 있습니다.
-                투수 저번 타석 0을 기록하였습니다.
-            
-            투수 과연 어떤 공을 던질까요?
-            """
+            annotation_about_this_game = ["투수 오늘 경기 "+str(total_batterbox)+"번째 타석에서 공을 던집니다",
+                                          "투수 오늘 경기 "+str(total_batterbox)+"번째 타자를 상대하고 있습니다",
+                                          "투수 오늘 경기 "+str(strikeout)+"개의 삼진을 잡아내고 있습니다",
+                                          "투수 오늘 경기 "+str(baseonballs)+"개의 포볼로 타자 출루 시켰습니다",
+                                          "투수 오늘 경기 "+str(fly)+"개의 플라이 아웃으로 타자 잡아냈습니다",
+                                          "투수 오늘 경기 "+str(outinbase)+"개의 땅볼 아웃으로 타자 잡아냈습니다",
+                                          "투수 오늘 경기 "+str(singlehit)+"개의 싱글 안타 허용하였습니다",
+                                          "투수 오늘 경기 "+str(double)+"개의 2루타 허용하였습니다",
+
+                                          pitcher_name + " 투수 오늘 경기 " + str(total_batterbox) + "번째 타석에서 공을 던집니다",
+                                          pitcher_name + " 투수 오늘 경기 " + str(total_batterbox) + "번째 타자를 상대하고 있습니다",
+                                          pitcher_name + " 투수 오늘 경기 " + str(strikeout) + "개의 삼진을 잡아내고 있습니다",
+                                          pitcher_name + " 투수 오늘 경기 " + str(baseonballs) + "개의 포볼로 타자 출루 시켰습니다",
+                                          pitcher_name + " 투수 오늘 경기 " + str(fly) + "개의 플라이 아웃으로 타자 잡아냈습니다",
+                                          pitcher_name + " 투수 오늘 경기 " + str(outinbase) + "개의 땅볼 아웃으로 타자 잡아냈습니다",
+                                          pitcher_name + " 투수 오늘 경기 " + str(singlehit) + "개의 싱글 안타 허용하였습니다",
+                                          pitcher_name + " 투수 오늘 경기 " + str(double) + "개의 2루타 허용하였습니다",
+
+                                          pitcher_name + " 오늘 경기 " + str(total_batterbox) + "번째 타석에서 공을 던집니다",
+                                          pitcher_name + " 오늘 경기 " + str(total_batterbox) + "번째 타자를 상대하고 있습니다",
+                                          pitcher_name + " 오늘 경기 " + str(strikeout) + "개의 삼진을 잡아내고 있습니다",
+                                          pitcher_name + " 오늘 경기 " + str(baseonballs) + "개의 포볼로 타자 출루 시켰습니다",
+                                          pitcher_name + " 오늘 경기 " + str(fly) + "개의 플라이 아웃으로 타자 잡아냈습니다",
+                                          pitcher_name + " 오늘 경기 " + str(outinbase) + "개의 땅볼 아웃으로 타자 잡아냈습니다",
+                                          pitcher_name + " 오늘 경기 " + str(singlehit) + "개의 싱글 안타 허용하였습니다",
+                                          pitcher_name + " 오늘 경기 " + str(double) + "개의 2루타 허용하였습니다",
+                                          ]
+            annotation = annotation + list(map("".join, product(situation, annotation_about_this_game)))
+            annotation = annotation + ["투수 이번 시즌 " + str(era) + "의 평균 자책점을 기록하고 있습니다",
+                                       pitcher_name + " 투수 이번 시즌 " + str(era) + "의 평균 자책점을 기록하고 있습니다",
+                                       pitcher_name + " 이번 시즌 " + str(era) + "의 평균 자책점을 기록하고 있습니다",
+                                       "투수 지난 타석 " + str(recent_result) + "을 기록하였습니다",
+                                       pitcher_name + " 투수 지난 타석 " + str(recent_result) + "을 기록하였습니다",
+                                       pitcher_name + " 지난 타석 " + str(recent_result)+ "을 기록하였습니다",
+                                       ]
 
         # if(isaboutbatter):
         #     annotation.append(1)
@@ -180,6 +212,9 @@ class Annotation():
         korean = ["실책 출루", "포 볼", "데드 볼", "2루타", "홈런", "3루타", "1루타", "플라이 아웃", "땅볼 아웃", "스트라이크 아웃", "아웃", "출루"]
 
         return korean[result.index(h)]
+
+    def get_player_name(self, name):
+        return "".join([s for s in list(name) if not s.isdigit()])
 
 a = Annotation()
 print(a.about_batterbox())
