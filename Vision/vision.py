@@ -106,6 +106,7 @@ class Vision(object):
             if(count == self.scene_threshold and scene_label != 9):
                 self.annotation.reload()
                 if(scene_label == 0):
+                    print(self.resource.get_gamecode(), self.resource.get_batter(), self.resource.get_strike_ball_out(), self.resource.get_batterbox(), self.resource.get_pitcher())
                     anno = anno + self.annotation.search_batter(self.resource.get_gamecode(), self.resource.get_batter(), self.resource.get_strike_ball_out())
                     anno = anno + self.annotation.search_pitcher(self.resource.get_gamecode(), self.resource.get_pitcher(), self.resource.get_strike_ball_out())
                     anno = anno + self.annotation.search_pitcherbatter(self.resource.get_gamecode(), self.resource.get_batter(), self.resource.get_pitcher(), self.resource.get_strike_ball_out())

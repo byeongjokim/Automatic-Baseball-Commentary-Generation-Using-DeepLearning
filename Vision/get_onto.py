@@ -29,6 +29,8 @@ class Annotation(object):
         self.stayIn2B = rdflib.URIRef(settings.OWL_URI + "stayIn2B")
         self.stayIn3B = rdflib.URIRef(settings.OWL_URI + "stayIn3B")
 
+        return 1
+
     def _set_data_properties(self):
         return 1
 
