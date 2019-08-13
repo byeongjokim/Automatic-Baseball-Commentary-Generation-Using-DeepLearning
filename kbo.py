@@ -7,7 +7,7 @@ from Vision.vision import Vision
 from resource import Resource
 
 class KBO():
-    def __init__(self, inEnglish=0):
+    def __init__(self):
         self.resource = Resource()
         self.web = Web(resource=self.resource)
         self.vision = Vision(resource=self.resource)

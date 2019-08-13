@@ -30,25 +30,17 @@ class Web(object):
     def _set_game_info(self, game_info):
         FhomeTeam = game_info["hFullName"]
         FawayTeam = game_info["aFullName"]
-
         homeTeam = game_info["hName"]
         awayTeam = game_info["aName"]
-
         homeCode = game_info["hCode"]
         awayCode = game_info["aCode"]
-
         date = game_info["gdate"]
-
         stadium = game_info["stadium"]
 
         self.GameInfo = {"FhomeTeam": FhomeTeam, "FawayTeam":FawayTeam, "homeTeam": homeTeam, "awayTeam": awayTeam, "stadium": stadium, "date" : date, "homeCode": homeCode, "awayCode": awayCode, "DateHomeAway" : str(date)+str(homeCode)+str(awayCode)}
 
-        #input of ontology (game)
-
         self.resources.set_gameinfo(self.GameInfo)
-
         create_game(self.onto, self.GameInfo)
-        return 1
 
     def _set_TeamLineUp(self, home, away):
         homeTeamPitchers = home["pitcher"]
