@@ -5,11 +5,9 @@ from itertools import product
 class Annotation():
     def __init__(self):
         self.rdf = rdflib.Graph()
-        #self.rdf.load(settings.OWL_FILE)
-        self.rdf.load("./_data/owl/baseball.owl")
+        self.rdf.load(settings.OWL_FILE)
 
-        #self.uri = settings.OWL_URI
-        self.uri = "http://ailab.hanyang.ac.kr/ontology/baseball#"
+        self.uri = settings.OWL_URI
 
         self._set_object_properties()
         self._set_data_properties()
@@ -98,14 +96,14 @@ class Annotation():
 
         return runner
 
-    def about_batterbox(self, gameCode="20180906LGNC", gameinfo=["잠실", "20180906", ["NC", "LT"], ["NC 다이노소어", "롯데 어쩌고"]], inn="20180906LGNC_3회말", score=[0, 2], batterbox="baseball.20180906LGNC_BatterBox_026", sbo=[2, 1, 2], isaboutpitcher="왕웨이중68948", isaboutbatter="유강남61102", isaboutrunner=1):
+    def about_batterbox(self, gameCode, gameinfo, inn, score, batterbox, sbo, pitcher, hitter, isaboutpitcher, isabouthitter, isaboutrunner):
         bbox = str(batterbox).split(".")[-1]
         batterbox_uri = rdflib.URIRef(self.uri + bbox)
         thisGame = rdflib.URIRef(self.uri + gameCode)
-        pitcher = rdflib.URIRef(self.uri + isaboutpitcher)
-        pitcher_name = self.get_player_name(isaboutpitcher)
-        hitter = rdflib.URIRef(self.uri + isaboutbatter)
-        hitter_name = self.get_player_name(isaboutbatter)
+        pitcher_name = self.get_player_name(pitcher)
+        pitcher = rdflib.URIRef(self.uri + pitcher)
+        hitter_name = self.get_player_name(hitter)
+        hitter = rdflib.URIRef(self.uri + hitter)
 
         situation = self.get_situation(gameinfo=gameinfo, inn=inn, score=score, sbo=sbo)
         annotation = []
@@ -145,7 +143,8 @@ class Annotation():
             singlehit = len([1 for i in r if 'SingleHit' in i[0]])
             double = len([1 for i in r if 'Double' in i[0]])
 
-            recent_result = self.change_result_history_to_korean(list(r)[-1][0].split("#")[1].split("_")[1])
+            if(r):
+                recent_result = self.change_result_history_to_korean(list(r)[-1][0].split("#")[1].split("_")[1])
 
             annotation_about_this_game = ["투수 오늘 경기 "+str(total_batterbox)+"번째 타석에서 공을 던집니다",
                                           "투수 오늘 경기 "+str(total_batterbox)+"번째 타자를 상대하고 있습니다",
@@ -190,7 +189,7 @@ class Annotation():
                                        pitcher_name + " 투수 어떤 공을 던질까요",
                                        ]
 
-        if(isaboutbatter):
+        if(isabouthitter):
             """
             타자 오늘 0번째 타석 입니다
             타자 오늘 0번째 타석에서 섰습니다
@@ -227,7 +226,8 @@ class Annotation():
             hits = int(singlehit) + int(double) + int(triple) + int(homerun)
             outs = int(fly) + int(outinbase) + int(strikeout)
 
-            recent_result = self.change_result_history_to_korean(list(r)[-1][0].split("#")[1].split("_")[1])
+            if(r):
+                recent_result = self.change_result_history_to_korean(list(r)[-1][0].split("#")[1].split("_")[1])
 
             annotation_about_this_game = ["타자 오늘 경기 " + str(total_batterbox) + "번째 타석입니다",
                                           "타자 오늘 경기 " + str(total_batterbox) + "번째 타석에 섰습니다",
@@ -312,7 +312,7 @@ class Annotation():
                                        hitter_name + " 타자",
                                        ]
 
-        if(isaboutpitcher and isaboutbatter):
+        if(isaboutpitcher and isabouthitter):
             query = "SELECT ?o where {?s ?inGame ?thisGame . ?s ?toHitter ?hitter . ?s ?fromPitcher ?pitcher . ?s ?result ?o} order by desc(?s)"
             r = self.rdf.query(query, initBindings={
                 "inGame": self.inGame, "thisGame": thisGame,
@@ -331,8 +331,9 @@ class Annotation():
             triple = len([1 for i in r if 'Triple' in i[0]])
             homerun = len([1 for i in r if 'HomeRun' in i[0]])
 
-            history = [self.change_result_history_to_korean(row[0].split("#")[1].split("_")[1]) for row in r]
-            recent_result = history[0]
+            if(r):
+                history = [self.change_result_history_to_korean(row[0].split("#")[1].split("_")[1]) for row in r]
+                recent_result = history[0]
 
             hits = int(singlehit) + int(double) + int(triple) + int(homerun)
             outs = int(fly) + int(outinbase)
@@ -394,21 +395,24 @@ class Annotation():
                 r = self.rdf.query(query, initBindings={"toHitter": self.toHitter, "hitter": hitter,
                                                       "inGame": self.inGame, "thisGame": thisGame,
                                                       "result": self.result, "stayIn1stBase": self.stayIn1stBase})
-                recent_result = self.change_result_history_to_korean(list(r)[-1][0].split("#")[1].split("_")[1])
+                if(r):
+                    recent_result = self.change_result_history_to_korean(list(r)[-1][0].split("#")[1].split("_")[1])
 
-                annotation = annotation + ["타자 1루 주자가 있는 타석에서 최근 " + str(recent_result) + "을 기록하였습니다",
-                                           hitter_name + " 타자 1루 주자가 있는 타석에서 최근 " + str(recent_result) + "을 기록하였습니다"
-                                           ]
+                    annotation = annotation + ["타자 1루 주자가 있는 타석에서 최근 " + str(recent_result) + "을 기록하였습니다",
+                                               hitter_name + " 타자 1루 주자가 있는 타석에서 최근 " + str(recent_result) + "을 기록하였습니다"
+                                               ]
 
                 query = "SELECT ?o where {?s ?fromPitcher ?pitcher . ?s ?result ?o . ?s ?stayIn1stBase ?o1} order by ?s"
                 r = self.rdf.query(query, initBindings={"fromPitcher": self.fromPitcher, "pitcher": pitcher,
                                                         "inGame": self.inGame, "thisGame": thisGame,
                                                         "result": self.result, "stayIn1stBase": self.stayIn1stBase})
-                recent_result = self.change_result_history_to_korean(list(r)[-1][0].split("#")[1].split("_")[1])
 
-                annotation = annotation + ["투수 1루 주자가 있는 타석에서 최근 " + str(recent_result) + "을 기록하였습니다",
-                                           pitcher_name + " 투수 1루 주자가 있는 타석에서 최근 " + str(recent_result) + "을 기록하였습니다"
-                                           ]
+                if(r):
+                    recent_result = self.change_result_history_to_korean(list(r)[-1][0].split("#")[1].split("_")[1])
+
+                    annotation = annotation + ["투수 1루 주자가 있는 타석에서 최근 " + str(recent_result) + "을 기록하였습니다",
+                                               pitcher_name + " 투수 1루 주자가 있는 타석에서 최근 " + str(recent_result) + "을 기록하였습니다"
+                                               ]
 
                 annotation = annotation + ["1루에는 " + str(first_runner) + "가 주자로 있습니다",
                                            "1루에는 " + str(first_runner) + "가 있습니다",
@@ -609,5 +613,3 @@ class Annotation():
     def get_player_name(self, name):
         return "".join([s for s in list(name) if not s.isdigit()])
 
-a = Annotation()
-print(len(a.about_batterbox(gameCode="20180906LGNC", gameinfo=["잠실", "20180906", ["NC", "LT"], ["NC 다이노소어", "롯데 어쩌고"]], inn="20180906LGNC_3회말", score=[0, 2], batterbox="baseball.20180906LGNC_BatterBox_026", sbo=[2, 1, 2], isaboutpitcher="왕웨이중68948", isaboutbatter="유강남61102", isaboutrunner=1)))

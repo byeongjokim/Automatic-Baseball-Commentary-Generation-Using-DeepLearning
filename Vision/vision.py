@@ -5,7 +5,7 @@ from Vision.Model.scene import Scene_Model
 from Vision.Model.detect import Detect_Model
 from Vision.Model.motion import Motion_Model, CAE
 from Vision.Model.situation import Situation_Model
-from Vision.annotation import Annotation
+from Vision.annotation2 import Annotation
 import time
 import random
 
@@ -49,6 +49,7 @@ class Vision(object):
         while(1):
             image = self.resource.get_frame()
             scene_label, scene_score, featuremap = self.scene.predict(image=image)
+            print(scene_label, count)
 
             if(scene_label != pre_scene_label):
                 position_images_seq = {"pitcher": [], "batter": [], "player": []}
@@ -106,27 +107,63 @@ class Vision(object):
             if(count == self.scene_threshold and scene_label != 9):
                 self.annotation.reload()
                 if(scene_label == 0):
-                    print(self.resource.get_gamecode(), self.resource.get_batter(), self.resource.get_strike_ball_out(), self.resource.get_batterbox(), self.resource.get_pitcher())
-                    anno = anno + self.annotation.search_batter(self.resource.get_gamecode(), self.resource.get_batter(), self.resource.get_strike_ball_out())
-                    anno = anno + self.annotation.search_pitcher(self.resource.get_gamecode(), self.resource.get_pitcher(), self.resource.get_strike_ball_out())
-                    anno = anno + self.annotation.search_pitcherbatter(self.resource.get_gamecode(), self.resource.get_batter(), self.resource.get_pitcher(), self.resource.get_strike_ball_out())
-                    anno = anno + self.annotation.search_runner(self.resource.get_batterbox())
+                    anno = anno + self.annotation.about_batterbox(gameCode=self.resource.get_gamecode(),
+                                                                  gameinfo=self.resource.get_gameinfo(),
+                                                                  inn=self.resource.get_inn(),
+                                                                  score=self.resource.get_gamescore(),
+                                                                  batterbox=self.resource.get_batterbox(),
+                                                                  sbo=self.resource.get_strike_ball_out(),
+                                                                  pitcher=self.resource.get_pitcher(),
+                                                                  hitter=self.resource.get_batter(),
+                                                                  isaboutpitcher=True,
+                                                                  isabouthitter=True,
+                                                                  isaboutrunner=True)
 
                 elif(scene_label == 1):
-                    anno = anno + self.annotation.search_batter(self.resource.get_gamecode(), self.resource.get_batter(), self.resource.get_strike_ball_out())
+                    anno = anno + self.annotation.about_batterbox(gameCode=self.resource.get_gamecode(),
+                                                                  gameinfo=self.resource.get_gameinfo(),
+                                                                  inn=self.resource.get_inn(),
+                                                                  score=self.resource.get_gamescore(),
+                                                                  batterbox=self.resource.get_batterbox(),
+                                                                  sbo=self.resource.get_strike_ball_out(),
+                                                                  pitcher=self.resource.get_pitcher(),
+                                                                  hitter=self.resource.get_batter(),
+                                                                  isaboutpitcher=False,
+                                                                  isabouthitter=True,
+                                                                  isaboutrunner=False)
 
             if(count >= self.closeup_threshold and scene_label == 2):
                 self.annotation.reload()
-                anno = anno + self.annotation.search_pitcher(self.resource.get_gamecode(), self.resource.get_pitcher(), self.resource.get_strike_ball_out())
+                anno = anno + self.annotation.about_batterbox(gameCode=self.resource.get_gamecode(),
+                                                              gameinfo=self.resource.get_gameinfo(),
+                                                              inn=self.resource.get_inn(),
+                                                              score=self.resource.get_gamescore(),
+                                                              batterbox=self.resource.get_batterbox(),
+                                                              sbo=self.resource.get_strike_ball_out(),
+                                                              pitcher=self.resource.get_pitcher(),
+                                                              hitter=self.resource.get_batter(),
+                                                              isaboutpitcher=True,
+                                                              isabouthitter=False,
+                                                              isaboutrunner=False)
                 count = 0
 
             if(too_long > self.silence_threshold and scene_label != 9):
                 self.annotation.reload()
                 anno = anno + self.annotation.search_gameInfo(self.resource.get_gamecode(), self.resource.get_inn(), self.resource.get_gamescore(), self.resource.get_gameinfo())
                 anno = anno + self.annotation.search_team(self.resource.get_gameinfo(), self.resource.get_btop())
-                anno = anno + self.annotation.search_batter(self.resource.get_gamecode(), self.resource.get_batter(), self.resource.get_strike_ball_out())
-                anno = anno + self.annotation.search_runner(self.resource.get_batterbox())
+                anno = anno + self.annotation.about_batterbox(gameCode=self.resource.get_gamecode(),
+                                                              gameinfo=self.resource.get_gameinfo(),
+                                                              inn=self.resource.get_inn(),
+                                                              score=self.resource.get_gamescore(),
+                                                              batterbox=self.resource.get_batterbox(),
+                                                              sbo=self.resource.get_strike_ball_out(),
+                                                              pitcher=self.resource.get_pitcher(),
+                                                              hitter=self.resource.get_batter(),
+                                                              isaboutpitcher=False,
+                                                              isabouthitter=True,
+                                                              isaboutrunner=True)
                 too_long = 0
+
             self._choose_random_annotation(anno)
 
             pre_scene_label = scene_label
