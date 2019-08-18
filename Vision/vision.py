@@ -17,7 +17,7 @@ class Vision(object):
     situation_threshold = 2
     silence_threshold = 4
 
-    def __init__(self, resource):
+    def __init__(self, resource, isSimulation=0):
         sess = tf.Session()
         self.scene = Scene_Model(sess=sess)
         self.detect = Detect_Model(sess=sess)
