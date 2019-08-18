@@ -17,7 +17,7 @@ class Vision(object):
     situation_threshold = 2
     silence_threshold = 4
 
-    def __init__(self, resource, isSimulation=0):
+    def __init__(self, resource):
         sess = tf.Session()
         self.scene = Scene_Model(sess=sess)
         self.detect = Detect_Model(sess=sess)
@@ -49,7 +49,7 @@ class Vision(object):
         while(1):
             image = self.resource.get_frame()
             scene_label, scene_score, featuremap = self.scene.predict(image=image)
-            print(scene_label, count)
+            print(count)
 
             if(scene_label != pre_scene_label):
                 position_images_seq = {"pitcher": [], "batter": [], "player": []}

@@ -7,12 +7,10 @@ from Vision.vision import Vision
 from resource import Resource
 
 class KBO():
-    def __init__(self, isSimulation=0):
-        self.isSimulation = isSimulation
-
+    def __init__(self):
         self.resource = Resource()
         self.web = Web(resource=self.resource)
-        self.vision = Vision(resource=self.resource, isSimulation=self.isSimulation)
+        self.vision = Vision(resource=self.resource)
         self.tts = TTS(resource=self.resource)
 
 
@@ -26,7 +24,7 @@ class KBO():
         #tts = threading.Thread(target=self.tts.text_2_speech)
         #tts.start()
 
-        play(self.resource, self.isSimulation)
+        play(self.resource)
 
 if __name__ == '__main__':
     app = KBO()

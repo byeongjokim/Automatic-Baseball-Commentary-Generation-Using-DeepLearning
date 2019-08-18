@@ -4,7 +4,7 @@ from PIL import Image, ImageDraw, ImageFont
 from time import time
 import settings
 
-def play(resource, isSimulation):
+def play(resource):
     def text_2_img(text):
         img = Image.new('RGB', (1080, 50), color=(180, 180, 180))
         font = ImageFont.truetype("gulim.ttc", 20)
