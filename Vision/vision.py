@@ -12,10 +12,10 @@ import random
 class Vision(object):
     annotation_history = []
 
-    scene_threshold = 2
-    closeup_threshold = 3
-    situation_threshold = 2
-    silence_threshold = 4
+    scene_threshold = 10
+    closeup_threshold = 15
+    situation_threshold = 20
+    silence_threshold = 10
 
     def __init__(self, resource):
         sess = tf.Session()
@@ -33,7 +33,7 @@ class Vision(object):
         print("[+] activate commentary framework via deep-learning and ontology")
 
         image = self.resource.get_frame()
-        self.image_width, self.image_height, self.image_channel = image.shape
+        self.image_height, self.image_width, self.image_channel = image.shape
         position_images_seq = {"pitcher": [], "batter": [], "player": []}
         position_images_bbox_seq = {"pitcher": [], "batter": [], "player": []}
         motion_label = {"pitcher": None, "batter": None, "player": None}
@@ -60,7 +60,7 @@ class Vision(object):
             human_coordinates = self.detect.predict(image=image)
             if(human_coordinates):
                 position_images_seq, position_images_bbox_seq = self._get_player_seq(image=image, position_images_seq=position_images_seq, position_images_bbox_seq=position_images_bbox_seq, human_coordinates=human_coordinates)
-
+                
             if (scene_label == 0 and position_images_seq["pitcher"] and motion_label["pitcher"] != 3):
                 pitcher_motion_label, motion_score = self.motion.predict(position_images_seq["pitcher"])
                 motion_label["pitcher"] = pitcher_motion_label
@@ -211,7 +211,7 @@ class Vision(object):
                 position_images_seq["batter"].append(image[p[1]:p[3], p[0]:p[2]])
 
         if (player):
-            player.sort(key=lambda x: (pow(((x[0] + x[2])/2 - self.image_width/2), 2) + pow(((x[1] + x[3])/2 - self.image_height/2), 2)))
+            player.sort(key=lambda x: (pow(((x[0] + x[2])/2 - self.image_height/2), 2) + pow(((x[1] + x[3])/2 - self.image_width/2), 2)))
             p = player[0]
             if(position_images_bbox_seq["player"]):
                 if (self._cal_mean_iou(p, [position_images_bbox_seq["player"][-1]]) > 0.3):

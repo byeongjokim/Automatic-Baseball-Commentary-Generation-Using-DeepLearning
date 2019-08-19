@@ -8,7 +8,6 @@ from collections import Counter
 
 class Scene_Model():
     def __init__(self, sess):
-        print("init scene_model")
         self.scenes = ["pitchingbatting", "batter", "closeup", "coach", "gallery", "frst", "center outfield", "right outfield", "second", "etc", "third", "left outfield", "ss"]
 
         self.width = 224

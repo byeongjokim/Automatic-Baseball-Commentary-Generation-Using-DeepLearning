@@ -1,9 +1,9 @@
 *.mp4
 *.pyc
+*.owl
 
 **/_model
 **/_result
 
 **/__pycache__
 **/.idea
-

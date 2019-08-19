@@ -111,9 +111,11 @@ class Web(object):
         return idx
 
     def parsing_relaytext(self):
+        print("[+] activate commentary framework via web data for referee")
+
         idx = self.parsing_before()
         after_relayTexts = self.relayTexts[idx:]
-
+        
         idx = 0
         while(True):
             relayText = after_relayTexts[idx]
