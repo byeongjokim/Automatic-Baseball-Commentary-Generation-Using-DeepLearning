@@ -49,7 +49,7 @@ class Vision(object):
         while(1):
             image = self.resource.get_frame()
             scene_label, scene_score, featuremap = self.scene.predict(image=image)
-            print(scene_label, count)
+            print(count)
 
             if(scene_label != pre_scene_label):
                 position_images_seq = {"pitcher": [], "batter": [], "player": []}

@@ -1,8 +1,6 @@
 class Resource():
     frame = []
 
-    exit = False
-
     seq = 1
     prev_annotation_text = ""
     prev_annotation = ""
@@ -49,9 +47,6 @@ class Resource():
 
     def get_frameno(self):
         return self.frameno
-
-    def set_exit(self, exit):
-        self.exit = exit
 
     def add_seq(self):
         self.seq = self.seq + 1
@@ -137,7 +132,6 @@ class Resource():
         return self.btop
 
     def set_LineUp(self, LineUp):
-
         sett = {"catcher":None, "1st":None, "2nd":None, "3rd":None, "ss":None, "ROF":None, "LOF":None, "COF":None}
 
         hometeam = LineUp["HomePitchers"] + LineUp["HomeBatters"]
@@ -187,12 +181,6 @@ class Resource():
 
         self.LineUp = LineUp
 
-    def get_LineUp(self, homeTeam = 1):
-        if homeTeam == 1:
-            return self.homeTeam
-        else:
-            return self.awayTeam
-
     def change_LineUp(self, player_in, player_out):
         pos = player_in["posName"]
 
@@ -211,7 +199,7 @@ class Resource():
                 self.homeTeam["3rd"] = player_in
             if (self.awayTeam["3rd"] == player_out):
                 self.awayTeam["3rd"] = player_in
-        elif (pos == "dbrurtn"):
+        elif (pos == "유격수"):
             if (self.homeTeam["ss"] == player_out):
                 self.homeTeam["ss"] = player_in
             if (self.awayTeam["ss"] == player_out):
@@ -240,8 +228,8 @@ class Resource():
     def get_player_with_position(self, position):
         btop = self.get_btop()
         if btop == 0:
-            lineup = self.get_LineUp(0)
+            lineup = self.awayTeam
         else:
-            lineup = self.get_LineUp(1)
+            lineup = self.homeTeam
 
         return lineup[position]["name"]

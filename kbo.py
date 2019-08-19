@@ -13,6 +13,7 @@ class KBO():
         self.vision = Vision(resource=self.resource)
         self.tts = TTS(resource=self.resource)
 
+
     def run(self):
         web_thread = threading.Thread(target=self.web.parsing_relaytext)
         web_thread.start()

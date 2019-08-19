@@ -19,30 +19,28 @@ def play(resource):
     fps = 1 / 29.97
 
     success, frame = video.read()
+    h, w, c = frame.shape
     frameno = settings.START_FRAME + 1
-    if(success):
-        h, w, c = frame.shape
+    resource.set_frameno(frameno)
 
     text = resource.get_annotation()
     textimage = text_2_img(text)
-    resource.set_frameno(settings.START_FRAME + 1)
 
-    while True:
+    while (cv2.waitKey(1) != ord('q')):
         start = time()
+        frameno = frameno + 1
 
         success, frame = video.read()
-        frameno = frameno + 1
+
         resource.set_frame(frame)
         resource.set_frameno(frameno)
-        if cv2.waitKey(1) == ord('q'):
-            break
 
         if (resource.is_new_annotation_video()):
             text = resource.get_annotation()
             textimage = text_2_img(text)
 
         frame[h - 100 : h - 50, 100 : w - 100] = textimage
-        cv2.imshow("play", frame)
+        cv2.imshow("Automatic Sports Commentary", frame)
 
         diff = time() - start
         while diff < fps:
