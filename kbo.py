@@ -16,7 +16,6 @@ class KBO():
         else:
             print("====================Simulation====================")
             
-
     def run(self):
         web_thread = threading.Thread(target=self.web.parsing_relaytext)
         web_thread.start()
@@ -24,8 +23,8 @@ class KBO():
         vision_thread = threading.Thread(target=self.vision.play)
         vision_thread.start()
 
-        #tts = threading.Thread(target=self.tts.text_2_speech)
-        #tts.start()
+        tts = threading.Thread(target=self.tts.text_2_speech)
+        tts.start()
 
         play(self.resource)
     
@@ -33,6 +32,6 @@ class KBO():
         play_bbox(frameno=128400)
 
 if __name__ == '__main__':
-    app = KBO(isSimulation=True)
-    #app.run()
-    app.run_bbox()
+    app = KBO(isSimulation=False)
+    app.run()
+    # app.run_bbox()

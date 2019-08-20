@@ -120,7 +120,6 @@ class Web(object):
         while(True):
             relayText = after_relayTexts[idx]
             next = input("next : "+relayText["liveText"])
-
             pitchId = relayText["pitchId"]
             """
             if not (pitchId == "-1"):

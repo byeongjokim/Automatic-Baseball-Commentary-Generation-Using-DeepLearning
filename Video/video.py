@@ -8,7 +8,6 @@ def play(resource):
     def _text_2_img(text):
         img = Image.new('RGB', (1080, 50), color=(180, 180, 180))
         font = ImageFont.truetype("gulim.ttc", 20)
-        #font = ImageFont.truetype("gulim.ttc", 30)
         d = ImageDraw.Draw(img)
         d.text((10, 10), text, font=font, fill=(0, 0, 0))
 
@@ -106,6 +105,15 @@ def play_bbox(frameno):
                 position_images_seq["player"].append(image[p[1]:p[3], p[0]:p[2]])
 
         return position_images_seq, position_images_bbox_seq
+    
+    def _draw_frame_no(frame, frameno):
+        image_h, image_w, image_c = frame.shape
+        img = Image.new('RGB', (200, 50), color=(255, 255, 255))
+        font = ImageFont.truetype("gulim.ttc", 20)
+        d = ImageDraw.Draw(img)
+        d.text((10, 10), frameno, font=font, fill=(0, 0, 0))
+
+        frame[0 : 50, 0 : 200] = np.asarray(img)
 
     def _draw_scene_label(frame, scene_label):
         image_h, image_w, image_c = frame.shape
@@ -126,23 +134,23 @@ def play_bbox(frameno):
         frame[50 : 100, image_w-400 : image_w] = np.asarray(img)
 
     def _draw_key_player_motion(frame, bbox, motion_label, motion_label_to_word, position):
-        if(motion_label):
+        if(motion_label is not None):
             motion_label = motion_label_to_word[motion_label]
         else:
             motion_label = "Etc"
 
         x, y, w, h = bbox
         image_h, image_w, image_c = frame.shape
-        img = Image.new('RGB', (150, 50), color=(255, 255, 255))
+        img = Image.new('RGB', (200, 50), color=(255, 255, 255))
         font = ImageFont.truetype("gulim.ttc", 15)
         d = ImageDraw.Draw(img)
         d.text((10, 10), position + ":\n" + motion_label, font=font, fill=(0, 0, 0))
 
         try:
-            frame[y : y+50, w : w+150] = np.asarray(img)
+            frame[y : y+50, w : w+200] = np.asarray(img)
         except ValueError:
-            height, width, c = frame[y : y+50, w : w+150].shape
-            frame[y : y+50, w : w+150] = np.asarray(img)[:height, :width]
+            height, width, c = frame[y : y+50, w : w+200].shape
+            frame[y : y+50, w : w+200] = np.asarray(img)[:height, :width]
        
 
     import tensorflow as tf
@@ -165,7 +173,7 @@ def play_bbox(frameno):
     image_h, image_w, image_c = image.shape
 
     scene_label_to_word = ["Batter's Box", "Batter", "Closeup", "Coach", "Gallery", "Frst Base", "Center Outfield", "Right Outfield", "Second Base", "Etc", "Third Base", "Left Outfield", "Short Stop"]
-    motion_label_to_word = ["Batting", "Batting Waiting", "Throwing", "Pitching", "Catch: catcher", "Catch: field", "Run", "Walking", "Etc"]
+    motion_label_to_word = ["Batting", "Batting Waiting", "Throwing", "Pitching", "Catch: catcher", "Catch: fielder", "Run", "Walking", "Etc"]
     situation_label_to_word = ["Strike", "Ball", "Foul", "Hit", "Ground Out", "Flying Out", "Etc"]
 
     position_images_seq = {"pitcher": [], "batter": [], "player": []}
@@ -223,7 +231,7 @@ def play_bbox(frameno):
                 human_queue.append([])
             scene_queue, human_queue, situation_label, situation_score = situation.predict(scene_queue=scene_queue, human_queue=human_queue, L=scene_length)
 
-            if (situation_count > 15):
+            if (situation_count > 30):
                 _draw_situation_label(image, "Result: " + situation_label_to_word[situation_label])
 
                 situation_count = 0
@@ -232,10 +240,11 @@ def play_bbox(frameno):
                 human_queue = []
 
         _draw_scene_label(image, "Scene: " + scene_label_to_word[scene_label])
-
+        _draw_frame_no(image, "Frame No: " + str(frameno))
         if(human_coordinates):
             for x, y, w, h, _ in human_coordinates[:6]:
                 image = cv2.rectangle(image, (x, y), (w, h), color=(0, 255, 255), thickness=2)
+                print(_)
 
             if(position_images_seq["pitcher"]):
                 x, y, w, h = position_images_bbox_seq["pitcher"][-1]
@@ -250,9 +259,10 @@ def play_bbox(frameno):
             if(position_images_seq["player"]):
                 x, y, w, h = position_images_bbox_seq["player"][-1]
                 image = cv2.rectangle(image, (x, y), (w, h), color=(0, 0, 255), thickness=2)
-                _draw_key_player_motion(image, position_images_bbox_seq["player"][-1], motion_label["player"], motion_label_to_word, "player")
-
+                _draw_key_player_motion(image, position_images_bbox_seq["player"][-1], motion_label["player"], motion_label_to_word, "player(in " + scene_label_to_word[scene_label] + ")")
+        
+        cv2.imwrite("./"+str(frameno)+".jpg", image)
         cv2.imshow("Automatic Sports Commentary", image)
-
-        frameno = frameno + 10
+        
+        frameno = frameno + 5
         pre_scene_label = scene_label
