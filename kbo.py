@@ -1,5 +1,5 @@
 import threading
-
+from settings import START_FRAME
 from Video.video import play, play_bbox
 from Video.tts import TTS
 from Web.web import Web
@@ -11,12 +11,15 @@ class KBO():
         if not(isSimulation):
             self.resource = Resource()
             self.web = Web(resource=self.resource)
-            self.tts = TTS(resource=self.resource)
             self.vision = Vision(resource=self.resource)
+            self.tts = TTS(resource=self.resource)
+
         else:
             print("====================Simulation====================")
             
     def run(self):
+        self.resource.set_frameno(START_FRAME + 1)
+
         web_thread = threading.Thread(target=self.web.parsing_relaytext)
         web_thread.start()
 
@@ -34,4 +37,4 @@ class KBO():
 if __name__ == '__main__':
     app = KBO(isSimulation=False)
     app.run()
-    # app.run_bbox()
+    #app.run_bbox()

@@ -108,12 +108,13 @@ def play_bbox(frameno):
     
     def _draw_frame_no(frame, frameno):
         image_h, image_w, image_c = frame.shape
-        img = Image.new('RGB', (200, 50), color=(255, 255, 255))
+        img = Image.new('RGB', (300, 110), color=(255, 255, 255))
         font = ImageFont.truetype("gulim.ttc", 20)
         d = ImageDraw.Draw(img)
-        d.text((10, 10), frameno, font=font, fill=(0, 0, 0))
+        game_info = "2018 09 29 LG VS NC in Seoul\n\n"
+        d.text((10, 20), game_info+frameno, font=font, fill=(0, 0, 0))
 
-        frame[0 : 50, 0 : 200] = np.asarray(img)
+        frame[0 : 110, 0 : 300] = np.asarray(img)
 
     def _draw_scene_label(frame, scene_label):
         image_h, image_w, image_c = frame.shape
@@ -215,7 +216,7 @@ def play_bbox(frameno):
         if (scene_label != 0 and position_images_seq["player"] and motion_label["player"] == None):
             player_motion_label, motion_score = motion.predict(position_images_seq["player"])
             motion_label["player"] = player_motion_label
-        
+
         _draw_situation_label(image, "Result: Before Pitching")
         if(situation_count > 0):
             _draw_situation_label(image, "Result: Before reaching Threshold")

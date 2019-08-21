@@ -12,10 +12,10 @@ import random
 class Vision(object):
     annotation_history = []
 
-    scene_threshold = 10
-    closeup_threshold = 15
-    situation_threshold = 15
-    silence_threshold = 30
+    scene_threshold = 9
+    closeup_threshold = 13
+    situation_threshold = 13
+    silence_threshold = 15
 
     def __init__(self, resource):
         sess = tf.Session()
@@ -44,10 +44,11 @@ class Vision(object):
 
         pre_scene_label = -1
         count = 0
-        too_long = 0
+        self.too_long = 0
         situation_count = 0
         while(1):
             image = self.resource.get_frame()
+            print(count, self.too_long)
             scene_label, scene_score, featuremap = self.scene.predict(image=image)
             
             if(scene_label != pre_scene_label):
@@ -103,9 +104,9 @@ class Vision(object):
                     human_queue = []
 
             if(count == self.scene_threshold and scene_label != 9):
-                self.annotation.reload()
                 if(scene_label == 0):
-                    print("======================================batter's box scene")
+                    #print("======================================batter's box scene")
+                    self.annotation.reload()
                     anno = self.annotation.about_batterbox(gameCode=self.resource.get_gamecode(),
                                                                   gameinfo=self.resource.get_gameinfo(),
                                                                   inn=self.resource.get_inn(),
@@ -120,7 +121,8 @@ class Vision(object):
                     self._choose_random_annotation(anno)
 
                 elif(scene_label == 1):
-                    print("======================================batter closeup scene")
+                    #print("======================================batter closeup scene")
+                    self.annotation.reload()
                     anno = self.annotation.about_batterbox(gameCode=self.resource.get_gamecode(),
                                                                   gameinfo=self.resource.get_gameinfo(),
                                                                   inn=self.resource.get_inn(),
@@ -134,8 +136,8 @@ class Vision(object):
                                                                   isaboutrunner=False)
                     self._choose_random_annotation(anno)
 
-            if(count >= self.closeup_threshold and scene_label == 2):
-                print("======================================pitcher closeup scene")
+            if(count > self.closeup_threshold and scene_label == 2):
+                #print("======================================pitcher closeup scene")
                 self.annotation.reload()
                 anno = self.annotation.about_batterbox(gameCode=self.resource.get_gamecode(),
                                                               gameinfo=self.resource.get_gameinfo(),
@@ -151,8 +153,8 @@ class Vision(object):
                 count = 0
                 self._choose_random_annotation(anno)
 
-            if(too_long > self.silence_threshold and scene_label != 9):
-                print("======================================long time no anno")
+            if(self.too_long > self.silence_threshold and scene_label != 9):
+                #print("======================================long time no anno")
                 self.annotation.reload()
                 anno = self.annotation.search_gameInfo(self.resource.get_gamecode(), self.resource.get_inn(), self.resource.get_gamescore(), self.resource.get_gameinfo())
                 anno = anno + self.annotation.search_team(self.resource.get_gameinfo(), self.resource.get_btop())
@@ -167,29 +169,30 @@ class Vision(object):
                                                               isaboutpitcher=False,
                                                               isabouthitter=True,
                                                               isaboutrunner=True)
-                too_long = 0
                 self._choose_random_annotation(anno)
 
             pre_scene_label = scene_label
             count = count + 1
-            too_long = too_long + 1
+            self.too_long = self.too_long + 1
 
     def _choose_random_annotation(self, anno):
         if not (anno == []):
             count = 0
             output = random.choice(anno)
-            while(output[-7:] in self.annotation_history):
+            while(output[-7:] in self.annotation_history or output[5:] in self.annotation_history):
                 if(count > 8):
                     break
                 output = random.choice(anno)
                 count = count + 1
 
-            if(len(self.annotation_history) > 8):
+            if(len(self.annotation_history) > 16):
+                self.annotation_history.pop(0)
                 self.annotation_history.pop(0)
             self.annotation_history.append(output[-7:])
+            self.annotation_history.append(output[5:])
             self.resource.set_annotation(output)
+            self.too_long = 0
             print(output)
-
 
     def _get_player_seq(self, image, position_images_seq, position_images_bbox_seq, human_coordinates):
         pitcher = [human_coordinate[:4] for human_coordinate in human_coordinates if (human_coordinate[4] == "pitcher")]

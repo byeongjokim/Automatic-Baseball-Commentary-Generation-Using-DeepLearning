@@ -52,18 +52,18 @@ class Scene_Model():
 
             fc0 = tf.reshape(P5, [-1, 7 * 7 * 512])
 
-            with tf.device("/cpu:0"):
-                W1 = tf.get_variable("W1", shape=[7 * 7 * 512, 4096], initializer=tf.contrib.layers.xavier_initializer())
-                b1 = tf.get_variable("b1", shape=[4096], initializer=tf.contrib.layers.xavier_initializer())
-                fc1 = tf.nn.relu(tf.matmul(fc0, W1) + b1)
 
-                W2 = tf.get_variable("W2", shape=[4096, 1000], initializer=tf.contrib.layers.xavier_initializer())
-                b2 = tf.get_variable("b2", shape=[1000], initializer=tf.contrib.layers.xavier_initializer())
-                fc2 = tf.nn.relu(tf.matmul(fc1, W2) + b2)
+            W1 = tf.get_variable("W1", shape=[7 * 7 * 512, 4096], initializer=tf.contrib.layers.xavier_initializer())
+            b1 = tf.get_variable("b1", shape=[4096], initializer=tf.contrib.layers.xavier_initializer())
+            fc1 = tf.nn.relu(tf.matmul(fc0, W1) + b1)
 
-                W3 = tf.get_variable("W3", shape=[1000, self.num_label], initializer=tf.contrib.layers.xavier_initializer())
-                b3 = tf.get_variable("b3", shape=[self.num_label], initializer=tf.contrib.layers.xavier_initializer())
-                self.model = tf.matmul(fc2, W3) + b3
+            W2 = tf.get_variable("W2", shape=[4096, 1000], initializer=tf.contrib.layers.xavier_initializer())
+            b2 = tf.get_variable("b2", shape=[1000], initializer=tf.contrib.layers.xavier_initializer())
+            fc2 = tf.nn.relu(tf.matmul(fc1, W2) + b2)
+
+            W3 = tf.get_variable("W3", shape=[1000, self.num_label], initializer=tf.contrib.layers.xavier_initializer())
+            b3 = tf.get_variable("b3", shape=[self.num_label], initializer=tf.contrib.layers.xavier_initializer())
+            self.model = tf.matmul(fc2, W3) + b3
 
         self.output = tf.nn.softmax(self.model)
 

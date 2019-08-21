@@ -111,22 +111,23 @@ class Web(object):
         return idx
 
     def parsing_relaytext(self):
-        print("[+] activate commentary framework via web data for referee")
-
         idx = self.parsing_before()
+        print("[+] activate commentary framework via web data for referee")
         after_relayTexts = self.relayTexts[idx:]
         
         idx = 0
         while(True):
             relayText = after_relayTexts[idx]
-            next = input("next : "+relayText["liveText"])
             pitchId = relayText["pitchId"]
-            """
-            if not (pitchId == "-1"):
-                pitch_timestamp = pitchId.split("_")[-1]
-                if (self.get_frameno(pitch_timestamp) > self.resources.get_frameno()):
-                    continue
-            """
+            next = input("next : " + relayText["liveText"] + "\n")
+            # if not (pitchId == "-1"):
+            #     pitch_timestamp = pitchId.split("_")[-1]
+            #     if (self.get_frameno(pitch_timestamp) > self.resources.get_frameno()):
+            #         continue
+            #
+            # if(pitchId == "-1"):
+            #     next = input("next : " + relayText["liveText"] + "\n")
+
             ball_data = self._find_ball_data_with_pitchId(pitchId)
 
             self.resources.set_gamescore(relayText["homeScore"], relayText["awayScore"])

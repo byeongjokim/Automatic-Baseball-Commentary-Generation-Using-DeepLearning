@@ -46,16 +46,16 @@ class Situation_Model(object):
     def model(self, H, L, scene_model, Y=None):
         with tf.variable_scope("situation"):
             scene_reshape = tf.reshape(scene_model, [-1, 7 * 7 * 512])
-            with tf.device("/cpu:0"):
-                scene_embed_W1 = tf.get_variable("scene_embed_W1", shape=[7 * 7 * 512, 128], initializer=tf.contrib.layers.xavier_initializer())
-                scene_embed_b1 = tf.get_variable("scene_embed_b1", shape=[128], initializer=tf.contrib.layers.xavier_initializer())
-                scene_embed_fc1 = tf.nn.relu(tf.matmul(scene_reshape, scene_embed_W1) + scene_embed_b1)
 
-                scene_embed_W2 = tf.get_variable("scene_embed_W2", shape=[128, self.scene_embeding_length], initializer=tf.contrib.layers.xavier_initializer())
-                scene_embed_b2 = tf.get_variable("scene_embed_b2", shape=[self.scene_embeding_length], initializer=tf.contrib.layers.xavier_initializer())
-                scene_embed_fc2 = tf.nn.relu(tf.matmul(scene_embed_fc1, scene_embed_W2) + scene_embed_b2)
+            scene_embed_W1 = tf.get_variable("scene_embed_W1", shape=[7 * 7 * 512, 128], initializer=tf.contrib.layers.xavier_initializer())
+            scene_embed_b1 = tf.get_variable("scene_embed_b1", shape=[128], initializer=tf.contrib.layers.xavier_initializer())
+            scene_embed_fc1 = tf.nn.relu(tf.matmul(scene_reshape, scene_embed_W1) + scene_embed_b1)
 
-                scene_embed = tf.reshape(scene_embed_fc2, [self.batch_size, self.max_length, self.scene_embeding_length])
+            scene_embed_W2 = tf.get_variable("scene_embed_W2", shape=[128, self.scene_embeding_length], initializer=tf.contrib.layers.xavier_initializer())
+            scene_embed_b2 = tf.get_variable("scene_embed_b2", shape=[self.scene_embeding_length], initializer=tf.contrib.layers.xavier_initializer())
+            scene_embed_fc2 = tf.nn.relu(tf.matmul(scene_embed_fc1, scene_embed_W2) + scene_embed_b2)
+
+            scene_embed = tf.reshape(scene_embed_fc2, [self.batch_size, self.max_length, self.scene_embeding_length])
 
             h = tf.reshape(H, [self.batch_size * self.max_length * self.human_max_length, self.human_height, self.human_width, self.human_rgb])
 
@@ -75,16 +75,16 @@ class Situation_Model(object):
             human_P4 = self.pool(human_C4_2, option="maxpool")
 
             human_reshape = tf.reshape(human_P4, [-1, 4 * 4 * 512])
-            with tf.device("/cpu:0"):
-                human_embed_W1 = tf.get_variable("human_embed_W1", shape=[4 * 4 * 512, 128], initializer=tf.contrib.layers.xavier_initializer())
-                human_embed_b1 = tf.get_variable("human_embed_b1", shape=[128], initializer=tf.contrib.layers.xavier_initializer())
-                human_embed_fc1 = tf.nn.relu(tf.matmul(human_reshape, human_embed_W1) + human_embed_b1)
 
-                human_embed_W2 = tf.get_variable("human_embed_W2", shape=[128, self.human_embeding_length], initializer=tf.contrib.layers.xavier_initializer())
-                human_embed_b2 = tf.get_variable("human_embed_b2", shape=[self.human_embeding_length], initializer=tf.contrib.layers.xavier_initializer())
-                human_embed_fc2 = tf.nn.relu(tf.matmul(human_embed_fc1, human_embed_W2) + human_embed_b2)
+            human_embed_W1 = tf.get_variable("human_embed_W1", shape=[4 * 4 * 512, 128], initializer=tf.contrib.layers.xavier_initializer())
+            human_embed_b1 = tf.get_variable("human_embed_b1", shape=[128], initializer=tf.contrib.layers.xavier_initializer())
+            human_embed_fc1 = tf.nn.relu(tf.matmul(human_reshape, human_embed_W1) + human_embed_b1)
 
-                human_embed = tf.reshape(human_embed_fc2, [self.batch_size, self.max_length, self.human_max_length * self.human_embeding_length])
+            human_embed_W2 = tf.get_variable("human_embed_W2", shape=[128, self.human_embeding_length], initializer=tf.contrib.layers.xavier_initializer())
+            human_embed_b2 = tf.get_variable("human_embed_b2", shape=[self.human_embeding_length], initializer=tf.contrib.layers.xavier_initializer())
+            human_embed_fc2 = tf.nn.relu(tf.matmul(human_embed_fc1, human_embed_W2) + human_embed_b2)
+
+            human_embed = tf.reshape(human_embed_fc2, [self.batch_size, self.max_length, self.human_max_length * self.human_embeding_length])
 
             rnn_input = tf.concat([scene_embed, human_embed], 2)
 
