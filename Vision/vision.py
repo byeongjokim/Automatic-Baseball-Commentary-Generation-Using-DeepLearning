@@ -12,10 +12,10 @@ import random
 class Vision(object):
     annotation_history = []
 
-    scene_threshold = 9
-    closeup_threshold = 13
-    situation_threshold = 13
-    silence_threshold = 15
+    scene_threshold = 15
+    closeup_threshold = 15
+    situation_threshold = 15
+    silence_threshold = 25
 
     def __init__(self, resource):
         sess = tf.Session()
@@ -28,7 +28,7 @@ class Vision(object):
         self.resource = resource
 
     def play(self):
-        time.sleep(7)
+        time.sleep(2)
 
         print("[+] activate commentary framework via deep-learning and ontology")
 
@@ -46,9 +46,10 @@ class Vision(object):
         count = 0
         self.too_long = 0
         situation_count = 0
+        flag = 1
         while(1):
             image = self.resource.get_frame()
-            print(count, self.too_long)
+
             scene_label, scene_score, featuremap = self.scene.predict(image=image)
             
             if(scene_label != pre_scene_label):
@@ -58,9 +59,10 @@ class Vision(object):
                 count = 0
 
             human_coordinates = self.detect.predict(image=image)
+
             if(human_coordinates):
                 position_images_seq, position_images_bbox_seq = self._get_player_seq(image=image, position_images_seq=position_images_seq, position_images_bbox_seq=position_images_bbox_seq, human_coordinates=human_coordinates)
-                
+
             if (scene_label == 0 and position_images_seq["pitcher"] and motion_label["pitcher"] != 3):
                 pitcher_motion_label, motion_score = self.motion.predict(position_images_seq["pitcher"])
                 motion_label["pitcher"] = pitcher_motion_label
@@ -179,8 +181,8 @@ class Vision(object):
         if not (anno == []):
             count = 0
             output = random.choice(anno)
-            while(output[-7:] in self.annotation_history or output[5:] in self.annotation_history):
-                if(count > 8):
+            while(output[-7:] in self.annotation_history or output[:5] in self.annotation_history):
+                if(count > 10):
                     break
                 output = random.choice(anno)
                 count = count + 1
@@ -189,7 +191,7 @@ class Vision(object):
                 self.annotation_history.pop(0)
                 self.annotation_history.pop(0)
             self.annotation_history.append(output[-7:])
-            self.annotation_history.append(output[5:])
+            self.annotation_history.append(output[:5])
             self.resource.set_annotation(output)
             self.too_long = 0
             print(output)

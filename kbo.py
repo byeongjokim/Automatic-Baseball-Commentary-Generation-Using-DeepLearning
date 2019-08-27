@@ -19,8 +19,9 @@ class KBO():
             
     def run(self):
         self.resource.set_frameno(START_FRAME + 1)
+        idx = self.web.parsing_before()
 
-        web_thread = threading.Thread(target=self.web.parsing_relaytext)
+        web_thread = threading.Thread(target=self.web.parsing_relaytext, args=(idx,))
         web_thread.start()
 
         vision_thread = threading.Thread(target=self.vision.play)

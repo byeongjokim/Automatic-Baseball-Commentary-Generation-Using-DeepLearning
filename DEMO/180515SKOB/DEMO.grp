@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GRP Version="2.0.0.1" Mode="0" TemplateObjectCnt="0">
+    <GrTxtBrushArr Size="0"/>
+    <GrTxtOutlineArr Size="0"/>
+    <GrTxtShadowArr Size="0"/>
+    <GrTimelineViewMode Mode="13" output_width="1280" output_height="720"/>
+    <GrEncodingPath Path="C:\Users\KBJ\Desktop\KBO-Baseball-Casting-with-Deep-Learning\DEMO\"/>
+    <GrVideoArr Size="4">
+        <GrVideo>
+            <GrVideoData FileName="C:\Users\KBJ\Desktop\KBO-Baseball-Casting-with-Deep-Learning\DEMO\180515SKOB\1_2.mp4" SegStart="0" SegEnd="5107" FadeType="0" ScreenTransformType="0" ScreenTransformTime="0" Mute="false" Volume="1" Tempo="1"/>
+            <GrVideoColorAdjust/>
+            <GrVideoFilter VideoColor="0" VideoColorType="0" VideoEffect="0" VideoEffectValue="20" FilterUseLookupFile="0" FilterUseVignetteFile="0"/>
+            <GrVideoTextureAdjust/>
+        </GrVideo>
+        <GrVideo>
+            <GrVideoData FileName="C:\Users\KBJ\Desktop\KBO-Baseball-Casting-with-Deep-Learning\DEMO\180515SKOB\3.mp4" SegStart="0" SegEnd="1533" FadeType="0" ScreenTransformType="0" ScreenTransformTime="0" Mute="false" Volume="1" Tempo="1"/>
+            <GrVideoColorAdjust/>
+            <GrVideoFilter VideoColor="0" VideoColorType="0" VideoEffect="0" VideoEffectValue="20" FilterUseLookupFile="0" FilterUseVignetteFile="0"/>
+            <GrVideoTextureAdjust/>
+        </GrVideo>
+        <GrVideo>
+            <GrVideoData FileName="C:\Users\KBJ\Desktop\KBO-Baseball-Casting-with-Deep-Learning\DEMO\180515SKOB\4.mp4" SegStart="0" SegEnd="2148" FadeType="0" ScreenTransformType="0" ScreenTransformTime="0" Mute="false" Volume="1" Tempo="1"/>
+            <GrVideoColorAdjust/>
+            <GrVideoFilter VideoColor="0" VideoColorType="0" VideoEffect="0" VideoEffectValue="20" FilterUseLookupFile="0" FilterUseVignetteFile="0"/>
+            <GrVideoTextureAdjust/>
+        </GrVideo>
+        <GrVideo>
+            <GrVideoData FileName="C:\Users\KBJ\Desktop\KBO-Baseball-Casting-with-Deep-Learning\DEMO\180515SKOB\5.mp4" SegStart="0" SegEnd="2286" FadeType="0" ScreenTransformType="0" ScreenTransformTime="0" Mute="false" Volume="1" Tempo="1"/>
+            <GrVideoColorAdjust/>
+            <GrVideoFilter VideoColor="0" VideoColorType="0" VideoEffect="0" VideoEffectValue="20" FilterUseLookupFile="0" FilterUseVignetteFile="0"/>
+            <GrVideoTextureAdjust/>
+        </GrVideo>
+    </GrVideoArr>
+    <GrObjArr Size="0"/>
+    <GrAudioArr Size="0"/>
+    <GrEffectArr Size="0"/>
+</GRP>

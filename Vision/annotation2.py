@@ -56,11 +56,11 @@ class Annotation():
         away_full_name = gameinfo[3][1]
 
         situation = [
-            inn + " " + str(sbo[0]) + " 스트라이크 " + str(sbo[1]) + " 볼 " + str(sbo[2]) + " 아웃 상황, ",
+            #inn + " " + str(sbo[0]) + " 스트라이크 " + str(sbo[1]) + " 볼 " + str(sbo[2]) + " 아웃 상황, ",
             inn + " 진행중에, ",
-            str(sbo[0]) + " 스트라이크 " + str(sbo[1]) + " 볼 " + str(sbo[2]) + " 아웃 상황, ",
+            #str(sbo[0]) + " 스트라이크 " + str(sbo[1]) + " 볼 " + str(sbo[2]) + " 아웃 상황, ",
             str(sbo[0]) + " 스트라이크 " + str(sbo[1]) + " 볼 상황, ",
-            str(sbo[2]) + " 아웃 상황, ",
+            #str(sbo[2]) + " 아웃 상황, ",
 
             str(stadium) + "에서 진행 중인 경기, ",
             str(stadium) + "에서 진행 중인 " + str(home_full_name) + " 대 " + str(away_full_name) + "경기, ",
