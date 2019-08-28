@@ -27,6 +27,7 @@ This research describes the three models (scene classifier, player detection, mo
 </td>
 </tr>
 </table>
+
 <table>
 <tr>
 <td colspan="1">Ground to 1st Base</td>
@@ -49,6 +50,7 @@ This research describes the three models (scene classifier, player detection, mo
 </tr>
 
 </table>
+Please wait a moment because the capacity of gif is large.
 
 ## Flow
 ![Flow_chart](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/flow.png?raw=1)
@@ -80,10 +82,7 @@ This research describes the three models (scene classifier, player detection, mo
 </td>
 </tr>
 </table>
-
-*** The referee's judgment(strike, ball, foul, out ...) is casted by web data
-
-
+* The referee's judgment(strike, ball, foul, out ...) is casted by web data
 
 ## Models
 ### Scene Classification
@@ -197,6 +196,8 @@ This research describes the three models (scene classifier, player detection, mo
 ### Motion Recognition
 #### Model
 ![Motion Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/model.png?raw=1)
+![Motion Model2](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/motion/model2.png?raw=1)
+
 #### Classes
 <table>
 <tr>
@@ -231,9 +232,10 @@ This research describes the three models (scene classifier, player detection, mo
 
 ---
 
-### Situation Recognition
+### Pitching Result Recognition
 #### Model
-![Motion Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/situation/model.png?raw=1)
+![PRR Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/situation/model.png?raw=1)
+![PRR Model2](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/situation/model2.png?raw=1)
 
 #### Classes
 - Strike
@@ -252,16 +254,26 @@ This research describes the three models (scene classifier, player detection, mo
 
 #### Example of retrieve knowledges
 <table>
-<tr>
-<td colspan="1">Knowledge</td>
-<td colspan="1">SPARQL</td>
-</tr>
-<tr>
-<td colspan="1">Previous record between pitcher A and batter B</td>
-<td colspan="1">
-SELECT ?o WHERE {?s toHitter A . ?s fromPitcher B . ?s result ?o}
+  <tr>
+    <th>Knowledge</th>
+    <th>the recent record between the hitter A and the pitcher B</th>
+  </tr>
+  <tr>
+    <td>Query</td>
+    <td>SELECT ?date ?stadium ?inning ?result WHERE {?s ?toHitter ?A . ?s ?fromPitcher ?B . ?s ?hasTimeStamp ?t . ?s ?hasResult ?result . ?s ?inInning ?inning . ?s ?inGame ?g . ?g ?inDate ?date . ?g ?hasHomeTeam ?h . ?h ?hasHomeStadium ?stadium} order by desc(?t)</td>
+  </tr>
+  <tr>
+    <td>Template</td>
+    <td>KOR) B 투수와 A 타자의 최근 전적은 {date} {stadium}에 진행한 경기 {inning}회 {result}입니다.
+    <br><br>ENG) Recently, the hitter A recorded {result} in {inning} at the {stadium} on {date} against B.
 </td>
-</tr>
+  </tr>
+  <tr>
+    <td>Commentary</td>
+    <td>KOR) B 투수와 A 타자의 최근 전적은 {date} {stadium}에 진행한 경기 {inning}회 {result}입니다.
+<br><br>ENG) Recently, the hitter A recorded {result} in {inning} at the {stadium} on {date} against B.
+</td>
+  </tr>
 </table>
 
 ---
@@ -277,3 +289,22 @@ SELECT ?o WHERE {?s toHitter A . ?s fromPitcher B . ?s result ?o}
 ---
 
 ## How to run
+
+```
+mkdir _model
+cd _model
+wget ~~~~~~~~~~~~~~~~~~~~~
+```
+```
+#download the video to _data/{videoname}/{videoname}.mp4
+cd _data/180906LGNC_FULL/
+wget ~~~~~~~~~~~~~~~~~~~~~
+```
+```
+#modify GAME_DATE, GAME_NO, FILE_NAME in settings.py to find video and web data
+#modify FIRST_BATTERBOX_START_IN_VIDEO, FIRST_BATTERBOX_START_IN_OWL, START_FRAME to make the same time point of the web data and the video
+vi settings.py
+```
+```
+python kbo.py
+```

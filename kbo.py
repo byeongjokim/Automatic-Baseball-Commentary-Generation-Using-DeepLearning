@@ -16,7 +16,8 @@ class KBO():
 
         else:
             print("====================Simulation====================")
-            
+            self.run_bbox()
+
     def run(self):
         self.resource.set_frameno(START_FRAME + 1)
         idx = self.web.parsing_before()
@@ -38,4 +39,3 @@ class KBO():
 if __name__ == '__main__':
     app = KBO(isSimulation=False)
     app.run()
-    #app.run_bbox()

@@ -5,17 +5,17 @@ from Vision.Model.scene import Scene_Model
 from Vision.Model.detect import Detect_Model
 from Vision.Model.motion import Motion_Model, CAE
 from Vision.Model.situation import Situation_Model
-from Vision.annotation2 import Annotation
+from Vision.annotation import Annotation
 import time
 import random
 
 class Vision(object):
     annotation_history = []
 
-    scene_threshold = 15
+    scene_threshold = 10
     closeup_threshold = 15
     situation_threshold = 15
-    silence_threshold = 25
+    silence_threshold = 20
 
     def __init__(self, resource):
         sess = tf.Session()
@@ -46,7 +46,7 @@ class Vision(object):
         count = 0
         self.too_long = 0
         situation_count = 0
-        flag = 1
+
         while(1):
             image = self.resource.get_frame()
 
