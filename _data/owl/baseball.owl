@@ -1,2512 +1,802 @@
 <?xml version="1.0"?>
-<rdf:RDF xmlns:owl="http://www.w3.org/2002/07/owl#"
-         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-         xml:base="http://ailab.hanyang.ac.kr/ontology/baseball"
-         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-         xmlns="http://ailab.hanyang.ac.kr/ontology/baseball#">
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://ailab.hanyang.ac.kr/ontology/baseball"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     ontologyIRI="http://ailab.hanyang.ac.kr/ontology/baseball">
+    <Prefix name="" IRI="http://ailab.hanyang.ac.kr/ontology/baseball"/>
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Declaration>
+        <Class IRI="#HomeRun"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#stayIn1stBase"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#thisERA"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Component"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#마산"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#잠실"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#GetOnBase"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#inInning"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#currentTeam"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#fromPitcher"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Steal"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#HitByPitch"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasOrder"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#thisFPCT"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#inDay"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#문학"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#사직"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#inBatterbox"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#HT"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#LT"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Hitter"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Strike"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#stayIn3rdBase"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#울산"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#prevSB"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Player"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#HH"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Team"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasName"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#consist"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#When"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Baseball"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#arrivedTo2ndBase"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#BaseByError"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#WO"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#inYear"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Foul"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#BatterBox"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Out"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#prevFPCT"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#수원"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasStadium"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#inGame"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Game"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#whenInfo"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#대전"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#SingleHit"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#고척"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasBirth"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#prevAVG"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Year"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#stayIn2ndBase"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasInning"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#inMonth"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#arrivedTo1stBase"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#homeTeam"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#inStadium"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#toHitter"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Double"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#LG"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#BaseOnBalls"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#playIn"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#passedToHomeBase"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#BBandHBP"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Change"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#awayTeam"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Ball"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#광주"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#takenRbi"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#thisSB"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#NC"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#thisAVG"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Event"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasMonth"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#stealed"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Hit"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#prevERA"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#inTeam"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Strikeout"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Day"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#timeStamp"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Month"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#OB"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ExtraBaseHit"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasPCode"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#inbase"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#playOut"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#OutInBase"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#strikeResult"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#대구"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#SK"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Pitcher"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#result"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasTime"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#SS"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Fly"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Triple"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasDay"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Stadium"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#KT"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#arrivedTo3rdBase"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Inning"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Throw"/>
+    </Declaration>
+    <SubClassOf>
+        <Class IRI="#BBandHBP"/>
+        <Class IRI="#GetOnBase"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Ball"/>
+        <Class IRI="#Throw"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#BaseByError"/>
+        <Class IRI="#GetOnBase"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#BaseOnBalls"/>
+        <Class IRI="#BBandHBP"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#BatterBox"/>
+        <Class IRI="#Event"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Change"/>
+        <Class IRI="#Event"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Component"/>
+        <Class IRI="#Baseball"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Day"/>
+        <Class IRI="#When"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Double"/>
+        <Class IRI="#ExtraBaseHit"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Event"/>
+        <Class IRI="#Baseball"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ExtraBaseHit"/>
+        <Class IRI="#Hit"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Fly"/>
+        <Class IRI="#Out"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Foul"/>
+        <Class IRI="#Throw"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Game"/>
+        <Class IRI="#When"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#GetOnBase"/>
+        <Class IRI="#Event"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Hit"/>
+        <Class IRI="#GetOnBase"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#HitByPitch"/>
+        <Class IRI="#BBandHBP"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Hitter"/>
+        <Class IRI="#Player"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#HomeRun"/>
+        <Class IRI="#ExtraBaseHit"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Inning"/>
+        <Class IRI="#Event"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Month"/>
+        <Class IRI="#When"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Out"/>
+        <Class IRI="#Event"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#OutInBase"/>
+        <Class IRI="#Out"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Pitcher"/>
+        <Class IRI="#Player"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Player"/>
+        <Class IRI="#Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#SingleHit"/>
+        <Class IRI="#Hit"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Stadium"/>
+        <Class IRI="#Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Steal"/>
+        <Class IRI="#Event"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Strike"/>
+        <Class IRI="#Throw"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Strikeout"/>
+        <Class IRI="#Out"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Team"/>
+        <Class IRI="#Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Throw"/>
+        <Class IRI="#Event"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Triple"/>
+        <Class IRI="#ExtraBaseHit"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#When"/>
+        <Class IRI="#Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Year"/>
+        <Class IRI="#When"/>
+    </SubClassOf>
+    <ClassAssertion>
+        <Class IRI="#Team"/>
+        <NamedIndividual IRI="#HH"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Team"/>
+        <NamedIndividual IRI="#HT"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Team"/>
+        <NamedIndividual IRI="#KT"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Team"/>
+        <NamedIndividual IRI="#LG"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Team"/>
+        <NamedIndividual IRI="#LT"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Team"/>
+        <NamedIndividual IRI="#NC"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Team"/>
+        <NamedIndividual IRI="#OB"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Team"/>
+        <NamedIndividual IRI="#SK"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Team"/>
+        <NamedIndividual IRI="#SS"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Team"/>
+        <NamedIndividual IRI="#WO"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Stadium"/>
+        <NamedIndividual IRI="#고척"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Stadium"/>
+        <NamedIndividual IRI="#광주"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Stadium"/>
+        <NamedIndividual IRI="#대구"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Stadium"/>
+        <NamedIndividual IRI="#대전"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Stadium"/>
+        <NamedIndividual IRI="#마산"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Stadium"/>
+        <NamedIndividual IRI="#문학"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Stadium"/>
+        <NamedIndividual IRI="#사직"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Stadium"/>
+        <NamedIndividual IRI="#수원"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Stadium"/>
+        <NamedIndividual IRI="#울산"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Stadium"/>
+        <NamedIndividual IRI="#잠실"/>
+    </ClassAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasStadium"/>
+        <NamedIndividual IRI="#HH"/>
+        <NamedIndividual IRI="#대전"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasStadium"/>
+        <NamedIndividual IRI="#HT"/>
+        <NamedIndividual IRI="#광주"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasStadium"/>
+        <NamedIndividual IRI="#KT"/>
+        <NamedIndividual IRI="#수원"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasStadium"/>
+        <NamedIndividual IRI="#LG"/>
+        <NamedIndividual IRI="#잠실"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasStadium"/>
+        <NamedIndividual IRI="#LT"/>
+        <NamedIndividual IRI="#사직"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasStadium"/>
+        <NamedIndividual IRI="#NC"/>
+        <NamedIndividual IRI="#마산"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasStadium"/>
+        <NamedIndividual IRI="#OB"/>
+        <NamedIndividual IRI="#잠실"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasStadium"/>
+        <NamedIndividual IRI="#SK"/>
+        <NamedIndividual IRI="#문학"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasStadium"/>
+        <NamedIndividual IRI="#SS"/>
+        <NamedIndividual IRI="#대구"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasStadium"/>
+        <NamedIndividual IRI="#WO"/>
+        <NamedIndividual IRI="#고척"/>
+    </ObjectPropertyAssertion>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#arrivedTo1stBase"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#arrivedTo2ndBase"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#arrivedTo3rdBase"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#awayTeam"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#consist"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#currentTeam"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#fromPitcher"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#hasStadium"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#homeTeam"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#inBatterbox"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#inDay"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#inGame"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#inInning"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#inMonth"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#inStadium"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#inTeam"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#inYear"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#passedToHomeBase"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#playIn"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#playOut"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#result"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#stayIn1stBase"/>
+        <ObjectProperty IRI="#inbase"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#stayIn2ndBase"/>
+        <ObjectProperty IRI="#inbase"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#stayIn3rdBase"/>
+        <ObjectProperty IRI="#inbase"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#stealed"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#strikeResult"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#toHitter"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#whenInfo"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <TransitiveObjectProperty>
+        <ObjectProperty IRI="#consist"/>
+    </TransitiveObjectProperty>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#fromPitcher"/>
+        <Class IRI="#Throw"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#hasStadium"/>
+        <Class IRI="#Team"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#toHitter"/>
+        <Class IRI="#Throw"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#hasStadium"/>
+        <Class IRI="#Stadium"/>
+    </ObjectPropertyRange>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#hasBirth"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#hasDay"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#hasInning"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#hasMonth"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#hasName"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#hasOrder"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#hasPCode"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#hasTime"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#prevAVG"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#prevERA"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#prevFPCT"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#prevSB"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#takenRbi"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#thisAVG"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#thisERA"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#thisFPCT"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#thisSB"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#timeStamp"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+</Ontology>
+
+
+
+<!-- Generated by the OWL API (version 4.2.8.20170104-2310) https://github.com/owlcs/owlapi -->
 
-<owl:Ontology rdf:about="http://ailab.hanyang.ac.kr/ontology/baseball"/>
-
-<owl:Class rdf:about="#HomeRun">
-  <rdfs:subClassOf rdf:resource="#ExtraBaseHit"/>
-</owl:Class>
-
-<owl:Class rdf:about="#ExtraBaseHit">
-  <rdfs:subClassOf rdf:resource="#Hit"/>
-</owl:Class>
-
-<owl:ObjectProperty rdf:about="#stayIn1stBase">
-  <rdfs:subPropertyOf rdf:resource="#inbase"/>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#inbase"/>
-
-<owl:DatatypeProperty rdf:about="#thisERA">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-</owl:DatatypeProperty>
-
-<owl:Class rdf:about="#Component">
-  <rdfs:subClassOf rdf:resource="#Baseball"/>
-</owl:Class>
-
-<owl:Class rdf:about="#Baseball"/>
-
-<Stadium rdf:about="#마산">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-</Stadium>
-
-<owl:Class rdf:about="#Stadium">
-  <rdfs:subClassOf rdf:resource="#Component"/>
-</owl:Class>
-
-<Stadium rdf:about="#잠실">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-</Stadium>
-
-<owl:Class rdf:about="#GetOnBase">
-  <rdfs:subClassOf rdf:resource="#Event"/>
-</owl:Class>
-
-<owl:Class rdf:about="#Event">
-  <rdfs:subClassOf rdf:resource="#Baseball"/>
-</owl:Class>
-
-<owl:ObjectProperty rdf:about="#inInning">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#currentTeam">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#fromPitcher">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-  <rdfs:domain rdf:resource="#Throw"/>
-</owl:ObjectProperty>
-
-<owl:Class rdf:about="#Double">
-  <rdfs:subClassOf rdf:resource="#ExtraBaseHit"/>
-</owl:Class>
-
-<Team rdf:about="#LG">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasStadium rdf:resource="#잠실"/>
-</Team>
-
-<owl:Class rdf:about="#Team">
-  <rdfs:subClassOf rdf:resource="#Component"/>
-</owl:Class>
-
-<owl:ObjectProperty rdf:about="#hasStadium">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-  <rdfs:domain rdf:resource="#Team"/>
-  <rdfs:range rdf:resource="#Stadium"/>
-</owl:ObjectProperty>
-
-<owl:Class rdf:about="#BaseOnBalls">
-  <rdfs:subClassOf rdf:resource="#BBandHBP"/>
-</owl:Class>
-
-<owl:ObjectProperty rdf:about="#playIn">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#passedToHomeBase">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<owl:Class rdf:about="#Change">
-  <rdfs:subClassOf rdf:resource="#Event"/>
-</owl:Class>
-
-<owl:ObjectProperty rdf:about="#awayTeam">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<owl:Class rdf:about="#Ball">
-  <rdfs:subClassOf rdf:resource="#Throw"/>
-</owl:Class>
-
-<Stadium rdf:about="#광주">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-</Stadium>
-
-<owl:DatatypeProperty rdf:about="#takenRbi">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-</owl:DatatypeProperty>
-
-<owl:ObjectProperty rdf:about="#inBatterbox">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<Team rdf:about="#HT">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasStadium rdf:resource="#광주"/>
-</Team>
-
-<Team rdf:about="#LT">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasStadium rdf:resource="#사직"/>
-</Team>
-
-<owl:Class rdf:about="#Hitter">
-  <rdfs:subClassOf rdf:resource="#Player"/>
-</owl:Class>
-
-<owl:Class rdf:about="#Player">
-  <rdfs:subClassOf rdf:resource="#Component"/>
-</owl:Class>
-
-<owl:Class rdf:about="#Strike">
-  <rdfs:subClassOf rdf:resource="#Throw"/>
-</owl:Class>
-
-<owl:ObjectProperty rdf:about="#stayIn3rdBase">
-  <rdfs:subPropertyOf rdf:resource="#inbase"/>
-</owl:ObjectProperty>
-
-<Stadium rdf:about="#울산">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-</Stadium>
-
-<owl:DatatypeProperty rdf:about="#prevSB">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-</owl:DatatypeProperty>
-
-<Team rdf:about="#HH">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasStadium rdf:resource="#대전"/>
-</Team>
-
-<owl:DatatypeProperty rdf:about="#hasName">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-</owl:DatatypeProperty>
-
-<owl:ObjectProperty rdf:about="#consist">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#arrivedTo2ndBase">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<owl:Class rdf:about="#BaseByError">
-  <rdfs:subClassOf rdf:resource="#GetOnBase"/>
-</owl:Class>
-
-<owl:Class rdf:about="#Throw">
-  <rdfs:subClassOf rdf:resource="#Event"/>
-</owl:Class>
-
-<owl:Class rdf:about="#Steal">
-  <rdfs:subClassOf rdf:resource="#Event"/>
-</owl:Class>
-
-<owl:Class rdf:about="#HitByPitch">
-  <rdfs:subClassOf rdf:resource="#BBandHBP"/>
-</owl:Class>
-
-<owl:Class rdf:about="#BBandHBP">
-  <rdfs:subClassOf rdf:resource="#GetOnBase"/>
-</owl:Class>
-
-<owl:DatatypeProperty rdf:about="#hasOrder">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#thisFPCT">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-</owl:DatatypeProperty>
-
-<owl:ObjectProperty rdf:about="#inDay">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<Stadium rdf:about="#문학">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-</Stadium>
-
-<Stadium rdf:about="#사직">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-</Stadium>
-
-<owl:Class rdf:about="#Game">
-  <rdfs:subClassOf rdf:resource="#When"/>
-</owl:Class>
-
-<owl:Class rdf:about="#When">
-  <rdfs:subClassOf rdf:resource="#Component"/>
-</owl:Class>
-
-<owl:ObjectProperty rdf:about="#whenInfo">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<Stadium rdf:about="#대전">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-</Stadium>
-
-<owl:Class rdf:about="#SingleHit">
-  <rdfs:subClassOf rdf:resource="#Hit"/>
-</owl:Class>
-
-<owl:Class rdf:about="#Hit">
-  <rdfs:subClassOf rdf:resource="#GetOnBase"/>
-</owl:Class>
-
-<Stadium rdf:about="#고척">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-</Stadium>
-
-<owl:DatatypeProperty rdf:about="#hasBirth">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#prevAVG">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-</owl:DatatypeProperty>
-
-<owl:Class rdf:about="#Year">
-  <rdfs:subClassOf rdf:resource="#When"/>
-</owl:Class>
-
-<owl:ObjectProperty rdf:about="#stayIn2ndBase">
-  <rdfs:subPropertyOf rdf:resource="#inbase"/>
-</owl:ObjectProperty>
-
-<owl:DatatypeProperty rdf:about="#hasInning">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-</owl:DatatypeProperty>
-
-<owl:ObjectProperty rdf:about="#inMonth">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#arrivedTo1stBase">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#homeTeam">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#inStadium">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#toHitter">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-  <rdfs:domain rdf:resource="#Throw"/>
-</owl:ObjectProperty>
-
-<Team rdf:about="#WO">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasStadium rdf:resource="#고척"/>
-</Team>
-
-<owl:ObjectProperty rdf:about="#inYear">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<owl:Class rdf:about="#Foul">
-  <rdfs:subClassOf rdf:resource="#Throw"/>
-</owl:Class>
-
-<owl:Class rdf:about="#BatterBox">
-  <rdfs:subClassOf rdf:resource="#Event"/>
-</owl:Class>
-
-<owl:Class rdf:about="#Out">
-  <rdfs:subClassOf rdf:resource="#Event"/>
-</owl:Class>
-
-<owl:DatatypeProperty rdf:about="#prevFPCT">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-</owl:DatatypeProperty>
-
-<Stadium rdf:about="#수원">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-</Stadium>
-
-<owl:ObjectProperty rdf:about="#inGame">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<owl:DatatypeProperty rdf:about="#thisSB">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-</owl:DatatypeProperty>
-
-<Team rdf:about="#NC">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasStadium rdf:resource="#마산"/>
-</Team>
-
-<Hitter rdf:about="#김재현76869">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19871107</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.277</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#김동엽66838">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19900724</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.252</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#김성현76802">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19870309</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.277</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#강승호63123">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19940209</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.255</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#이재원76812">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19880224</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.329</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#이성우71184">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19810901</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.242</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#최항62884">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19940103</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.293</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#허도환77243">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19840731</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.273</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Pitcher rdf:about="#브리검67313">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19880210</hasBirth>
-  <thisERA rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">3.84</thisERA>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Pitcher"/>
-</Pitcher>
-
-<Pitcher rdf:about="#한현희62363">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19930625</hasBirth>
-  <thisERA rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4.79</thisERA>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Pitcher"/>
-</Pitcher>
-
-<owl:DatatypeProperty rdf:about="#timeStamp">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-</owl:DatatypeProperty>
-
-<Team rdf:about="#OB">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasStadium rdf:resource="#잠실"/>
-</Team>
-
-<owl:DatatypeProperty rdf:about="#hasPCode">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-</owl:DatatypeProperty>
-
-<owl:ObjectProperty rdf:about="#playOut">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<owl:Class rdf:about="#OutInBase">
-  <rdfs:subClassOf rdf:resource="#Out"/>
-</owl:Class>
-
-<owl:ObjectProperty rdf:about="#strikeResult">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<Stadium rdf:about="#대구">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-</Stadium>
-
-<owl:ObjectProperty rdf:about="#result">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<owl:DatatypeProperty rdf:about="#hasTime">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-</owl:DatatypeProperty>
-
-<Team rdf:about="#SS">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasStadium rdf:resource="#대구"/>
-</Team>
-
-<owl:Class rdf:about="#Fly">
-  <rdfs:subClassOf rdf:resource="#Out"/>
-</owl:Class>
-
-<owl:Class rdf:about="#Triple">
-  <rdfs:subClassOf rdf:resource="#ExtraBaseHit"/>
-</owl:Class>
-
-<owl:DatatypeProperty rdf:about="#hasDay">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-</owl:DatatypeProperty>
-
-<Team rdf:about="#KT">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasStadium rdf:resource="#수원"/>
-</Team>
-
-<owl:ObjectProperty rdf:about="#arrivedTo3rdBase">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<owl:Class rdf:about="#Inning">
-  <rdfs:subClassOf rdf:resource="#Event"/>
-</owl:Class>
-
-<owl:DatatypeProperty rdf:about="#thisAVG">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#hasMonth">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-</owl:DatatypeProperty>
-
-<owl:ObjectProperty rdf:about="#stealed">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<owl:DatatypeProperty rdf:about="#prevERA">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-</owl:DatatypeProperty>
-
-<owl:ObjectProperty rdf:about="#inTeam">
-  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-</owl:ObjectProperty>
-
-<owl:Class rdf:about="#Strikeout">
-  <rdfs:subClassOf rdf:resource="#Out"/>
-</owl:Class>
-
-<Game rdf:about="#20181102SKWO">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <homeTeam rdf:resource="#SK"/>
-  <awayTeam rdf:resource="#WO"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Game"/>
-  <inYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2018</inYear>
-  <inMonth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">11</inMonth>
-  <inDay rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</inDay>
-</Game>
-
-<Team rdf:about="#SK">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasStadium rdf:resource="#문학"/>
-</Team>
-
-<Year rdf:about="#2018">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-</Year>
-
-<Month rdf:about="#11">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-</Month>
-
-<Day rdf:about="#2">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-</Day>
-
-<owl:Class rdf:about="#Month">
-  <rdfs:subClassOf rdf:resource="#When"/>
-</owl:Class>
-
-<owl:Class rdf:about="#Day">
-  <rdfs:subClassOf rdf:resource="#When"/>
-</owl:Class>
-
-<Pitcher rdf:about="#김광현77829">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#WO"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19880722</hasBirth>
-  <thisERA rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.98</thisERA>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Pitcher"/>
-</Pitcher>
-
-<owl:Class rdf:about="#Pitcher">
-  <rdfs:subClassOf rdf:resource="#Player"/>
-</owl:Class>
-
-<Pitcher rdf:about="#김태훈79847">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#WO"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19900519</hasBirth>
-  <thisERA rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">3.83</thisERA>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Pitcher"/>
-</Pitcher>
-
-<Pitcher rdf:about="#켈리65856">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#WO"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19881014</hasBirth>
-  <thisERA rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4.09</thisERA>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Pitcher"/>
-</Pitcher>
-
-<Pitcher rdf:about="#신재웅75138">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#WO"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19820328</hasBirth>
-  <thisERA rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.77</thisERA>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Pitcher"/>
-</Pitcher>
-
-<Pitcher rdf:about="#김택형65343">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#WO"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19961010</hasBirth>
-  <thisERA rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">7.71</thisERA>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Pitcher"/>
-</Pitcher>
-
-<Hitter rdf:about="#김강민71837">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19820913</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.298</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#한동민62895">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19890809</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.284</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#최정75847">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19870228</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.244</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#로맥67872">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19850930</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.316</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#정진기61869">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19921010</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.244</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#나주환73209">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19840614</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.262</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#박정권74846">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19810721</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.172</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Pitcher rdf:about="#안우진68341">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19990830</hasBirth>
-  <thisERA rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">7.19</thisERA>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Pitcher"/>
-</Pitcher>
-
-<Pitcher rdf:about="#오주원74359">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19850331</hasBirth>
-  <thisERA rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">6.19</thisERA>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Pitcher"/>
-</Pitcher>
-
-<Pitcher rdf:about="#이보근75342">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19860430</hasBirth>
-  <thisERA rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4.28</thisERA>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Pitcher"/>
-</Pitcher>
-
-<Pitcher rdf:about="#김상수76430">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19880102</hasBirth>
-  <thisERA rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">5.17</thisERA>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Pitcher"/>
-</Pitcher>
-
-<Pitcher rdf:about="#신재영62937">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#SK"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19891118</hasBirth>
-  <thisERA rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">6.75</thisERA>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Pitcher"/>
-</Pitcher>
-
-<Hitter rdf:about="#김하성64300">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#WO"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19951017</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.288</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#송성문65357">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#WO"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19960829</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.313</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#서건창78168">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#WO"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19890822</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.34</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#박병호75125">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#WO"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19860710</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.345</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#샌즈68345">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#WO"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19870928</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.314</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Foul rdf:about="#20181102SKWO_Foul_033">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_006"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Ball rdf:about="#20181102SKWO_Ball_034">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_006"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_035">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_006"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Hitter rdf:about="#임병욱64346">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#WO"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19950930</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.293</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#김민성77564">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#WO"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19881217</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.283</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#김규민62356">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#WO"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19930126</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.295</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#박정음62353">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#WO"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19890415</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.063</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#고종욱61353">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#WO"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19890111</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.279</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#김혜성67304">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#WO"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19990127</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.27</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#김재현62332">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#WO"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19930318</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.228</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#허정협65399">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#WO"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19900217</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.25</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<Hitter rdf:about="#주효상66354">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <currentTeam rdf:resource="#WO"/>
-  <hasBirth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19971111</hasBirth>
-  <thisAVG rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.218</thisAVG>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Hitter"/>
-</Hitter>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_001">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#김하성64300"/>
-  <fromPitcher rdf:resource="#김광현77829"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_1회초"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</hasOrder>
-  <result rdf:resource="#20181102SKWO_Fly_008"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Fly rdf:about="#20181102SKWO_Fly_008">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Fly"/>
-</Fly>
-
-<Strike rdf:about="#20181102SKWO_Strike_001">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_001"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Foul rdf:about="#20181102SKWO_Foul_002">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_001"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Foul rdf:about="#20181102SKWO_Foul_003">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_001"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Ball rdf:about="#20181102SKWO_Ball_004">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_001"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Foul rdf:about="#20181102SKWO_Foul_005">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_001"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Ball rdf:about="#20181102SKWO_Ball_006">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_001"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Ball rdf:about="#20181102SKWO_Ball_007">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_001"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_009">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_002"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Ball rdf:about="#20181102SKWO_Ball_010">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_002"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Ball rdf:about="#20181102SKWO_Ball_011">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_002"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_012">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_002"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Foul rdf:about="#20181102SKWO_Foul_013">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_002"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Strike rdf:about="#20181102SKWO_Strike_015">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_002"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_002">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#송성문65357"/>
-  <fromPitcher rdf:resource="#김광현77829"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_1회초"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</hasOrder>
-  <result rdf:resource="#20181102SKWO_Strikeout_016"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Strikeout rdf:about="#20181102SKWO_Strikeout_016">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strikeout"/>
-</Strikeout>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_003">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#서건창78168"/>
-  <fromPitcher rdf:resource="#김광현77829"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_1회초"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</hasOrder>
-  <arrivedTo1stBase rdf:resource="#서건창78168"/>
-  <result rdf:resource="#20181102SKWO_SingleHit_017"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Inning rdf:about="#20181102SKWO_1회초">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasInning rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</hasInning>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Inning"/>
-</Inning>
-
-<SingleHit rdf:about="#20181102SKWO_SingleHit_017">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#SingleHit"/>
-</SingleHit>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_004">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#박병호75125"/>
-  <fromPitcher rdf:resource="#김광현77829"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_1회초"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</hasOrder>
-  <stayIn1stBase rdf:resource="#서건창78168"/>
-  <result rdf:resource="#20181102SKWO_Strikeout_021"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Strikeout rdf:about="#20181102SKWO_Strikeout_021">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strikeout"/>
-</Strikeout>
-
-<Strike rdf:about="#20181102SKWO_Strike_018">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_004"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Strike rdf:about="#20181102SKWO_Strike_019">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_004"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Strike rdf:about="#20181102SKWO_Strike_020">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_004"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Inning rdf:about="#20181102SKWO_1회말">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasInning rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</hasInning>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Inning"/>
-</Inning>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_005">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#김강민71837"/>
-  <fromPitcher rdf:resource="#브리검67313"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_1회말"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</hasOrder>
-  <result rdf:resource="#20181102SKWO_Strikeout_028"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Strikeout rdf:about="#20181102SKWO_Strikeout_028">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strikeout"/>
-</Strikeout>
-
-<Ball rdf:about="#20181102SKWO_Ball_022">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_005"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Ball rdf:about="#20181102SKWO_Ball_023">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_005"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_024">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_005"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Foul rdf:about="#20181102SKWO_Foul_025">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_005"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Ball rdf:about="#20181102SKWO_Ball_026">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_005"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_027">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_005"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_006">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#한동민62895"/>
-  <fromPitcher rdf:resource="#브리검67313"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_1회말"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</hasOrder>
-  <result rdf:resource="#20181102SKWO_Strikeout_036"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Strikeout rdf:about="#20181102SKWO_Strikeout_036">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strikeout"/>
-</Strikeout>
-
-<Strike rdf:about="#20181102SKWO_Strike_029">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_006"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Ball rdf:about="#20181102SKWO_Ball_030">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_006"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_031">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_006"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Ball rdf:about="#20181102SKWO_Ball_032">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_006"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Foul rdf:about="#20181102SKWO_Foul_014">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_002"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_007">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#최정75847"/>
-  <fromPitcher rdf:resource="#브리검67313"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_1회말"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</hasOrder>
-  <result rdf:resource="#20181102SKWO_Strikeout_043"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Strikeout rdf:about="#20181102SKWO_Strikeout_043">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strikeout"/>
-</Strikeout>
-
-<Strike rdf:about="#20181102SKWO_Strike_037">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_007"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Strike rdf:about="#20181102SKWO_Strike_038">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_007"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Ball rdf:about="#20181102SKWO_Ball_039">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_007"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Ball rdf:about="#20181102SKWO_Ball_040">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_007"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Ball rdf:about="#20181102SKWO_Ball_041">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_007"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_042">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_007"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Inning rdf:about="#20181102SKWO_2회초">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasInning rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</hasInning>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Inning"/>
-</Inning>
-
-<OutInBase rdf:about="#20181102SKWO_OutInBase_084">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#OutInBase"/>
-</OutInBase>
-
-<Ball rdf:about="#20181102SKWO_Ball_083">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_017"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_008">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#샌즈68345"/>
-  <fromPitcher rdf:resource="#김광현77829"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_2회초"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</hasOrder>
-  <arrivedTo1stBase rdf:resource="#샌즈68345"/>
-  <result rdf:resource="#20181102SKWO_BaseOnBalls_052"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<BaseOnBalls rdf:about="#20181102SKWO_BaseOnBalls_052">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BaseOnBalls"/>
-</BaseOnBalls>
-
-<Ball rdf:about="#20181102SKWO_Ball_044">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_008"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Ball rdf:about="#20181102SKWO_Ball_045">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_008"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_046">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_008"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Ball rdf:about="#20181102SKWO_Ball_047">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_008"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Foul rdf:about="#20181102SKWO_Foul_048">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_008"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Foul rdf:about="#20181102SKWO_Foul_049">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_008"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Foul rdf:about="#20181102SKWO_Foul_050">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_008"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Ball rdf:about="#20181102SKWO_Ball_051">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_008"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_009">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#임병욱64346"/>
-  <fromPitcher rdf:resource="#김광현77829"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_2회초"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</hasOrder>
-  <stayIn1stBase rdf:resource="#샌즈68345"/>
-  <result rdf:resource="#20181102SKWO_OutInBase_058"/>
-  <arrivedTo2ndBase rdf:resource="#샌즈68345"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<OutInBase rdf:about="#20181102SKWO_OutInBase_058">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#OutInBase"/>
-</OutInBase>
-
-<Strike rdf:about="#20181102SKWO_Strike_053">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_009"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Ball rdf:about="#20181102SKWO_Ball_054">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_009"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_055">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_009"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Ball rdf:about="#20181102SKWO_Ball_056">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_009"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Foul rdf:about="#20181102SKWO_Foul_057">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_009"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_010">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#김규민62356"/>
-  <fromPitcher rdf:resource="#김광현77829"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_2회초"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</hasOrder>
-  <stayIn2ndBase rdf:resource="#샌즈68345"/>
-  <result rdf:resource="#20181102SKWO_Strikeout_063"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Strikeout rdf:about="#20181102SKWO_Strikeout_063">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strikeout"/>
-</Strikeout>
-
-<Strike rdf:about="#20181102SKWO_Strike_059">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_010"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Ball rdf:about="#20181102SKWO_Ball_060">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_010"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Foul rdf:about="#20181102SKWO_Foul_061">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_010"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Strike rdf:about="#20181102SKWO_Strike_062">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_010"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Strike rdf:about="#20181102SKWO_Strike_064">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_011"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Foul rdf:about="#20181102SKWO_Foul_066">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_011"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_011">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#김혜성67304"/>
-  <fromPitcher rdf:resource="#김광현77829"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_2회초"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</hasOrder>
-  <stayIn2ndBase rdf:resource="#샌즈68345"/>
-  <result rdf:resource="#20181102SKWO_Strikeout_068"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Strike rdf:about="#20181102SKWO_Strike_067">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_011"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Strikeout rdf:about="#20181102SKWO_Strikeout_068">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strikeout"/>
-</Strikeout>
-
-<Inning rdf:about="#20181102SKWO_2회말">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasInning rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</hasInning>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Inning"/>
-</Inning>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_012">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#로맥67872"/>
-  <fromPitcher rdf:resource="#브리검67313"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_2회말"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</hasOrder>
-  <result rdf:resource="#20181102SKWO_Fly_071"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Fly rdf:about="#20181102SKWO_Fly_071">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Fly"/>
-</Fly>
-
-<Ball rdf:about="#20181102SKWO_Ball_069">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_012"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_070">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_012"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_013">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#박정권74846"/>
-  <fromPitcher rdf:resource="#브리검67313"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_2회말"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</hasOrder>
-  <result rdf:resource="#20181102SKWO_Fly_073"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Fly rdf:about="#20181102SKWO_Fly_073">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Fly"/>
-</Fly>
-
-<Strike rdf:about="#20181102SKWO_Strike_072">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_013"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_014">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#김동엽66838"/>
-  <fromPitcher rdf:resource="#브리검67313"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_2회말"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</hasOrder>
-  <result rdf:resource="#20181102SKWO_Fly_077"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Fly rdf:about="#20181102SKWO_Fly_077">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Fly"/>
-</Fly>
-
-<Ball rdf:about="#20181102SKWO_Ball_074">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_014"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Foul rdf:about="#20181102SKWO_Foul_075">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_014"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Strike rdf:about="#20181102SKWO_Strike_076">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_014"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Inning rdf:about="#20181102SKWO_3회초">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasInning rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</hasInning>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Inning"/>
-</Inning>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_015">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#주효상66354"/>
-  <fromPitcher rdf:resource="#김광현77829"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_3회초"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">9</hasOrder>
-  <result rdf:resource="#20181102SKWO_OutInBase_081"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<OutInBase rdf:about="#20181102SKWO_OutInBase_081">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#OutInBase"/>
-</OutInBase>
-
-<Strike rdf:about="#20181102SKWO_Strike_078">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_015"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Ball rdf:about="#20181102SKWO_Ball_079">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_015"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_080">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_015"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_016">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#김하성64300"/>
-  <fromPitcher rdf:resource="#김광현77829"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_3회초"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</hasOrder>
-  <result rdf:resource="#20181102SKWO_Fly_082"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Fly rdf:about="#20181102SKWO_Fly_082">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Fly"/>
-</Fly>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_017">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#송성문65357"/>
-  <fromPitcher rdf:resource="#김광현77829"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_3회초"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</hasOrder>
-  <result rdf:resource="#20181102SKWO_OutInBase_084"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Ball rdf:about="#20181102SKWO_Ball_065">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_011"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Inning rdf:about="#20181102SKWO_3회말">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasInning rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</hasInning>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Inning"/>
-</Inning>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_018">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#김성현76802"/>
-  <fromPitcher rdf:resource="#브리검67313"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_3회말"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</hasOrder>
-  <arrivedTo1stBase rdf:resource="#김성현76802"/>
-  <result rdf:resource="#20181102SKWO_HitByPitch_088"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<HitByPitch rdf:about="#20181102SKWO_HitByPitch_088">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#HitByPitch"/>
-</HitByPitch>
-
-<Ball rdf:about="#20181102SKWO_Ball_085">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_018"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_086">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_018"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Ball rdf:about="#20181102SKWO_Ball_087">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_018"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_019">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#강승호63123"/>
-  <fromPitcher rdf:resource="#브리검67313"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_3회말"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</hasOrder>
-  <stayIn1stBase rdf:resource="#김성현76802"/>
-  <result rdf:resource="#20181102SKWO_Strikeout_092"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Strikeout rdf:about="#20181102SKWO_Strikeout_092">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strikeout"/>
-</Strikeout>
-
-<Foul rdf:about="#20181102SKWO_Foul_089">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_019"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Ball rdf:about="#20181102SKWO_Ball_129">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_027"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_130">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_027"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Ball rdf:about="#20181102SKWO_Ball_131">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_027"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_091">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_019"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_020">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#허도환77243"/>
-  <fromPitcher rdf:resource="#브리검67313"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_3회말"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">9</hasOrder>
-  <stayIn1stBase rdf:resource="#김성현76802"/>
-  <result rdf:resource="#20181102SKWO_OutInBase_100"/>
-  <arrivedTo2ndBase rdf:resource="#김성현76802"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<OutInBase rdf:about="#20181102SKWO_OutInBase_100">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#OutInBase"/>
-</OutInBase>
-
-<Strike rdf:about="#20181102SKWO_Strike_093">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_020"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Foul rdf:about="#20181102SKWO_Foul_094">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_020"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Foul rdf:about="#20181102SKWO_Foul_095">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_020"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Ball rdf:about="#20181102SKWO_Ball_096">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_020"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Ball rdf:about="#20181102SKWO_Ball_097">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_020"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Foul rdf:about="#20181102SKWO_Foul_098">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_020"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Foul rdf:about="#20181102SKWO_Foul_099">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_020"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_021">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#김강민71837"/>
-  <fromPitcher rdf:resource="#브리검67313"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_3회말"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</hasOrder>
-  <stayIn2ndBase rdf:resource="#김성현76802"/>
-  <result rdf:resource="#20181102SKWO_Fly_104"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Fly rdf:about="#20181102SKWO_Fly_104">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Fly"/>
-</Fly>
-
-<Strike rdf:about="#20181102SKWO_Strike_101">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_021"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Foul rdf:about="#20181102SKWO_Foul_102">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_021"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Ball rdf:about="#20181102SKWO_Ball_103">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_021"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_022">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#서건창78168"/>
-  <fromPitcher rdf:resource="#김광현77829"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_4회초"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</hasOrder>
-  <arrivedTo2ndBase rdf:resource="#서건창78168"/>
-  <result rdf:resource="#20181102SKWO_Double_105"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Double rdf:about="#20181102SKWO_Double_105">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Double"/>
-</Double>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_023">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#박병호75125"/>
-  <fromPitcher rdf:resource="#김광현77829"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_4회초"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</hasOrder>
-  <stayIn2ndBase rdf:resource="#서건창78168"/>
-  <result rdf:resource="#20181102SKWO_Fly_109"/>
-  <arrivedTo3rdBase rdf:resource="#서건창78168"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Fly rdf:about="#20181102SKWO_Fly_109">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Fly"/>
-</Fly>
-
-<Foul rdf:about="#20181102SKWO_Foul_106">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_023"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Ball rdf:about="#20181102SKWO_Ball_107">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_023"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_108">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_023"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Ball rdf:about="#20181102SKWO_Ball_110">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_024"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_090">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_019"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Ball rdf:about="#20181102SKWO_Ball_111">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_024"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_024">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#샌즈68345"/>
-  <fromPitcher rdf:resource="#김광현77829"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_4회초"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</hasOrder>
-  <stayIn3rdBase rdf:resource="#서건창78168"/>
-  <result rdf:resource="#20181102SKWO_Strikeout_117"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Strike rdf:about="#20181102SKWO_Strike_112">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_024"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Ball rdf:about="#20181102SKWO_Ball_113">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_024"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_114">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_024"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Foul rdf:about="#20181102SKWO_Foul_115">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_024"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Strike rdf:about="#20181102SKWO_Strike_116">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_024"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Strikeout rdf:about="#20181102SKWO_Strikeout_117">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strikeout"/>
-</Strikeout>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_025">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#임병욱64346"/>
-  <fromPitcher rdf:resource="#김광현77829"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_4회초"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</hasOrder>
-  <stayIn3rdBase rdf:resource="#서건창78168"/>
-  <result rdf:resource="#20181102SKWO_Strikeout_122"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Inning rdf:about="#20181102SKWO_4회초">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasInning rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</hasInning>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Inning"/>
-</Inning>
-
-<Strikeout rdf:about="#20181102SKWO_Strikeout_122">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strikeout"/>
-</Strikeout>
-
-<Strike rdf:about="#20181102SKWO_Strike_118">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_025"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Strike rdf:about="#20181102SKWO_Strike_119">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_025"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Foul rdf:about="#20181102SKWO_Foul_120">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_025"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Strike rdf:about="#20181102SKWO_Strike_121">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_025"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Inning rdf:about="#20181102SKWO_4회말">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasInning rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</hasInning>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Inning"/>
-</Inning>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_026">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#한동민62895"/>
-  <fromPitcher rdf:resource="#브리검67313"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_4회말"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</hasOrder>
-  <result rdf:resource="#20181102SKWO_Fly_125"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Fly rdf:about="#20181102SKWO_Fly_125">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Fly"/>
-</Fly>
-
-<Strike rdf:about="#20181102SKWO_Strike_123">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_026"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Foul rdf:about="#20181102SKWO_Foul_124">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_026"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_027">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#최정75847"/>
-  <fromPitcher rdf:resource="#브리검67313"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_4회말"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</hasOrder>
-  <arrivedTo1stBase rdf:resource="#최정75847"/>
-  <result rdf:resource="#20181102SKWO_BaseOnBalls_132"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<BaseOnBalls rdf:about="#20181102SKWO_BaseOnBalls_132">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BaseOnBalls"/>
-</BaseOnBalls>
-
-<Foul rdf:about="#20181102SKWO_Foul_126">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_027"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Ball rdf:about="#20181102SKWO_Ball_127">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_027"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Ball rdf:about="#20181102SKWO_Ball_128">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_027"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_028">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#로맥67872"/>
-  <fromPitcher rdf:resource="#브리검67313"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_4회말"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</hasOrder>
-  <stayIn1stBase rdf:resource="#최정75847"/>
-  <result rdf:resource="#20181102SKWO_Strikeout_140"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Strikeout rdf:about="#20181102SKWO_Strikeout_140">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strikeout"/>
-</Strikeout>
-
-<Strike rdf:about="#20181102SKWO_Strike_133">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_028"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Strike rdf:about="#20181102SKWO_Strike_134">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_028"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Foul rdf:about="#20181102SKWO_Foul_135">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_028"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Foul rdf:about="#20181102SKWO_Foul_136">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_028"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Ball rdf:about="#20181102SKWO_Ball_137">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_028"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Foul rdf:about="#20181102SKWO_Foul_138">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_028"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Strike rdf:about="#20181102SKWO_Strike_139">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_028"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_029">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#박정권74846"/>
-  <fromPitcher rdf:resource="#브리검67313"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_4회말"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</hasOrder>
-  <stayIn1stBase rdf:resource="#최정75847"/>
-  <result rdf:resource="#20181102SKWO_Fly_142"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<OutInBase rdf:about="#20181102SKWO_OutInBase_155">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#OutInBase"/>
-</OutInBase>
-
-<Ball rdf:about="#20181102SKWO_Ball_150">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_032"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_151">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_032"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Ball rdf:about="#20181102SKWO_Ball_152">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_032"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Foul rdf:about="#20181102SKWO_Foul_153">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_032"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Foul rdf:about="#20181102SKWO_Foul_154">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_032"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Strike rdf:about="#20181102SKWO_Strike_156">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_033"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Foul rdf:about="#20181102SKWO_Foul_157">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_033"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Ball rdf:about="#20181102SKWO_Ball_158">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_033"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Ball rdf:about="#20181102SKWO_Ball_159">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_033"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Foul rdf:about="#20181102SKWO_Foul_160">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_033"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<Ball rdf:about="#20181102SKWO_Ball_161">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_033"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_170">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_036"/>
-</Strike>
-
-<Fly rdf:about="#20181102SKWO_Fly_171">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-</Fly>
-
-<Fly rdf:about="#20181102SKWO_Fly_142">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Fly"/>
-</Fly>
-
-<Foul rdf:about="#20181102SKWO_Foul_162">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_033"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Foul"/>
-</Foul>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_033">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#김하성64300"/>
-  <fromPitcher rdf:resource="#김광현77829"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_5회초"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</hasOrder>
-  <stayIn3rdBase rdf:resource="#박정음62353"/>
-  <result rdf:resource="#20181102SKWO_Strikeout_164"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Strike rdf:about="#20181102SKWO_Strike_163">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_033"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Strikeout rdf:about="#20181102SKWO_Strikeout_164">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strikeout"/>
-</Strikeout>
-
-<Inning rdf:about="#20181102SKWO_5회말">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasInning rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</hasInning>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Inning"/>
-</Inning>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_034">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#김동엽66838"/>
-  <fromPitcher rdf:resource="#브리검67313"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_5회말"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</hasOrder>
-  <result rdf:resource="#20181102SKWO_Fly_166"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Fly rdf:about="#20181102SKWO_Fly_166">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Fly"/>
-</Fly>
-
-<Ball rdf:about="#20181102SKWO_Ball_165">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_034"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_035">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#김성현76802"/>
-  <fromPitcher rdf:resource="#브리검67313"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_5회말"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</hasOrder>
-  <arrivedTo1stBase rdf:resource="#김성현76802"/>
-  <result rdf:resource="#20181102SKWO_SingleHit_168"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<SingleHit rdf:about="#20181102SKWO_SingleHit_168">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#SingleHit"/>
-</SingleHit>
-
-<Strike rdf:about="#20181102SKWO_Strike_167">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_035"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_036">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#강승호63123"/>
-  <fromPitcher rdf:resource="#브리검67313"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_5회말"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</hasOrder>
-  <stayIn1stBase rdf:resource="#김성현76802"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-  <result rdf:resource="#20181102SKWO_Fly_171"/>
-</BatterBox>
-
-<Ball rdf:about="#20181102SKWO_Ball_169">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_036"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<Strike rdf:about="#20181102SKWO_Strike_141">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_029"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Inning rdf:about="#20181102SKWO_5회초">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <hasInning rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</hasInning>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Inning"/>
-</Inning>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_030">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#김규민62356"/>
-  <fromPitcher rdf:resource="#김광현77829"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_5회초"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</hasOrder>
-  <result rdf:resource="#20181102SKWO_Strikeout_146"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Strikeout rdf:about="#20181102SKWO_Strikeout_146">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strikeout"/>
-</Strikeout>
-
-<Strike rdf:about="#20181102SKWO_Strike_143">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_030"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Strike rdf:about="#20181102SKWO_Strike_144">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_030"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Strike rdf:about="#20181102SKWO_Strike_145">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_030"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_031">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#김혜성67304"/>
-  <fromPitcher rdf:resource="#김광현77829"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_5회초"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</hasOrder>
-  <arrivedTo2ndBase rdf:resource="#김혜성67304"/>
-  <result rdf:resource="#20181102SKWO_Double_149"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-<Double rdf:about="#20181102SKWO_Double_149">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Double"/>
-</Double>
-
-<Strike rdf:about="#20181102SKWO_Strike_147">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_031"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Strike"/>
-</Strike>
-
-<Ball rdf:about="#20181102SKWO_Ball_148">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <inBatterbox rdf:resource="#20181102SKWO_BatterBox_031"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#Ball"/>
-</Ball>
-
-<BatterBox rdf:about="#20181102SKWO_BatterBox_032">
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <toHitter rdf:resource="#주효상66354"/>
-  <fromPitcher rdf:resource="#김광현77829"/>
-  <inGame rdf:resource="#20181102SKWO"/>
-  <inInning rdf:resource="#20181102SKWO_5회초"/>
-  <hasOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">9</hasOrder>
-  <stayIn2ndBase rdf:resource="#박정음62353"/>
-  <result rdf:resource="#20181102SKWO_OutInBase_155"/>
-  <arrivedTo3rdBase rdf:resource="#김혜성67304"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdf:type rdf:resource="#BatterBox"/>
-</BatterBox>
-
-
-</rdf:RDF>

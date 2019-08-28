@@ -1,7 +1,6 @@
 *.mp4
 *.pyc
 *.owl
-**/DEMO/**/*.jpg
 
 **/_model
 **/_result
