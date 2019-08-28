@@ -2,8 +2,10 @@
 *.pyc
 *.owl
 
+**/DEMO
 **/_model
 **/_result
+**/_data
 
 **/__pycache__
 **/.idea
