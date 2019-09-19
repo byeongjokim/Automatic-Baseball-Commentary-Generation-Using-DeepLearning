@@ -1,4 +1,4 @@
-# Baseball Game Casting with Deep Learning
+# Automatic-sports-commentary-framework
 There have been many studies to make captions or explanations about images and video with deep learning. A combination of CNN and RNN is mainly used to generate captions from the features of image and frame. Recently, the attention model has been combined to explain a more detailed and accurate situation. Through these studies, deep learning can describe the real state of an image Human-Like. However, when casting a sports event, castings are created not only from contextual information about who does what, but also from understanding and reasoning using the player’s information and past knowledge.<br>
 This research describes the three models (scene classifier, player detection, motion recognition) to obtain contextual information from the sports frame and the ontology to inference knowledge from past data. There are three types of castings: First, create castings by knowledge from real-time web data. Second, castings are created by combining 13 kinds of scene and ontology. Last, recognizes the position of the player and 8 actions and combines them with the ontology to create castings. Data in [KBO(Korea Baseball Organization League)](https://www.koreabaseball.com "Korea Baseball League") games from 1 April 2018 to 14 April 2018 is used for learning three models.
 
@@ -264,14 +264,14 @@ Please wait a moment because the capacity of gif is large.
   </tr>
   <tr>
     <td>Template</td>
-    <td>KOR) B 투수와 A 타자의 최근 전적은 {date} {stadium}에 진행한 경기 {inning}회 {result}입니다.
-    <br><br>ENG) Recently, the hitter A recorded {result} in {inning} at the {stadium} on {date} against B.
+    <td>KOR) B 투수와 A 타자의 최근 전적은 {date} {stadium}에 진행한 경기 {inning}회 {result}입니다
+    <br><br>ENG) The batter "A" {result} in the {inning} inning of the latest game against the pitcher "B" on {date} at {stadium}
 </td>
   </tr>
   <tr>
     <td>Commentary</td>
-    <td>KOR) B 투수와 A 타자의 최근 전적은 {date} {stadium}에 진행한 경기 {inning}회 {result}입니다.
-<br><br>ENG) Recently, the hitter A recorded {result} in {inning} at the {stadium} on {date} against B.
+    <td>KOR) B 투수와 A 타자의 최근 전적은 2018년 10월 10일, 잠실에 진행한 경기 8회 스트라이크 아웃입니다
+<br><br>ENG) The batter "A" struck out in the 8th inning of the latest game against the pitcher "B" on October 10th, 2018 at Jamsil
 </td>
   </tr>
 </table>
@@ -291,20 +291,38 @@ Please wait a moment because the capacity of gif is large.
 ## How to run
 
 ```
+#download pretrained four models
+
 mkdir _model
 cd _model
-wget ~~~~~~~~~~~~~~~~~~~~~
+wget -O https://1drv.ms/u/s!AtL3vScJgk8Fkcpcdo4SbT09PKJlvg?e=dq4uHV
+unzip -j _model.zip
 ```
 ```
-#download the video to _data/{videoname}/{videoname}.mp4
-cd _data/180906LGNC_FULL/
-wget ~~~~~~~~~~~~~~~~~~~~~
+#download the web data files (about result "{videoname}.txt", about ball "{videoname}_ball.txt") to _data/{videoname}/
+#download the video "{videoname}.mp4" to _data/{videoname}/
+#ex) 2018. 09. 06 LG vs NC game
+
+mkdir _data
+cd _data
+wget https://1drv.ms/u/s!AtL3vScJgk8FkcpryZAWuKuF18hiDQ?e=cOAJov
 ```
 ```
 #modify GAME_DATE, GAME_NO, FILE_NAME in settings.py to find video and web data
 #modify FIRST_BATTERBOX_START_IN_VIDEO, FIRST_BATTERBOX_START_IN_OWL, START_FRAME to make the same time point of the web data and the video
+
 vi settings.py
 ```
 ```
+#run the Automatic-sports-commentary-framework
+python kbo.py
+```
+```
+#run the simulation with predicted bounding boxes and labels
+
+vi kbo.py
+#modify isSimulation=False to isSimulation=True
+#comment app.run() -> #app.run()
+
 python kbo.py
 ```

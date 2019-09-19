@@ -245,7 +245,6 @@ def play_bbox(frameno):
         if(human_coordinates):
             for x, y, w, h, _ in human_coordinates[:6]:
                 image = cv2.rectangle(image, (x, y), (w, h), color=(0, 255, 255), thickness=2)
-                print(_)
 
             if(position_images_seq["pitcher"]):
                 x, y, w, h = position_images_bbox_seq["pitcher"][-1]
@@ -262,7 +261,7 @@ def play_bbox(frameno):
                 image = cv2.rectangle(image, (x, y), (w, h), color=(0, 0, 255), thickness=2)
                 _draw_key_player_motion(image, position_images_bbox_seq["player"][-1], motion_label["player"], motion_label_to_word, "player(in " + scene_label_to_word[scene_label] + ")")
         
-        cv2.imwrite("./"+str(frameno)+".jpg", image)
+        #cv2.imwrite("./"+str(frameno)+".jpg", image)
         cv2.imshow("Automatic Sports Commentary", image)
         
         frameno = frameno + 5
