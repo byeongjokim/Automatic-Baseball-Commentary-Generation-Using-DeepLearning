@@ -8,38 +8,6 @@ A new system to automatically generate commentary for baseball games. In our sys
 
 <table>
 <tr>
-<td colspan="1">[New] Demo (with English, 6:47)</td>
-</tr>
-
-<tr>
-<td colspan="1">
-[Onedrive](https://1drv.ms/v/s!AtL3vScJgk8Fkcpz6SoHPrOEL9RoUg?e=MV7mN3) 
-</td>
-</tr>
-
-<tr>
-<td colspan="1">[Old] Demo 1 (with pitching result recognition, 2:27)</td>
-</tr>
-
-<tr>
-<td colspan="1">
-[Onedrive](https://1drv.ms/v/s!AtL3vScJgk8Fkcp0HP8U7eliRSV5Gg?e=vsZpS5) 
-</td>
-</tr>
-
-<tr>
-<td colspan="1">[Old] Demo 2 (only three deep learning models 5:07)</td>
-</tr>
-
-<tr>
-<td colspan="1">
-[Onedrive](https://1drv.ms/v/s!AtL3vScJgk8Fkcp1xeKlk6pZB12h_g?e=QfTr7W)
-</td>
-</tr>
-</table>
-
-<table>
-<tr>
 <td colspan="1">Ground to 1st Base</td>
 <td colspan="1">Double Play</td>
 </tr>
