@@ -4,24 +4,32 @@ A new system to automatically generate commentary for baseball games. In our sys
 ## Demo
 <table>
 <tr>
-<td colspan="1">Demo 1 (with situation recognition, 2:27)</td>
+<td colspan="1">[New] Demo (with English, 6:47)</td>
 </tr>
 
 <tr>
 <td colspan="1">
-[Download video](https://1drv.ms/v/s!AvVDi_7fZiBTmTx1YdA1Y_yb2-z2) 
+[Onedrive](https://1drv.ms/v/s!AtL3vScJgk8Fkcpz6SoHPrOEL9RoUg?e=MV7mN3) 
 </td>
 </tr>
 
 <tr>
-<td colspan="1">Demo 2 (without situation recognition, 5:07)</td>
+<td colspan="1">[Old] Demo 1 (with pitching result recognition, 2:27)</td>
 </tr>
 
 <tr>
 <td colspan="1">
-[Download video(high)](https://1drv.ms/v/s!AvVDi_7fZiBTjF4pHNja6cCqGoJm) 
-<br>
-[Download video(low)](https://1drv.ms/v/s!AvVDi_7fZiBTjFzcG_MBqgyz5kXt) 
+[Onedrive](https://1drv.ms/v/s!AtL3vScJgk8Fkcp0HP8U7eliRSV5Gg?e=vsZpS5) 
+</td>
+</tr>
+
+<tr>
+<td colspan="1">[Old] Demo 2 (only three deep learning models 5:07)</td>
+</tr>
+
+<tr>
+<td colspan="1">
+[Onedrive](https://1drv.ms/v/s!AtL3vScJgk8Fkcp1xeKlk6pZB12h_g?e=QfTr7W)
 </td>
 </tr>
 </table>
