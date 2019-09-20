@@ -42,7 +42,7 @@ Please wait a moment because the capacity of gif is large.
 </tr>
 <tr>
 <td colspan="1">A</td>
-<td colspan="1">Casting using <span style="color:blue"><strong>*Web Data</strong></span>, <span style="color:green"><strong>Situation Recognition</strong></span> and <span style="color:red"><strong>Ontology(knowledge)</strong></span></td>
+<td colspan="1">Casting using <span style="color:blue"><strong>*Web Data</strong></span>, <span style="color:green"><strong>Pitching Result Recognition</strong></span> and <span style="color:red"><strong>Ontology(knowledge)</strong></span></td>
 <td colspan="1"><span style="color:blue"><span style="color:green">볼 인가요?</span> 스트라이크! 구석에 꽂히는 직구에</span> 타자가 제대로 속았습니다. <span style="color:red">유희관 투수 이번 시즌 높은 확률로 초구 스트라이크 잡아내고 있습니다.</span></td>
 <td colspan="1"><span style="color:blue"><span style="color:green">Is it Ball?</span> Strike! The fastball in the corner.</span> <span style="color:red">Yoo Hee-kwan is making his first pitch this season with a high chance.</span></td>
 </tr>
@@ -220,8 +220,8 @@ Please wait a moment because the capacity of gif is large.
 - Ball
 - Foul
 - Hit
-- Ground Ball
-- Flying Ball
+- Ground out
+- Fly out
 - Etc.
 
 ---
