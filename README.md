@@ -2,6 +2,10 @@
 A new system to automatically generate commentary for baseball games. In our system, given real-time baseball videos, suitable descriptions are relayed using four deep-learning models (i.e., a scene classifier, player detector, motion recognizer, and pitching result recognizer) integrated with domain ontology. Using these four deep-learning models, pieces of information about “who is doing what in which area of the field” and “what results are expected” are obtained. This approach is used to select an appropriate template, which is combined with baseball ontology knowledge for the generation of commentary. We train four deep-learning models using baseball games from the [KBO(Korea Baseball Organization League)](https://www.koreabaseball.com "Korea Baseball League") League’s 2018 season.
 
 ## Demo
+|[New] Demo (with English, 6:47)|[Old] Demo 1 (with pitching result recognition, 2:27)|[Old] Demo 2 (only three deep learning models 5:07)
+|----|----|----|
+|[Onedrive](https://1drv.ms/v/s!AtL3vScJgk8Fkcpz6SoHPrOEL9RoUg?e=MV7mN3)|[Onedrive](https://1drv.ms/v/s!AtL3vScJgk8Fkcp0HP8U7eliRSV5Gg?e=vsZpS5)|[Onedrive](https://1drv.ms/v/s!AtL3vScJgk8Fkcp1xeKlk6pZB12h_g?e=QfTr7W)|
+
 <table>
 <tr>
 <td colspan="1">[New] Demo (with English, 6:47)</td>
