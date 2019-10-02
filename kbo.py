@@ -16,7 +16,7 @@ class KBO():
             self.web = Web(resource=self.resource)
             self.vision = Vision(resource=self.resource)
 
-            self.run_server(host="127.0.0.1", port=8080)
+            self.run_server(host="166.104.143.103", port=8080)
 
         elif isSimulation:
             print("====================Simulation====================")
