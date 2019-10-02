@@ -110,7 +110,7 @@ class Web(object):
 
         return idx
 
-    def parsing_relaytext(self, idx):
+    def parsing_relaytext(self, idx, auto=False):
         print("[+] activate commentary framework via web data for referee")
         after_relayTexts = self.relayTexts[idx:]
         
@@ -118,14 +118,15 @@ class Web(object):
         while(True):
             relayText = after_relayTexts[idx]
             pitchId = relayText["pitchId"]
-            next = input("next : " + relayText["liveText"] + "\n")
-            # if not (pitchId == "-1"):
-            #     pitch_timestamp = pitchId.split("_")[-1]
-            #     if (self.get_frameno(pitch_timestamp) > self.resources.get_frameno()):
-            #         continue
-            #
-            # if(pitchId == "-1"):
-            #     next = input("next : " + relayText["liveText"] + "\n")
+            
+            if auto:
+                if not (pitchId == "-1"):
+                    pitch_timestamp = pitchId.split("_")[-1]
+                    if (self.get_frameno(pitch_timestamp) > self.resources.get_frameno()):
+                        continue
+
+            else:
+                next = input("next : " + relayText["liveText"] + "\n")
 
             ball_data = self._find_ball_data_with_pitchId(pitchId)
 
@@ -140,7 +141,7 @@ class Web(object):
             else:  # pitching and batting
                 annotation = self.PB.set(relayText, ball_data)
 
-            print(annotation)
+            #print(annotation)
             self.resources.set_annotation(annotation)
             idx = idx + 1
 

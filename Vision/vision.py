@@ -194,7 +194,7 @@ class Vision(object):
             self.annotation_history.append(output[:5])
             self.resource.set_annotation(output)
             self.too_long = 0
-            print(output)
+            #print(output)
 
     def _get_player_seq(self, image, position_images_seq, position_images_bbox_seq, human_coordinates):
         pitcher = [human_coordinate[:4] for human_coordinate in human_coordinates if (human_coordinate[4] == "pitcher")]

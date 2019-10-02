@@ -266,3 +266,28 @@ def play_bbox(frameno):
         
         frameno = frameno + 5
         pre_scene_label = scene_label
+
+def play_API(resource):
+    print("[+] activate getting frame from video")
+    video = cv2.VideoCapture(settings.VIDEO_FILE)
+    video.set(1, settings.START_FRAME)
+    fps = 1 / 29.97
+
+    success, frame = video.read()
+    h, w, c = frame.shape
+    frameno = settings.START_FRAME + 1
+    resource.set_frameno(frameno)
+    text = resource.get_annotation()
+
+    while (cv2.waitKey(1) != ord('q')):
+        start = time()
+        frameno = frameno + 1
+
+        success, frame = video.read()
+
+        resource.set_frame(frame)
+        resource.set_frameno(frameno)
+
+        diff = time() - start
+        while diff < fps:
+            diff = time() - start
