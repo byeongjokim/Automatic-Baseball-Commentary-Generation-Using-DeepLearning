@@ -1,4 +1,5 @@
 import socket
+import json
 
 BUF_SIZE = 1024
 with socket.socket() as sock:
@@ -8,5 +9,6 @@ with socket.socket() as sock:
 
     while True:
         data = conn.recv(BUF_SIZE)
-        msg = data.decode()
-        print(msg)
+        if(data):
+            msg = data.decode()
+            print(msg)

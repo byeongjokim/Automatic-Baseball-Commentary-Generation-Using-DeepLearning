@@ -12,10 +12,14 @@ import random
 class Vision(object):
     annotation_history = []
 
-    scene_threshold = 10
-    closeup_threshold = 15
-    situation_threshold = 15
-    silence_threshold = 20
+    # scene_threshold = 10
+    # closeup_threshold = 15
+    # situation_threshold = 15
+    # silence_threshold = 20
+    scene_threshold = 5
+    closeup_threshold = 10
+    situation_threshold = 10
+    silence_threshold = 15
 
     def __init__(self, resource):
         sess = tf.Session()

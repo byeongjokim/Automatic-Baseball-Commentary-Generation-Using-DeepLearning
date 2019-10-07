@@ -1,5 +1,4 @@
 import threading
-import socket
 
 from settings import START_FRAME
 from Video.video import play, play_bbox, play_API
@@ -12,11 +11,14 @@ class KBO():
     def __init__(self, isSimulation=False, isAPI=False):
         if isAPI:
             print("====================As API====================")
+            from Api.api import API
             self.resource = Resource()
             self.web = Web(resource=self.resource)
             self.vision = Vision(resource=self.resource)
+            self.api = API(resource=self.resource, host="127.0.0.1", port=8080)
 
-            self.run_server(host="166.104.143.103", port=8080)
+            #self.run_server(host="166.104.143.103", port=8080)
+            self.run_server()
 
         elif isSimulation:
             print("====================Simulation====================")
@@ -49,7 +51,7 @@ class KBO():
     def run_bbox(self):
         play_bbox(frameno=128400)
     
-    def run_server(self, host, port):
+    def run_server(self):
         self.resource.set_frameno(START_FRAME + 1)
         idx = self.web.parsing_before()
 
@@ -62,14 +64,7 @@ class KBO():
         video_thread = threading.Thread(target=play_API, args=(self.resource,))
         video_thread.start()
 
-        with socket.socket() as sock:
-            sock.connect((host, port))
-
-            while(True):
-                if (self.resource.is_new_annotation_video()):
-                    text = self.resource.get_annotation()
-                    print(text)
-                    sock.sendall(text.encode())
+        self.api.relay()
 
 
 
