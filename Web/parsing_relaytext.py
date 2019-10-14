@@ -28,6 +28,7 @@ class Change():
             annotation = self.fin_attack(relayText)
             self.resources.clear_strike_ball_out()
 
+        self.resources.set_action("etc")
         return annotation
 
     def batterbox(self, relayText):
@@ -143,6 +144,7 @@ class PitchingBatting():
                                    self.resources.get_seq())
             self.resources.add_seq()
             self.resources.set_strike_ball_out(strike=True)
+            self.resources.set_action("strike")
 
         elif ("구 헛스윙" in text):
             annotation = self.Swing(ball_data)
@@ -150,6 +152,7 @@ class PitchingBatting():
                                    self.resources.get_seq())
             self.resources.add_seq()
             self.resources.set_strike_ball_out(strike=True)
+            self.resources.set_action("strike")
 
         elif ("구 볼" in text):
             annotation = self.Ball(ball_data)
@@ -157,6 +160,7 @@ class PitchingBatting():
                                    self.resources.get_seq())
             self.resources.set_strike_ball_out(ball=True)
             self.resources.add_seq()
+            self.resources.set_action("ball")
 
         elif ("구 파울" in text):
             annotation = self.Foul(ball_data)
@@ -164,6 +168,7 @@ class PitchingBatting():
                                    self.resources.get_seq())
             self.resources.add_seq()
             self.resources.set_strike_ball_out(foul=True)
+            self.resources.set_action("foul")
 
         elif ("구 번트파울" in text):
             annotation = self.BntFoul(ball_data)
@@ -171,9 +176,11 @@ class PitchingBatting():
                                    self.resources.get_seq())
             self.resources.add_seq()
             self.resources.set_strike_ball_out(foul=True)
+            self.resources.set_action("foul")
 
         elif ("구 타격" in text):
             annotation = self.Hit(ball_data)
+            self.resources.set_action("hit")
 
         return annotation
 
@@ -364,17 +371,20 @@ class Result():
 
         if ("비디오" in text):
             annotation = text
+            self.resources.set_action("etc")
 
         elif ("아웃" in text):
             annotation = self.out(relayText)
             self.resources.set_strike_ball_out(out=True)
+            self.resources.set_action("out")
 
-        elif (
-                "고의" in text or "볼넷" in text or "몸에" in text or "출루" in text or "루타" in text or "내야안타" in text or "홈런" in text):  # 출루, 안타, 홈런
+        elif ("고의" in text or "볼넷" in text or "몸에" in text or "출루" in text or "루타" in text or "내야안타" in text or "홈런" in text):  # 출루, 안타, 홈런
             annotation = self.hit(relayText)
+            self.resources.set_action("hits")
 
         elif ("진루" in text or "홈인" in text):
             annotation = self.run(relayText)
+            self.resources.set_action("etc")
 
         try:
             text = text[:text.index("(")]

@@ -8,7 +8,7 @@ class API():
 
         self.cheering = cheering
 
-    def choose_motion(self, text):
+    def choose_motion(self, text, comment_type):
         motions = ["스트라이크", "파울", "페어", "아웃", "세이프", "홈런"]
 
         good_attack = ["진루", "출루", "안타", "세이프", "홈런"]
@@ -34,7 +34,10 @@ class API():
             while (True):
                 if (self.resource.is_new_annotation_video()):
                     text = self.resource.get_annotation()
-                    motion = self.choose_motion(text)
-                    content = {"text": text, "motion": motion}
+                    comment_type = self.resource.get_action()
+
+                    motion = self.choose_motion(text, comment_type)
+
+                    content = {"comment_type": comment_type, "text": text, "motion": motion}
                     print(str(content))
                     sock.sendall(str(content).encode())

@@ -12,6 +12,8 @@ class Resource():
     ball = 0
     out = 0
 
+    action = 0
+
     def set_annotation(self, annotation):
         self.prev_annotation = self.annotation
         self.annotation = annotation
@@ -102,6 +104,13 @@ class Resource():
 
     def get_strike_ball_out(self):
         return [self.strike, self.ball, self.out]
+
+    def set_action(self, judge):
+        actions = ["strike", "ball", "foul", "hit", "hits", "out", "etc"]
+        self.action = judge
+
+    def get_action(self):
+        return self.action
 
     def set_batterbox(self, batterbox, pitcher, batter):
         self.batterbox = batterbox

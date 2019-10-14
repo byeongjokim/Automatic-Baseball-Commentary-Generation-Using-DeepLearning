@@ -112,6 +112,7 @@ class Web(object):
 
     def parsing_relaytext(self, idx, auto=False):
         print("[+] activate commentary framework via web data for referee")
+        self.resources.set_action("etc")
         after_relayTexts = self.relayTexts[idx:]
         
         idx = 0
@@ -141,9 +142,9 @@ class Web(object):
             else:  # pitching and batting
                 annotation = self.PB.set(relayText, ball_data)
 
-            #print(annotation)
             self.resources.set_annotation(annotation)
             idx = idx + 1
+            #print(self.resources.get_action(), annotation)
 
     def _find_ball_data_with_pitchId(self, pitchId):
         for i in self.ball_data:

@@ -287,6 +287,7 @@ def play_API(resource):
 
         resource.set_frame(frame)
         resource.set_frameno(frameno)
+        cv2.imshow("Automatic Sports Commentary", frame)
 
         diff = time() - start
         while diff < fps:

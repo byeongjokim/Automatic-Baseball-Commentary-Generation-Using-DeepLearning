@@ -197,6 +197,7 @@ class Vision(object):
             self.annotation_history.append(output[-7:])
             self.annotation_history.append(output[:5])
             self.resource.set_annotation(output)
+            self.resource.set_action("etc")
             self.too_long = 0
             #print(output)
 
