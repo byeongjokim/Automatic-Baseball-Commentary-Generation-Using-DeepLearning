@@ -3,6 +3,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 from time import time
 import settings
+from Api.api import API
 
 def play(resource):
     def _text_2_img(text):
@@ -37,6 +38,7 @@ def play(resource):
         if (resource.is_new_annotation_video()):
             text = resource.get_annotation()
             textimage = _text_2_img(text)
+            print(text)
 
         frame[h - 100 : h - 50, 100 : w - 100] = textimage
         cv2.imshow("Automatic Sports Commentary", frame)
@@ -267,8 +269,11 @@ def play_bbox(frameno):
         frameno = frameno + 5
         pre_scene_label = scene_label
 
-def play_API(resource):
-    print("[+] activate getting frame from video")
+def play_API(resource, host, port):
+    print("[+] activate getting frame from video and send commentary to NAO robot")
+    api = API(resource=resource, host=host, port=port)
+    api.connect()
+
     video = cv2.VideoCapture(settings.VIDEO_FILE)
     video.set(1, settings.START_FRAME)
     fps = 1 / 29.97
@@ -288,6 +293,11 @@ def play_API(resource):
         resource.set_frame(frame)
         resource.set_frameno(frameno)
         cv2.imshow("Automatic Sports Commentary", frame)
+
+        if (resource.is_new_annotation_video()):
+            text = resource.get_annotation()
+            comment_type = resource.get_action()
+            api.relay(text, comment_type)
 
         diff = time() - start
         while diff < fps:

@@ -17,6 +17,7 @@ class Change():
         annotation = ""
         if ("번타자" in text):
             annotation = self.batterbox(relayText)
+            self.resources.clear_strike_ball()
 
         elif ("교체" in text):
             annotation = self.change_player(relayText)

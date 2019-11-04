@@ -41,7 +41,7 @@ class Vision(object):
         self.resource = resource
 
     def play(self):
-        time.sleep(2)
+        time.sleep(4)
 
         print("[+] activate commentary framework via deep-learning and ontology")
 

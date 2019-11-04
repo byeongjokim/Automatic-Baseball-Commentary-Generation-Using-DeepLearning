@@ -15,7 +15,6 @@ class KBO():
             self.resource = Resource()
             self.web = Web(resource=self.resource)
             self.vision = Vision(resource=self.resource)
-            self.api = API(resource=self.resource, host="169.254.119.30", port=8080)
 
             #self.run_server(host="166.104.143.103", port=8080)
             self.run_server()
@@ -61,12 +60,7 @@ class KBO():
         vision_thread = threading.Thread(target=self.vision.play)
         vision_thread.start()
 
-        video_thread = threading.Thread(target=play_API, args=(self.resource,))
-        video_thread.start()
-
-        self.api.relay()
-
-
+        play_API(self.resource, host="169.254.17.149", port=8080)
 
 if __name__ == '__main__':
-    app = KBO(isSimulation=False, isAPI=False)
+    app = KBO(isSimulation=False, isAPI=True)

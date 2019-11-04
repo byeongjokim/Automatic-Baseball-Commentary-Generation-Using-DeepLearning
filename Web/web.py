@@ -4,6 +4,7 @@ import owlready2
 import settings
 from Web.set_onto import *
 from Web.parsing_relaytext import *
+import time
 
 class Web(object):
     batterbox_index = 0
@@ -110,7 +111,7 @@ class Web(object):
 
         return idx
 
-    def parsing_relaytext(self, idx, auto=False):
+    def parsing_relaytext(self, idx, auto=True):
         print("[+] activate commentary framework via web data for referee")
         self.resources.set_action("etc")
         after_relayTexts = self.relayTexts[idx:]
@@ -143,6 +144,7 @@ class Web(object):
                 annotation = self.PB.set(relayText, ball_data)
 
             self.resources.set_annotation(annotation)
+            time.sleep(1)
             idx = idx + 1
             #print(self.resources.get_action(), annotation)
 

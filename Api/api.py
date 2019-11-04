@@ -58,23 +58,19 @@ class API():
                 else:
                     return comment_type+"_0"
 
-    def relay(self):
-        with socket.socket() as sock:
-            sock.connect((self.host, self.port))
+    def connect(self):
+        self.sock = socket.socket()
+        self.sock.connect((self.host, self.port))
 
-            content = {"motion": "etc_0", "text": "중계방송 준비중입니다."}
-            print(content)
-            content = json.dumps(content, ensure_ascii=False)
-            sock.sendall(content.encode('utf-8'))
+        content = {"motion": "etc_0", "text": "중계방송 준비중입니다."}
+        print(content)
+        content = json.dumps(content, ensure_ascii=False)
+        self.sock.sendall(content.encode('utf-8'))
 
-            while (True):
-                if (self.resource.is_new_annotation_video()):
-                    text = self.resource.get_annotation()
-                    comment_type = self.resource.get_action()
+    def relay(self, text, comment_type):
+        motion = self.choose_motion(text, comment_type)
 
-                    motion = self.choose_motion(text, comment_type)
-
-                    content = {"text": text, "motion": motion}
-                    print(content)
-                    content = json.dumps(content, ensure_ascii=False)
-                    sock.sendall(content.encode('utf-8'))
+        content = {"text": text, "motion": motion}
+        print(content)
+        content = json.dumps(content, ensure_ascii=False)
+        self.sock.sendall(content.encode('utf-8'))

@@ -91,6 +91,10 @@ class Resource():
         self.ball = 0
         self.out = 0
 
+    def clear_strike_ball(self):
+        self.strike = 0
+        self.ball = 0
+
     def set_strike_ball_out(self, strike=False, ball=False, foul=False, out=False):
         if(strike):
             self.strike = self.strike + 1
