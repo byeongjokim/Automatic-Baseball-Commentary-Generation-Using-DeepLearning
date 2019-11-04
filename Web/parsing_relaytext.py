@@ -380,7 +380,10 @@ class Result():
 
         elif ("고의" in text or "볼넷" in text or "몸에" in text or "출루" in text or "루타" in text or "내야안타" in text or "홈런" in text):  # 출루, 안타, 홈런
             annotation = self.hit(relayText)
-            self.resources.set_action("hits")
+            if "홈런" in text:
+                self.resources.set_action("homerun")
+            else:
+                self.resources.set_action("hits")
 
         elif ("진루" in text or "홈인" in text):
             annotation = self.run(relayText)

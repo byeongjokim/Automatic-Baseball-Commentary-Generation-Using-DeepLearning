@@ -106,7 +106,7 @@ class Resource():
         return [self.strike, self.ball, self.out]
 
     def set_action(self, judge):
-        actions = ["strike", "ball", "foul", "hit", "hits", "out", "etc"]
+        actions = ["strike", "ball", "foul", "hit", "hits", "out", "homerun", "etc"]
         self.action = judge
 
     def get_action(self):

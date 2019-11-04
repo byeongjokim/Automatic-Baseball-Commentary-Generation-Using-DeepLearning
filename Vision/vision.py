@@ -16,13 +16,22 @@ class Vision(object):
     # closeup_threshold = 15
     # situation_threshold = 15
     # silence_threshold = 20
-    scene_threshold = 5
-    closeup_threshold = 10
-    situation_threshold = 10
-    silence_threshold = 15
+
+    # scene_threshold = 5
+    # closeup_threshold = 10
+    # situation_threshold = 10
+    # silence_threshold = 15
+
+    scene_threshold = 3
+    closeup_threshold = 5
+    situation_threshold = 5
+    silence_threshold = 7
 
     def __init__(self, resource):
-        sess = tf.Session()
+        config = tf.ConfigProto()
+        config.gpu_options.allow_growth = True
+        sess = tf.Session(config=config)
+        
         self.scene = Scene_Model(sess=sess)
         self.detect = Detect_Model(sess=sess)
         self.motion = Motion_Model(sess=sess)

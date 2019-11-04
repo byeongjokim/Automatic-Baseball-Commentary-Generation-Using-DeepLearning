@@ -1,4 +1,5 @@
 import socket
+import json
 
 class API():
     def __init__(self, resource, host, port, cheering="home"):
@@ -9,27 +10,62 @@ class API():
         self.cheering = cheering
 
     def choose_motion(self, text, comment_type):
-        motions = ["스트라이크", "파울", "페어", "아웃", "세이프", "홈런"]
+        # btop == 0 -> home attacking
+        btop = self.resource.get_btop()
 
-        good_attack = ["진루", "출루", "안타", "세이프", "홈런"]
-        bad_attack = ["스트라이크", "파울", "아웃"]
+        motions = ["strike", "ball", "foul", "hit", "hits", "out", "homerun", "etc"]
 
-        # 00 motions+negative
-        # 01 motions+positive
-        motion = None
+        good_attack = ["hits", "hit", "ball", "homerun"]
+        bad_attack = ["strike", "foul", "out"]
+        nop = ["etc"]
 
-        # if self.cheering == "home":
-        #
-        # elif self.cheering == "away":
-        #
-        # else:
-        #
-
-        return motion
+        if self.cheering == "home":
+            if btop == 0:
+                # good -> positive
+                # bad -> negative
+                if comment_type in good_attack:
+                    return comment_type+"_1"
+                elif comment_type in bad_attack:
+                    return comment_type+"_-1"
+                else:
+                    return comment_type+"_0"
+            else:
+                # good -> negative
+                # bad -> positive
+                if comment_type in good_attack:
+                    return comment_type+"_-1"
+                elif comment_type in bad_attack:
+                    return comment_type+"_1"
+                else:
+                    return comment_type+"_0"
+        else:
+            if btop == 0:
+                # good -> negative
+                # bad -> positive
+                if comment_type in good_attack:
+                    return comment_type+"_-1"
+                elif comment_type in bad_attack:
+                    return comment_type+"_1"
+                else:
+                    return comment_type+"_0"
+            else:
+                # good -> positive
+                # bad -> negative
+                if comment_type in good_attack:
+                    return comment_type+"_1"
+                elif comment_type in bad_attack:
+                    return comment_type+"_-1"
+                else:
+                    return comment_type+"_0"
 
     def relay(self):
         with socket.socket() as sock:
             sock.connect((self.host, self.port))
+
+            content = {"motion": "etc_0", "text": "중계방송 준비중입니다."}
+            print(content)
+            content = json.dumps(content, ensure_ascii=False)
+            sock.sendall(content.encode('utf-8'))
 
             while (True):
                 if (self.resource.is_new_annotation_video()):
@@ -38,6 +74,7 @@ class API():
 
                     motion = self.choose_motion(text, comment_type)
 
-                    content = {"comment_type": comment_type, "text": text, "motion": motion}
-                    print(str(content))
-                    sock.sendall(str(content).encode())
+                    content = {"text": text, "motion": motion}
+                    print(content)
+                    content = json.dumps(content, ensure_ascii=False)
+                    sock.sendall(content.encode('utf-8'))

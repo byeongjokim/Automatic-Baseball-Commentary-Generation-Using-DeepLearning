@@ -15,7 +15,7 @@ class KBO():
             self.resource = Resource()
             self.web = Web(resource=self.resource)
             self.vision = Vision(resource=self.resource)
-            self.api = API(resource=self.resource, host="127.0.0.1", port=8080)
+            self.api = API(resource=self.resource, host="169.254.119.30", port=8080)
 
             #self.run_server(host="166.104.143.103", port=8080)
             self.run_server()
@@ -69,4 +69,4 @@ class KBO():
 
 
 if __name__ == '__main__':
-    app = KBO(isSimulation=False, isAPI=True)
+    app = KBO(isSimulation=False, isAPI=False)
