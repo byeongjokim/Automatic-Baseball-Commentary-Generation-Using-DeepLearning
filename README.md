@@ -2,7 +2,7 @@
 Video captioning is known as a method to summarize or explain a video. However, it is very difficult to create sports commentaries, which are running scene-by-scene descriptions, for sports videos by using conventional video captioning. This is the case because sports commentary requires not only specific and varied information about every scene, such as player action descriptions in baseball, but also background knowledge and dynamic at-bats statistics that are not found in the video. We propose a new system to automatically generate commentary for baseball games. In our system, given real-time baseball videos, suitable descriptions are relayed using four deep-learning models (i.e., a scene classifier, player detector, motion recognizer, and pitching result recognizer) integrated with domain ontology. Using these four deep-learning models, pieces of information about “who is doing what in which area of the field” and “what results are expected” are obtained. This approach is used to select an appropriate template, which is combined with baseball ontology knowledge for the generation of commentary. We evaluate our system using baseball games from the [KBO (Korea Baseball Organization)](https://www.koreabaseball.com "Korea Baseball League") League’s 2018 season. As a result of the evaluation, we identify that our system can act as a commentator for baseball games.
 
 ## Demo
-|[New] Demo<br/>(with NAO Robot, 5:11)|[New] Demo<br/>(with English, 6:47)|[Old] Demo 1<br/>(with pitching result recognition, 2:27)
+|[New] Demo<br/>(with NAO Robot, 5:11)|[New] Demo<br/>(with English, 6:47)|[Old] Demo 1<br/>(with pitching result recognition, 2:27)|
 |----|----|----|----|
 |[Onedrive](https://1drv.ms/v/s!AtL3vScJgk8Fkcwa8KMVNXRZuUuLsg?e=KLqqg2)|[Onedrive](https://1drv.ms/v/s!AtL3vScJgk8Fkcpz6SoHPrOEL9RoUg?e=MV7mN3)|[Onedrive](https://1drv.ms/v/s!AtL3vScJgk8Fkcp0HP8U7eliRSV5Gg?e=vsZpS5)|
 
@@ -63,7 +63,7 @@ Please wait a moment because the capacity of gif is large.
 ** The referee's judgment(strike, ball, foul, out ...) is casted by web data
 
 ## Models
-![Scene Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/all_models.png?raw=1)
+![Scene Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/all_models.png?raw=1)
 ### Scene Classification
 #### Model
 ![Scene Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/model.png?raw=1)
