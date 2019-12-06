@@ -1,10 +1,10 @@
 # Automatic-sports-commentary-framework
-A new system to automatically generate commentary for baseball games. In our system, given real-time baseball videos, suitable descriptions are relayed using four deep-learning models (i.e., a scene classifier, player detector, motion recognizer, and pitching result recognizer) integrated with domain ontology. Using these four deep-learning models, pieces of information about “who is doing what in which area of the field” and “what results are expected” are obtained. This approach is used to select an appropriate template, which is combined with baseball ontology knowledge for the generation of commentary. We train four deep-learning models using baseball games from the [KBO(Korea Baseball Organization League)](https://www.koreabaseball.com "Korea Baseball League") League’s 2018 season.
+Video captioning is known as a method to summarize or explain a video. However, it is very difficult to create sports commentaries, which are running scene-by-scene descriptions, for sports videos by using conventional video captioning. This is the case because sports commentary requires not only specific and varied information about every scene, such as player action descriptions in baseball, but also background knowledge and dynamic at-bats statistics that are not found in the video. We propose a new system to automatically generate commentary for baseball games. In our system, given real-time baseball videos, suitable descriptions are relayed using four deep-learning models (i.e., a scene classifier, player detector, motion recognizer, and pitching result recognizer) integrated with domain ontology. Using these four deep-learning models, pieces of information about “who is doing what in which area of the field” and “what results are expected” are obtained. This approach is used to select an appropriate template, which is combined with baseball ontology knowledge for the generation of commentary. We evaluate our system using baseball games from the [KBO (Korea Baseball Organization)](https://www.koreabaseball.com "Korea Baseball League") League’s 2018 season. As a result of the evaluation, we identify that our system can act as a commentator for baseball games.
 
 ## Demo
-|[New] Demo<br/>(with English, 6:47)|[Old] Demo 1<br/>(with pitching result recognition, 2:27)|[Old] Demo 2<br/>(only three deep learning models 5:07)
-|----|----|----|
-|[Onedrive](https://1drv.ms/v/s!AtL3vScJgk8Fkcpz6SoHPrOEL9RoUg?e=MV7mN3)|[Onedrive](https://1drv.ms/v/s!AtL3vScJgk8Fkcp0HP8U7eliRSV5Gg?e=vsZpS5)|[Onedrive](https://1drv.ms/v/s!AtL3vScJgk8Fkcp1xeKlk6pZB12h_g?e=QfTr7W)|
+|[New] Demo<br/>(with NAO Robot, 5:11)|[New] Demo<br/>(with English, 6:47)|[Old] Demo 1<br/>(with pitching result recognition, 2:27)
+|----|----|----|----|
+|[Onedrive](https://1drv.ms/v/s!AtL3vScJgk8Fkcwa8KMVNXRZuUuLsg?e=KLqqg2)|[Onedrive](https://1drv.ms/v/s!AtL3vScJgk8Fkcpz6SoHPrOEL9RoUg?e=MV7mN3)|[Onedrive](https://1drv.ms/v/s!AtL3vScJgk8Fkcp0HP8U7eliRSV5Gg?e=vsZpS5)|
 
 <table>
 <tr>
@@ -60,9 +60,10 @@ Please wait a moment because the capacity of gif is large.
 </td>
 </tr>
 </table>
-* The referee's judgment(strike, ball, foul, out ...) is casted by web data
+** The referee's judgment(strike, ball, foul, out ...) is casted by web data
 
 ## Models
+![Scene Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/all_models.png?raw=1)
 ### Scene Classification
 #### Model
 ![Scene Model](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/model.png?raw=1)
@@ -119,9 +120,7 @@ Please wait a moment because the capacity of gif is large.
 #### Data Augmentation
 ![Scene](https://github.com/byeongjokim/Baseball-Casting-with-Deep-Learning/blob/master/PNG/scene/zero_shot.png?raw=1)
 
-- In Baseball Game, There are few data of 3rd Base and Right OutField than others. But I can train these with others. Almost Baseball Field have symmetrical characters. So I can supplement data with flipping other classes' data.
-- 3rd Base <-> 1st Base
-- Right OutField <-> Left OutField
+It is difficult to get a similar amount of scene data for each class because of the relatively infrequent number of plays near third base and right field. To solve this problem, we take advantage of the symmetric features of a baseball stadium. The flipped image of the 1st base area and the image of the 3rd base area look alike, despite the different stadiums. We supplement insufficient data for third base and right field by flipping first base and left field data. This is also applied in the opposite direction.
 
 ---
 
@@ -279,8 +278,8 @@ unzip -j _model.zip
 ```
 #download the web data files (about result "{videoname}.txt", about ball "{videoname}_ball.txt") to _data/{videoname}/
 #download the video "{videoname}.mp4" to _data/{videoname}/
-#ex) 2018. 09. 06 LG vs NC game
 
+#ex) 2018. 09. 06 LG vs NC game
 mkdir _data
 cd _data
 wget https://1drv.ms/u/s!AtL3vScJgk8FkcpryZAWuKuF18hiDQ?e=cOAJov
@@ -288,6 +287,7 @@ wget https://1drv.ms/u/s!AtL3vScJgk8FkcpryZAWuKuF18hiDQ?e=cOAJov
 ```
 #modify GAME_DATE, GAME_NO, FILE_NAME in settings.py to find video and web data
 #modify FIRST_BATTERBOX_START_IN_VIDEO, FIRST_BATTERBOX_START_IN_OWL, START_FRAME to make the same time point of the web data and the video
+#you can set the FIRST_BATTERBOX_START_IN_VIDEO, FIRST_BATTERBOX_START_IN_OWL using frame number and pitchID of {videoname}.txt of the first pitching judgement 
 
 vi settings.py
 ```
@@ -300,7 +300,15 @@ python kbo.py
 
 vi kbo.py
 #modify isSimulation=False to isSimulation=True
-#comment app.run() -> #app.run()
+
+python kbo.py
+```
+```
+#run the simulation with predicted bounding boxes and labels
+
+vi kbo.py
+#modify isSimulation=False and isAPI=True
+#modify host and port in run_server method
 
 python kbo.py
 ```
